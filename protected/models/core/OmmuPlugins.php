@@ -78,9 +78,9 @@ class OmmuPlugins extends CActiveRecord
 			array('name, desc', 'required', 'on'=>'adminadd'),
 			array('defaults, install, actived, search, orders', 'numerical', 'integerOnly'=>true),
 			array('folder', 'length', 'max'=>32),
-			array('name', 'length', 'max'=>128),
+			array('name, model', 'length', 'max'=>128),
 			array('desc', 'length', 'max'=>255),
-			array('creation_date', 'safe'),
+			array('model', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('plugin_id, defaults, install, actived, search, orders, folder, name, desc, creation_date, creation_id, modified_date, modified_id,

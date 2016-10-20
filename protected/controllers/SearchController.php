@@ -81,6 +81,8 @@ class SearchController extends Controller
 				$data = new $model();
 				$data->searchIndexing($index);
 			}
+			echo '1';
+			exit();
 		}
 		
 		echo 'Lucene index created';
