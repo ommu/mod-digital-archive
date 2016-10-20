@@ -35,6 +35,9 @@
 class DigitalLanguage extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $creation_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -63,12 +66,13 @@ class DigitalLanguage extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('language_name, language_desc, creation_date, creation_id', 'required'),
+			array('language_name, language_desc', 'required'),
 			array('language_name', 'length', 'max'=>32),
 			array('creation_id', 'length', 'max'=>11),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('language_id, language_name, language_desc, creation_date, creation_id', 'safe', 'on'=>'search'),
+			array('language_id, language_name, language_desc, creation_date, creation_id,
+				creation_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,7 +84,8 @@ class DigitalLanguage extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'ommuDigitals_relation' => array(self::HAS_MANY, 'OmmuDigitals', 'language_id'),
+			'digitals' => array(self::HAS_MANY, 'Digitals', 'language_id'),
+			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 		);
 	}
 
@@ -91,10 +96,11 @@ class DigitalLanguage extends CActiveRecord
 	{
 		return array(
 			'language_id' => Yii::t('attribute', 'Language'),
-			'language_name' => Yii::t('attribute', 'Language Name'),
-			'language_desc' => Yii::t('attribute', 'Language Desc'),
+			'language_name' => Yii::t('attribute', 'Name'),
+			'language_desc' => Yii::t('attribute', 'Description'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
+			'creation_search' => Yii::t('attribute', 'Creation'),
 		);
 		/*
 			'Language' => 'Language',
@@ -133,6 +139,15 @@ class DigitalLanguage extends CActiveRecord
 			$criteria->compare('t.creation_id',$_GET['creation']);
 		else
 			$criteria->compare('t.creation_id',$this->creation_id);
+		
+		// Custom Search
+		$criteria->with = array(
+			'creation' => array(
+				'alias'=>'creation',
+				'select'=>'displayname',
+			),
+		);
+		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 
 		if(!isset($_GET['DigitalLanguage_sort']))
 			$criteria->order = 't.language_id DESC';
@@ -193,6 +208,10 @@ class DigitalLanguage extends CActiveRecord
 			$this->defaultColumns[] = 'language_name';
 			$this->defaultColumns[] = 'language_desc';
 			$this->defaultColumns[] = array(
+				'name' => 'creation_search',
+				'value' => '$data->creation->displayname',
+			);
+			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
 				'htmlOptions' => array(
@@ -218,7 +237,6 @@ class DigitalLanguage extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'creation_id';
 		}
 		parent::afterConstruct();
 	}
@@ -243,68 +261,12 @@ class DigitalLanguage extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	/*
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			// Create action
+			if($this->isNewRecord)
+				$this->creation_id = Yii::app()->user->id;
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
-	
-	/**
-	 * before save attributes
-	 */
-	/*
-	protected function beforeSave() {
-		if(parent::beforeSave()) {
-		}
-		return true;	
-	}
-	*/
-	
-	/**
-	 * After save attributes
-	 */
-	/*
-	protected function afterSave() {
-		parent::afterSave();
-		// Create action
-	}
-	*/
-
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-	*/
-
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
-	}
-	*/
 
 }

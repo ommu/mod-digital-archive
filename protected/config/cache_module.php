@@ -1,5 +1,4 @@
-article
+digital
 report
 support
 users
-province

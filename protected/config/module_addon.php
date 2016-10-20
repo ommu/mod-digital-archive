@@ -1,10 +1,9 @@
 <?php 
 return array(
 	'modules' => array(
-		'article',
+		'digital',
 		'report',
 		'support',
-		'users',
-		'province'
+		'users'
 	),
 );
