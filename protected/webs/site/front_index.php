@@ -616,6 +616,7 @@
 							</div>
 						</div>
 					</div>
+					<?php /*
 					<div class="vc_row wpb_row vc_row-fluid h-padding-0">
 						<div class="row">
 							<div class="only-static h-padding-0 wpb_column vc_column_container vc_col-sm-12">
@@ -686,64 +687,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="vc_row wpb_row vc_row-fluid homepage-carousel vc_custom_1466407836563">
-						<div class="row">
-							<div class="only-static container nofloat h-padding-0 wpb_column vc_column_container vc_col-sm-12">
-								<div class="wpb_wrapper">
-									<div class="azexo_html">
-										<h3 class="section-title"><span>pricing details</span></h3>
-									</div>
-									<div class="azexo_html custom-subtitle">
-										<p>Find out & explore new businesses near your area and see what’s happening !!!</p>
-									</div>
-									<div class="azexo_html">
-										<ul class="price-wrapper">
-											<li>
-												<h4>Basic</h4>
-												<span>$19.50</span>
-												<p>per month</p>
-												<ul class="price-list" data-cloneable>
-													<li>All Deals & Promotions</li>
-													<li>Only Images Support</li>
-													<li>Featured Listings</li>
-													<li>24 / 7 Live Support</li>
-													<li>Customer Reviews</li>
-												</ul>
-												<a href="#" class="price-button">sign up</a>
-											</li>
-											<li>
-												<h4>Premium</h4>
-												<span>$25.50</span>
-												<p>per month</p>
-												<ul class="price-list" data-cloneable>
-													<li>All Deals & Promotions</li>
-													<li>Only Images Support</li>
-													<li>Featured Listings</li>
-													<li>24 / 7 Live Support</li>
-													<li>Display All Features</li>
-													<li>Customer Reviews</li>
-												</ul>
-												<a href="#" class="price-button">sign up</a>
-											</li>
-											<li>
-												<h4>Ultimate</h4>
-												<span>$39.50</span>
-												<p>per month</p>
-												<ul class="price-list" data-cloneable>
-													<li>All Deals & Promotions</li>
-													<li>Only Images Support</li>
-													<li>Featured Listings</li>
-													<li>24 / 7 Live Support</li>
-													<li>Customer Reviews</li>
-												</ul>
-												<a href="#" class="price-button">sign up</a>
-											</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+
 					<div class="vc_row wpb_row vc_row-fluid homepage-carousel vc_custom_1466429663256">
 						<div class="row">
 							<div class="only-static container nofloat h-padding-0 h-adaptive wpb_column vc_column_container vc_col-sm-12">
@@ -805,6 +749,7 @@
 							</div>
 						</div>
 					</div>
+					
 					<div class="vc_row wpb_row vc_row-fluid custom-section colored vc_custom_1466672859262">
 						<div class="row">
 							<div class="container nofloat wpb_column vc_column_container vc_col-sm-12">
@@ -956,6 +901,7 @@
 							</div>
 						</div>
 					</div>
+					*/ ?>
 				</div>
 				<!-- .entry-content -->
 			</div>
