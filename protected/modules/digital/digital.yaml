@@ -1,24 +1,64 @@
 code			: 12000
-name			: Report
-description		: Report
-folder_name		: report
+name			: Digital
+description		: Digital
+folder_name		: digital
 version			: 0.1.0
 created_date	: 2012-08-30 14:03
 author			: Putra Sudaryanto [putra@sudaryanto.id]
 
 db_table_name	: 
- - ommu_report_category
- - ommu_reports
  
 db_sql_filename	: 
 
 plugin_menu		:
-	- urlTitle: View Reports
+	- urlTitle: View Digitals
 		urlRules: {siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
+	- urlTitle: Settings
+		urlRules: {siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: o/setting/edit, attr: -, icon: -}
+		submenu :
+			- urlTitle: Categories
+				urlRules: {siteType: 0,1, userLevel: 1}
+				urlPath: {url: o/category/manage, attr: -, icon: -}
+			- urlTitle: Subjecs
+				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlPath: {url: o/subject/manage, attr: -, icon: -}
+			- urlTitle: Languages
+				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlPath: {url: o/language/manage, attr: -, icon: -}
+			- urlTitle: Tags
+				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlPath: {url: o/tag/manage, attr: -, icon: -}
+			- urlTitle: Publishers
+				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlPath: {url: o/publisher/manage, attr: -, icon: -}
+			- urlTitle: Authors
+				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlPath: {url: o/author/manage, attr: -, icon: -}
 
 content_menu	:
 # controller o/category
 	- urlTitle: Add Category
-		urlRules: {report, o/category, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {digital, o/category, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
+        
+# controller o/subject
+	- urlTitle: Add Subject
+		urlRules: {digital, o/subject, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
+        
+# controller o/language
+	- urlTitle: Add Language
+		urlRules: {digital, o/language, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
+        
+# controller o/publisher
+	- urlTitle: Add Publisher
+		urlRules: {digital, o/publisher, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
+        
+# controller o/publisher
+	- urlTitle: Add Author
+		urlRules: {digital, o/author, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: add, attr: -, icon: -}

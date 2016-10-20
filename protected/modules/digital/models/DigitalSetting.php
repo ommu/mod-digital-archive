@@ -38,6 +38,9 @@
 class DigitalSetting extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $modified_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -66,14 +69,15 @@ class DigitalSetting extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_resize_size, cover_view_size, modified_id', 'required'),
+			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize', 'required'),
 			array('permission, cover_limit, cover_resize', 'numerical', 'integerOnly'=>true),
 			array('license', 'length', 'max'=>32),
 			array('modified_id', 'length', 'max'=>11),
-			array('modified_date', 'safe'),
+			array('cover_resize_size, cover_view_size', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_resize_size, cover_view_size, modified_date, modified_id', 'safe', 'on'=>'search'),
+			array('id, license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_resize_size, cover_view_size, modified_date, modified_id,
+				modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -85,6 +89,7 @@ class DigitalSetting extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 		);
 	}
 
@@ -105,6 +110,7 @@ class DigitalSetting extends CActiveRecord
 			'cover_view_size' => Yii::t('attribute', 'Cover View Size'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
+			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 		/*
 			'ID' => 'ID',
@@ -155,6 +161,15 @@ class DigitalSetting extends CActiveRecord
 			$criteria->compare('t.modified_id',$_GET['modified']);
 		else
 			$criteria->compare('t.modified_id',$this->modified_id);
+		
+		// Custom Search
+		$criteria->with = array(
+			'modified' => array(
+				'alias'=>'modified',
+				'select'=>'displayname'
+			),
+		);
+		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
 		if(!isset($_GET['DigitalSetting_sort']))
 			$criteria->order = 't.id DESC';
@@ -206,79 +221,19 @@ class DigitalSetting extends CActiveRecord
 	 */
 	protected function afterConstruct() {
 		if(count($this->defaultColumns) == 0) {
-			/*
-			$this->defaultColumns[] = array(
-				'class' => 'CCheckBoxColumn',
-				'name' => 'id',
-				'selectableRows' => 2,
-				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-			);
-			*/
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
-			);
 			$this->defaultColumns[] = 'license';
-			if(!isset($_GET['type'])) {
-				$this->defaultColumns[] = array(
-					'name' => 'permission',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("permission",array("id"=>$data->id)), $data->permission, 1)',
-					'htmlOptions' => array(
-						'class' => 'center',
-					),
-					'filter'=>array(
-						1=>Yii::t('phrase', 'Yes'),
-						0=>Yii::t('phrase', 'No'),
-					),
-					'type' => 'raw',
-				);
-			}
+			$this->defaultColumns[] = 'permission';
 			$this->defaultColumns[] = 'meta_keyword';
 			$this->defaultColumns[] = 'meta_description';
 			$this->defaultColumns[] = 'cover_limit';
-			if(!isset($_GET['type'])) {
-				$this->defaultColumns[] = array(
-					'name' => 'cover_resize',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("cover_resize",array("id"=>$data->id)), $data->cover_resize, 1)',
-					'htmlOptions' => array(
-						'class' => 'center',
-					),
-					'filter'=>array(
-						1=>Yii::t('phrase', 'Yes'),
-						0=>Yii::t('phrase', 'No'),
-					),
-					'type' => 'raw',
-				);
-			}
+			$this->defaultColumns[] = 'cover_resize';
 			$this->defaultColumns[] = 'cover_resize_size';
 			$this->defaultColumns[] = 'cover_view_size';
+			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = array(
-				'name' => 'modified_date',
-				'value' => 'Utility::dateFormat($data->modified_date)',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'modified_date',
-					'language' => 'ja',
-					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
-					//'mode'=>'datetime',
-					'htmlOptions' => array(
-						'id' => 'modified_date_filter',
-					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
+				'name' => 'modified_search',
+				'value' => '$data->modified->displayname',
 			);
-			$this->defaultColumns[] = 'modified_id';
 		}
 		parent::afterConstruct();
 	}
@@ -303,68 +258,39 @@ class DigitalSetting extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	/*
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			// Create action
+			if($this->cover_limit != '' && $this->cover_limit <= 0)
+				$this->addError('cover_limit', Yii::t('phrase', 'Photo Limit lebih besar dari 0'));
+			
+			if($this->cover_resize == 1 && ($this->cover_resize_size['width'] == '' || $this->cover_resize_size['height'] == ''))
+				$this->addError('cover_resize_size', Yii::t('attribute', 'Media Resize cannot be blank.'));
+			
+			if($this->cover_view_size['large']['width'] == '' || $this->cover_view_size['large']['height'] == '')
+				$this->addError('cover_view_size[large]', Yii::t('phrase', 'Large Size cannot be blank.'));
+			
+			if($this->cover_view_size['medium']['width'] == '' || $this->cover_view_size['medium']['height'] == '')
+				$this->addError('cover_view_size[medium]', Yii::t('phrase', 'Medium Size cannot be blank.'));
+			
+			if($this->cover_view_size['small']['width'] == '' || $this->cover_view_size['small']['height'] == '')
+				$this->addError('cover_view_size[small]', Yii::t('phrase', 'Small Size cannot be blank.'));
+			
+			// Article type is active
+			
+			$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
 	
 	/**
 	 * before save attributes
 	 */
-	/*
 	protected function beforeSave() {
 		if(parent::beforeSave()) {
-		}
-		return true;	
-	}
-	*/
-	
-	/**
-	 * After save attributes
-	 */
-	/*
-	protected function afterSave() {
-		parent::afterSave();
-		// Create action
-	}
-	*/
-
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
+			$this->cover_resize_size = serialize($this->cover_resize_size);
+			$this->cover_view_size = serialize($this->cover_view_size);
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
-	}
-	*/
 
 }
