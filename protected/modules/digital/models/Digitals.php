@@ -83,14 +83,14 @@ class Digitals extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_cover, publish_year, publish_location, isbn, subjects, pages, series, creation_date, creation_id, modified_id', 'required'),
+			array('cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_cover, publish_year, publish_location, isbn, subjects, pages, series', 'required'),
 			array('publish, cat_id, language_id, opac_id', 'numerical', 'integerOnly'=>true),
 			array('publisher_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('digital_code', 'length', 'max'=>16),
 			array('publish_year', 'length', 'max'=>4),
 			array('isbn', 'length', 'max'=>32),
 			array('pages', 'length', 'max'=>5),
-			array('modified_date', 'safe'),
+			array('', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_cover, publish_year, publish_location, isbn, subjects, pages, series, creation_date, creation_id, modified_date, modified_id', 'safe', 'on'=>'search'),
@@ -105,12 +105,12 @@ class Digitals extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'ommuDigitalAuthors_relation' => array(self::HAS_MANY, 'OmmuDigitalAuthors', 'digital_id'),
-			'ommuDigitalHistoryPrints_relation' => array(self::HAS_MANY, 'OmmuDigitalHistoryPrint', 'digital_id'),
-			'ommuDigitalTags_relation' => array(self::HAS_MANY, 'OmmuDigitalTag', 'digital_id'),
-			'cat_relation' => array(self::BELONGS_TO, 'OmmuDigitalCategory', 'cat_id'),
-			'language_relation' => array(self::BELONGS_TO, 'OmmuDigitalLanguage', 'language_id'),
-			'publisher_relation' => array(self::BELONGS_TO, 'OmmuDigitalPublisher', 'publisher_id'),
+			'authors' => array(self::HAS_MANY, 'DigitalAuthors', 'digital_id'),
+			'history_prints' => array(self::HAS_MANY, 'DigitalHistoryPrint', 'digital_id'),
+			'tags' => array(self::HAS_MANY, 'DigitalTag', 'digital_id'),
+			'category' => array(self::BELONGS_TO, 'DigitalCategory', 'cat_id'),
+			'language' => array(self::BELONGS_TO, 'DigitalLanguage', 'language_id'),
+			'publisher' => array(self::BELONGS_TO, 'DigitalPublisher', 'publisher_id'),
 		);
 	}
 
@@ -302,34 +302,13 @@ class Digitals extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['type'])) {
-				$this->defaultColumns[] = array(
-					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->digital_id)), $data->publish, 1)',
-					'htmlOptions' => array(
-						'class' => 'center',
-					),
-					'filter'=>array(
-						1=>Yii::t('phrase', 'Yes'),
-						0=>Yii::t('phrase', 'No'),
-					),
-					'type' => 'raw',
-				);
-			}
+			$this->defaultColumns[] = 'digital_code';
 			$this->defaultColumns[] = 'cat_id';
+			$this->defaultColumns[] = 'digital_title';
 			$this->defaultColumns[] = 'publisher_id';
 			$this->defaultColumns[] = 'language_id';
 			$this->defaultColumns[] = 'opac_id';
-			$this->defaultColumns[] = 'digital_code';
-			$this->defaultColumns[] = 'digital_title';
-			$this->defaultColumns[] = 'digital_intro';
-			$this->defaultColumns[] = 'digital_cover';
 			$this->defaultColumns[] = 'publish_year';
-			$this->defaultColumns[] = 'publish_location';
-			$this->defaultColumns[] = 'isbn';
-			$this->defaultColumns[] = 'subjects';
-			$this->defaultColumns[] = 'pages';
-			$this->defaultColumns[] = 'series';
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
@@ -356,34 +335,20 @@ class Digitals extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'creation_id';
-			$this->defaultColumns[] = array(
-				'name' => 'modified_date',
-				'value' => 'Utility::dateFormat($data->modified_date)',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'modified_date',
-					'language' => 'ja',
-					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
-					//'mode'=>'datetime',
+			if(!isset($_GET['type'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'publish',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->digital_id)), $data->publish, 1)',
 					'htmlOptions' => array(
-						'id' => 'modified_date_filter',
+						'class' => 'center',
 					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
+					'filter'=>array(
+						1=>Yii::t('phrase', 'Yes'),
+						0=>Yii::t('phrase', 'No'),
 					),
-				), true),
-			);
-			$this->defaultColumns[] = 'modified_id';
+					'type' => 'raw',
+				);
+			}
 		}
 		parent::afterConstruct();
 	}
@@ -408,68 +373,14 @@ class Digitals extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	/*
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			// Create action
+			if($this->isNewRecord)
+				$this->creation_id = Yii::app()->user->id;
+			else
+				$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
-	
-	/**
-	 * before save attributes
-	 */
-	/*
-	protected function beforeSave() {
-		if(parent::beforeSave()) {
-		}
-		return true;	
-	}
-	*/
-	
-	/**
-	 * After save attributes
-	 */
-	/*
-	protected function afterSave() {
-		parent::afterSave();
-		// Create action
-	}
-	*/
-
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-	*/
-
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
-	}
-	*/
 
 }
