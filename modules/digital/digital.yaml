@@ -27,18 +27,18 @@ plugin_menu		:
 			- urlTitle: Languages
 				urlRules: {siteType: 0,1, userLevel: 1,2}
 				urlPath: {url: o/language/manage, attr: -, icon: -}
-			- urlTitle: Tags
-				urlRules: {siteType: 0,1, userLevel: 1,2}
-				urlPath: {url: o/tag/manage, attr: -, icon: -}
 			- urlTitle: Publishers
 				urlRules: {siteType: 0,1, userLevel: 1,2}
 				urlPath: {url: o/publisher/manage, attr: -, icon: -}
 			- urlTitle: Authors
 				urlRules: {siteType: 0,1, userLevel: 1,2}
 				urlPath: {url: o/author/manage, attr: -, icon: -}
+			- urlTitle: Tags
+				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlPath: {url: o/tag/manage, attr: -, icon: -}
 
 content_menu	:
-# controller o/category
+# controller o/admin
 	- urlTitle: Add Materi Digital
 		urlRules: {digital, o/admin, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: add, attr: -, icon: -}
@@ -63,7 +63,12 @@ content_menu	:
 		urlRules: {digital, o/publisher, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: add, attr: -, icon: -}
         
-# controller o/publisher
+# controller o/author
 	- urlTitle: Add Author
 		urlRules: {digital, o/author, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: add, attr: -, icon: -}
+        
+# controller o/tag
+	- urlTitle: Back to mateti digital
+		urlRules: {digital, o/tag, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: o/admin/manage, attr: -, icon: -}

@@ -35,6 +35,11 @@
 class DigitalTag extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $digital_search;
+	public $tag_search;
+	public $creation_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -63,11 +68,12 @@ class DigitalTag extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('digital_id, tag_id, creation_date, creation_id', 'required'),
+			array('digital_id, tag_id', 'required'),
 			array('digital_id, tag_id, creation_id', 'length', 'max'=>11),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, digital_id, tag_id, creation_date, creation_id', 'safe', 'on'=>'search'),
+			array('id, digital_id, tag_id, creation_date, creation_id,
+				digital_search, tag_search, creation_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -79,7 +85,9 @@ class DigitalTag extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'digital_relation' => array(self::BELONGS_TO, 'OmmuDigitals', 'digital_id'),
+			'digital' => array(self::BELONGS_TO, 'Digitals', 'digital_id'),
+			'tag' => array(self::BELONGS_TO, 'OmmuTags', 'tag_id'),
+			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 		);
 	}
 
@@ -94,6 +102,9 @@ class DigitalTag extends CActiveRecord
 			'tag_id' => Yii::t('attribute', 'Tag'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
+			'digital_search' => Yii::t('attribute', 'Digital'),
+			'tag_search' => Yii::t('attribute', 'Tag'),
+			'creation_search' => Yii::t('attribute', 'Creation'),
 		);
 		/*
 			'ID' => 'ID',
@@ -135,6 +146,25 @@ class DigitalTag extends CActiveRecord
 			$criteria->compare('t.creation_id',$_GET['creation']);
 		else
 			$criteria->compare('t.creation_id',$this->creation_id);
+		
+		// Custom Search
+		$criteria->with = array(
+			'digital' => array(
+				'alias'=>'digital',
+				'select'=>'digital_title',
+			),
+			'tag' => array(
+				'alias'=>'tag',
+				'select'=>'body',
+			),
+			'creation' => array(
+				'alias'=>'creation',
+				'select'=>'displayname',
+			),
+		);
+		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
+		$criteria->compare('tag.body',strtolower($this->tag_search), true);
+		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 
 		if(!isset($_GET['DigitalTag_sort']))
 			$criteria->order = 't.id DESC';
@@ -192,8 +222,22 @@ class DigitalTag extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'digital_id';
-			$this->defaultColumns[] = 'tag_id';
+			if(!isset($_GET['digital'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'digital_search',
+					'value' => '$data->digital->digital_title',
+				);
+			}
+			if(!isset($_GET['tag'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'tag_search',
+					'value' => '$data->tag->body',
+				);
+			}
+			$this->defaultColumns[] = array(
+				'name' => 'creation_search',
+				'value' => '$data->creation->displayname',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
@@ -220,7 +264,6 @@ class DigitalTag extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'creation_id';
 		}
 		parent::afterConstruct();
 	}
@@ -245,68 +288,12 @@ class DigitalTag extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	/*
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			// Create action
+			if($this->isNewRecord)
+				$this->creation_id = Yii::app()->user->id;
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
-	
-	/**
-	 * before save attributes
-	 */
-	/*
-	protected function beforeSave() {
-		if(parent::beforeSave()) {
-		}
-		return true;	
-	}
-	*/
-	
-	/**
-	 * After save attributes
-	 */
-	/*
-	protected function afterSave() {
-		parent::afterSave();
-		// Create action
-	}
-	*/
-
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-	*/
-
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
-	}
-	*/
 
 }
