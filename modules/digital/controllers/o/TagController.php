@@ -140,7 +140,26 @@ class TagController extends Controller
 	 */
 	public function actionAdd() 
 	{
-		
+		$model=new DigitalTag;
+
+		// Uncomment the following line if AJAX validation is needed
+		$this->performAjaxValidation($model);
+
+		if(isset($_POST['digital_id'], $_POST['tag_id'], $_POST['tag'])) {
+			$model->digital_id = $_POST['digital_id'];
+			$model->tag_id = $_POST['tag_id'];
+			$model->tag_input = $_POST['tag'];
+
+			if($model->save()) {
+				if(isset($_GET['type']) && $_GET['type'] == 'digital')
+					$url = Yii::app()->controller->createUrl('delete',array('id'=>$model->id,'type'=>'digital'));
+				else 
+					$url = Yii::app()->controller->createUrl('delete',array('id'=>$model->id));
+				echo CJSON::encode(array(
+					'data' => '<div>'.$model->tag_TO->body.'<a href="'.$url.'" title="'.Yii::t('phrase', 'Delete').'">'.Yii::t('phrase', 'Delete').'</a></div>',
+				));
+			}
+		}
 	}
 
 	/**
@@ -155,7 +174,12 @@ class TagController extends Controller
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
 			if(isset($id)) {
-				if($model->delete()) {
+				$model->delete();
+				if(isset($_GET['type']) && $_GET['type'] == 'digital') {
+					echo CJSON::encode(array(
+						'type' => 4,
+					));
+				} else {
 					echo CJSON::encode(array(
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
@@ -166,8 +190,13 @@ class TagController extends Controller
 			}
 
 		} else {
+			if(isset($_GET['type']) && $_GET['type'] == 'digital')
+				$url = Yii::app()->controller->createUrl('o/admin/edit', array('id'=>$model->digital_id));
+			else
+				$url = Yii::app()->controller->createUrl('manage');
+			
 			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+			$this->dialogGroundUrl = $url;
 			$this->dialogWidth = 350;
 
 			$this->pageTitle = Yii::t('phrase', 'DigitalTag Delete.');

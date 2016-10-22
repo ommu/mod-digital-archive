@@ -35,6 +35,7 @@
 class DigitalTag extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $tag_input;
 	
 	// Variable Search
 	public $digital_search;
@@ -70,6 +71,8 @@ class DigitalTag extends CActiveRecord
 		return array(
 			array('digital_id, tag_id', 'required'),
 			array('digital_id, tag_id, creation_id', 'length', 'max'=>11),
+			array('
+				tag_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, digital_id, tag_id, creation_date, creation_id,
@@ -292,6 +295,35 @@ class DigitalTag extends CActiveRecord
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
 				$this->creation_id = Yii::app()->user->id;
+		}
+		return true;
+	}
+	
+	/**
+	 * before save attributes
+	 */
+	protected function beforeSave() {
+		if(parent::beforeSave()) {
+			if($this->isNewRecord) {
+				if($this->tag_id == 0) {
+					$tag = OmmuTags::model()->find(array(
+						'select' => 'tag_id, body',
+						'condition' => 'publish = 1 AND body = :body',
+						'params' => array(
+							':body' => $this->tag_input,
+						),
+					));
+					if($tag != null) {
+						$this->tag_id = $tag->tag_id;
+					} else {
+						$data = new OmmuTags;
+						$data->body = $this->tag_input;
+						if($data->save()) {
+							$this->tag_id = $data->tag_id;
+						}
+					}					
+				}
+			}
 		}
 		return true;
 	}
