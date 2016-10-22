@@ -78,12 +78,12 @@
 		</div>
 
 		<div class="clearfix">
-			<label><?php echo Yii::t('phrase', 'Media Setting');?> <span class="required">*</span></label>
+			<label><?php echo Yii::t('phrase', 'Cover Setting');?> <span class="required">*</span></label>
 			<div class="desc">
 				<p><?php echo $model->getAttributeLabel('cover_resize');?></p>
 				<?php echo $form->radioButtonList($model, 'cover_resize', array(
-					0 => Yii::t('phrase', 'No, not resize media after upload.'),
-					1 => Yii::t('phrase', 'Yes, resize media after upload.'),
+					0 => Yii::t('phrase', 'No, not resize cover after upload.'),
+					1 => Yii::t('phrase', 'Yes, resize cover after upload.'),
 				)); ?>
 				
 				<?php if(!$model->getErrors()) {

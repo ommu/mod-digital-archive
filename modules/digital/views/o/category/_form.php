@@ -48,6 +48,24 @@
 			</div>
 		</div>
 
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'cat_code'); ?>
+			<div class="desc">
+				<?php echo $form->textField($model,'cat_code',array('maxlength'=>6)); ?>
+				<?php echo $form->error($model,'cat_code'); ?>
+				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
+		</div>
+
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'cat_icon'); ?>
+			<div class="desc">
+				<?php echo $form->textField($model,'cat_icon',array('maxlength'=>32)); ?>
+				<?php echo $form->error($model,'cat_icon'); ?>
+				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
+		</div>
+
 		<div class="clearfix publish">
 			<?php echo $form->labelEx($model,'publish'); ?>
 			<div class="desc">
