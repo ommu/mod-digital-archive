@@ -315,5 +315,15 @@ class DigitalAuthor extends CActiveRecord
 		}
 		return true;
 	}
+	
+	/**
+	 * before save attributes
+	 */
+	protected function beforeSave() {
+		if(parent::beforeSave()) {
+			$this->author_name = strtolower(trim($this->author_name));
+		}
+		return true;
+	}
 
 }
