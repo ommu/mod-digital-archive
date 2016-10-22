@@ -10,7 +10,6 @@
  */
 ?>
 
-<div id="main" class="site-main">
 	<div id="primary" class="content-area">
 		<div id="content" class="site-content" role="main">
 			<div id="post-28" class="entry post-28 page type-page status-publish hentry">
@@ -910,4 +909,3 @@
 		<!-- #content -->
 	</div>
 	<!-- #primary -->
-</div>

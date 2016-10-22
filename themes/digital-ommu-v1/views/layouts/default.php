@@ -139,6 +139,10 @@ if(isset($_GET['protocol']) && $_GET['protocol'] == 'script') {
 		$cs->registerScriptFile('http://azexo.com/wisem/wp-content/plugins/js_composer/assets/lib/waypoints/waypoints.min.js?ver=4.12', CClientScript::POS_END);
 		$cs->registerScriptFile('http://azexo.com/wisem/wp-content/plugins/az_listings/js/mustache.js?ver=4.5.4', CClientScript::POS_END);
 		$cs->registerScriptFile('http://azexo.com/wisem/wp-content/plugins/az_listings/js/azl.js?ver=4.5.4', CClientScript::POS_END);
+$js=<<<EOP
+	var _wpcf7 = {"loaderUrl":"http:\/\/azexo.com\/wisem\/wp-content\/plugins\/contact-form-7\/images\/ajax-loader.gif","recaptcha":{"messages":{"empty":"Please verify that you are not a robot."}},"sending":"Sending ...","cached":"1"};
+EOP;
+		$cs->registerScript('type', $js, CClientScript::POS_END);
 		Yii::app()->clientScript->scriptMap=array(
 				'jquery.js'=>false,
 		);		
@@ -180,13 +184,14 @@ if(isset($_GET['protocol']) && $_GET['protocol'] == 'script') {
 		<style type="text/css"> .wpb_animate_when_almost_visible { opacity: 1; }</style>
 	</noscript>	
  </head>
- <body <?php echo $this->dialogDetail == true ? 'style="overflow-y: hidden;"' : '';?> class="home page page-id-28 page-template-default white wpb-js-composer js-comp-ver-4.12 vc_responsive">
+ <body <?php echo $this->dialogDetail == true ? 'style="overflow-y: hidden;"' : '';?> class="<?php echo $module == null && $currentAction == 'site/index' ? 'home page page-id-28 page-template-default white wpb-js-composer js-comp-ver-4.12 vc_responsive' : 'blog wpb-js-composer js-comp-ver-4.12 vc_responsive';?>"> 
  
 	<div id="preloader">
 		<div id="status"></div>
 	</div>
 				
 	<header id="masthead" class="site-header clearfix">
+		<?php /*
 		<div id="secondary" class="sidebar-container " role="complementary">
 			<div class="sidebar-inner">
 				<div class="widget-area clearfix">
@@ -306,17 +311,16 @@ if(isset($_GET['protocol']) && $_GET['protocol'] == 'script') {
 			<!-- .sidebar-inner -->
 		</div>
 		<!-- #secondary -->
+		*/?>
 		<div class="header-main clearfix">
 			<div class="header-parts container">
-				<a class="site-title" href="http://azexo.com/wisem/" rel="home"><img src="http://azexo.com/wisem/wp-content/uploads/2016/06/logo.png" alt="logo"></a>
+				<?php /*<a class="site-title" href="http://azexo.com/wisem/" rel="home"><img src="http://azexo.com/wisem/wp-content/uploads/2016/06/logo.png" alt="logo"></a>*/?>
 				<nav class="site-navigation primary-navigation">
 					<div class="menu-main-menu-container">
 						<ul id="primary-menu" class="nav-menu">
-							<li id="menu-item-34" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-28 current_page_item menu-item-34"><a href="http://azexo.com/wisem/" class="menu-link">Home</a></li>
-							<li id="menu-item-32" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-32"><a href="http://azexo.com/wisem/blog/" class="menu-link">Blog</a></li>
-							<li id="menu-item-33" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-33"><a href="http://azexo.com/wisem/listings/" class="menu-link">Listings</a></li>
-							<li id="menu-item-145" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-145"><a href="http://azexo.com/wisem/profiles/" class="menu-link">Profiles</a></li>
-							<li id="menu-item-252" class="custom-link menu-item menu-item-type-post_type menu-item-object-page menu-item-252"><a href="http://azexo.com/wisem/submit-listing/" class="menu-link">Submit listing</a></li>
+							<li id="menu-item-34" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-28 current_page_item menu-item-34"><a href="<?php echo Yii::app()->createUrl('site/index');?>" class="menu-link">Home</a></li>
+							<li id="menu-item-32" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-32"><a href="<?php echo Yii::app()->createUrl('page/view');?>" class="menu-link">Browse</a></li>
+								<li id="menu-item-252" class="custom-link menu-item menu-item-type-post_type menu-item-object-page menu-item-252"><a href="http://azexo.com/wisem/submit-listing/" class="menu-link">Login</a></li>
 						</ul>
 					</div>
 				</nav>
@@ -325,16 +329,15 @@ if(isset($_GET['protocol']) && $_GET['protocol'] == 'script') {
 				<nav class="site-navigation mobile-menu">
 					<div class="menu-main-menu-container">
 						<ul id="primary-menu-mobile" class="nav-menu">
-							<li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-28 current_page_item menu-item-34"><a href="http://azexo.com/wisem/" class="menu-link">Home</a></li>
-							<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-32"><a href="http://azexo.com/wisem/blog/" class="menu-link">Blog</a></li>
-							<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-33"><a href="http://azexo.com/wisem/listings/" class="menu-link">Listings</a></li>
-							<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-145"><a href="http://azexo.com/wisem/profiles/" class="menu-link">Profiles</a></li>
-							<li class="custom-link menu-item menu-item-type-post_type menu-item-object-page menu-item-252"><a href="http://azexo.com/wisem/submit-listing/" class="menu-link">Submit listing</a></li>
+							<li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-28 current_page_item menu-item-34"><a href="<?php echo Yii::app()->createUrl('site/index');?>" class="menu-link">Home</a></li>
+							<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-32"><a href="<?php echo Yii::app()->createUrl('page/view');?>" class="menu-link">Browse</a></li>
+							<li class="custom-link menu-item menu-item-type-post_type menu-item-object-page menu-item-252"><a href="http://azexo.com/wisem/submit-listing/" class="menu-link">Login</a></li>
 						</ul>
 					</div>
 				</nav>
 			</div>
 		</div>
+		<?php if($module == null && $currentAction == 'site/index') {?>
 		<div id="middle" class="sidebar-container " role="complementary">
 			<div class="sidebar-inner">
 				<div class="widget-area clearfix">
@@ -410,10 +413,52 @@ if(isset($_GET['protocol']) && $_GET['protocol'] == 'script') {
 			<!-- .sidebar-inner -->
 		</div>
 		<!-- #middle -->
+		
+		<?php } else {?>
+		<div id="middle" class="sidebar-container " role="complementary">
+			<div class="sidebar-inner">
+				<div class="widget-area clearfix">
+					<div id="vc_widget-5" class="widget-1 widget-first widget-last widget-odd widget widget_vc_widget">
+						<div class="scoped-style">
+							<div class="vc_row wpb_row vc_row-fluid middle-header-background vc_custom_1467032271820">
+								<div class="row">
+									<div class="wpb_column vc_column_container vc_col-sm-12">
+										<div class="wpb_wrapper">
+											<div class="vc_row wpb_row vc_inner vc_row-fluid container">
+												<div class="row">
+													<div class="wpb_column vc_column_container vc_col-sm-12">
+														<div class="wpb_wrapper">
+															<div class="page-header">
+																<h2 class="entry-title"><a href="http://azexo.com/wisem/blog/" rel="bookmark">Browse</a></h2>
+															</div>
+															<?php /*
+															<div class="azexo-woo-breadcrumb">
+																<nav class="woocommerce-breadcrumb" ><a href="http://azexo.com/wisem">Home</a> <span class="delimiter">/</span> Blog</nav>
+															</div>
+															*/?>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- .widget-area -->
+			</div>
+			<!-- .sidebar-inner -->
+		</div>
+		<!-- #middle -->		
+		<?php }?>
 	</header>
 	<!-- #masthead -->
 
-	<?php echo $content;?>
+	<div id="main" class="site-main">
+		<?php echo $content;?>
+	</div>
 					
 	<footer id="colophon" class="site-footer clearfix">
 		<div id="quaternary" class="sidebar-container " role="complementary">
