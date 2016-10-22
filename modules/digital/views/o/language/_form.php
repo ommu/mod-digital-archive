@@ -47,6 +47,15 @@
 			</div>
 		</div>
 
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'language_code'); ?>
+			<div class="desc">
+				<?php echo $form->textField($model,'language_code',array('maxlength'=>4)); ?>
+				<?php echo $form->error($model,'language_code'); ?>
+				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
+		</div>
+
 	</fieldset>
 </div>
 <div class="dialog-submit">

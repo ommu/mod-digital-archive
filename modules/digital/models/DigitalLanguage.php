@@ -26,8 +26,11 @@
  * @property integer $language_id
  * @property string $language_name
  * @property string $language_desc
+ * @property string $language_code
  * @property string $creation_date
  * @property string $creation_id
+ * @property string $modified_date
+ * @property string $modified_id
  *
  * The followings are the available model relations:
  * @property OmmuDigitals[] $ommuDigitals
@@ -38,6 +41,7 @@ class DigitalLanguage extends CActiveRecord
 	
 	// Variable Search
 	public $creation_search;
+	public $modified_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -66,13 +70,14 @@ class DigitalLanguage extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('language_name, language_desc', 'required'),
+			array('language_name, language_desc, language_code', 'required'),
 			array('language_name', 'length', 'max'=>32),
 			array('creation_id', 'length', 'max'=>11),
+			array('language_code', 'length', 'max'=>4),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('language_id, language_name, language_desc, creation_date, creation_id,
-				creation_search', 'safe', 'on'=>'search'),
+			array('language_id, language_name, language_desc, language_code, creation_date, creation_id, modified_date, modified_id,
+				creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -86,6 +91,7 @@ class DigitalLanguage extends CActiveRecord
 		return array(
 			'digitals' => array(self::HAS_MANY, 'Digitals', 'language_id'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
+			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 		);
 	}
 
@@ -96,11 +102,15 @@ class DigitalLanguage extends CActiveRecord
 	{
 		return array(
 			'language_id' => Yii::t('attribute', 'Language'),
-			'language_name' => Yii::t('attribute', 'Name'),
+			'language_name' => Yii::t('attribute', 'Language'),
 			'language_desc' => Yii::t('attribute', 'Description'),
+			'language_code' => Yii::t('attribute', 'Code'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
+			'modified_date' => Yii::t('attribute', 'Modified Date'),
+			'modified_id' => Yii::t('attribute', 'Modified'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
+			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 		/*
 			'Language' => 'Language',
@@ -133,12 +143,19 @@ class DigitalLanguage extends CActiveRecord
 		$criteria->compare('t.language_id',$this->language_id);
 		$criteria->compare('t.language_name',strtolower($this->language_name),true);
 		$criteria->compare('t.language_desc',strtolower($this->language_desc),true);
+		$criteria->compare('t.language_code',strtolower($this->language_code),true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
 		if(isset($_GET['creation']))
 			$criteria->compare('t.creation_id',$_GET['creation']);
 		else
 			$criteria->compare('t.creation_id',$this->creation_id);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
+		if(isset($_GET['modified']))
+			$criteria->compare('t.modified_id',$_GET['modified']);
+		else
+			$criteria->compare('t.modified_id',$this->modified_id);
 		
 		// Custom Search
 		$criteria->with = array(
@@ -146,8 +163,13 @@ class DigitalLanguage extends CActiveRecord
 				'alias'=>'creation',
 				'select'=>'displayname',
 			),
+			'modified' => array(
+				'alias'=>'modified',
+				'select'=>'displayname',
+			),
 		);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
+		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
 		if(!isset($_GET['DigitalLanguage_sort']))
 			$criteria->order = 't.language_id DESC';
@@ -181,8 +203,11 @@ class DigitalLanguage extends CActiveRecord
 			//$this->defaultColumns[] = 'language_id';
 			$this->defaultColumns[] = 'language_name';
 			$this->defaultColumns[] = 'language_desc';
+			$this->defaultColumns[] = 'language_code';
 			$this->defaultColumns[] = 'creation_date';
 			$this->defaultColumns[] = 'creation_id';
+			$this->defaultColumns[] = 'modified_date';
+			$this->defaultColumns[] = 'modified_id';
 		}
 
 		return $this->defaultColumns;
@@ -204,6 +229,10 @@ class DigitalLanguage extends CActiveRecord
 			$this->defaultColumns[] = array(
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'language_code',
+				'value' => '$data->language_code',
 			);
 			$this->defaultColumns[] = 'language_name';
 			$this->defaultColumns[] = 'language_desc';
@@ -265,6 +294,8 @@ class DigitalLanguage extends CActiveRecord
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
 				$this->creation_id = Yii::app()->user->id;
+			else
+				$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
 	}

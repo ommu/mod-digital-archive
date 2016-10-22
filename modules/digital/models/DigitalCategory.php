@@ -255,9 +255,6 @@ class DigitalCategory extends CActiveRecord
 			$this->defaultColumns[] = array(
 				'name' => 'cat_code',
 				'value' => '$data->cat_code',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
 			);
 			$this->defaultColumns[] = 'cat_title';
 			$this->defaultColumns[] = 'cat_desc';
