@@ -36,6 +36,12 @@
 class DigitalAuthors extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $author_input;
+	
+	// Variable Search
+	public $digital_search;
+	public $author_search;
+	public $creation_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -64,11 +70,12 @@ class DigitalAuthors extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('digital_id, author_id, creation_date, creation_id', 'required'),
+			array('digital_id, author_id', 'required'),
 			array('digital_id, author_id, creation_id', 'length', 'max'=>11),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, digital_id, author_id, creation_date, creation_id', 'safe', 'on'=>'search'),
+			array('id, digital_id, author_id, creation_date, creation_id,
+				digital_search, author_search, creation_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,8 +87,9 @@ class DigitalAuthors extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'digital_relation' => array(self::BELONGS_TO, 'OmmuDigitals', 'digital_id'),
-			'author_relation' => array(self::BELONGS_TO, 'OmmuDigitalAuthor', 'author_id'),
+			'digital' => array(self::BELONGS_TO, 'Digitals', 'digital_id'),
+			'author' => array(self::BELONGS_TO, 'DigitalAuthor', 'author_id'),
+			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 		);
 	}
 
@@ -96,6 +104,9 @@ class DigitalAuthors extends CActiveRecord
 			'author_id' => Yii::t('attribute', 'Author'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
+			'digital_search' => Yii::t('attribute', 'Digital'),
+			'author_search' => Yii::t('attribute', 'Author'),
+			'creation_search' => Yii::t('attribute', 'Creation'),
 		);
 		/*
 			'ID' => 'ID',
@@ -140,6 +151,25 @@ class DigitalAuthors extends CActiveRecord
 			$criteria->compare('t.creation_id',$_GET['creation']);
 		else
 			$criteria->compare('t.creation_id',$this->creation_id);
+		
+		// Custom Search
+		$criteria->with = array(
+			'digital' => array(
+				'alias'=>'digital',
+				'select'=>'digital_title',
+			),
+			'author' => array(
+				'alias'=>'author',
+				'select'=>'author_name',
+			),
+			'creation' => array(
+				'alias'=>'creation',
+				'select'=>'displayname',
+			),
+		);
+		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
+		$criteria->compare('author.author_name',strtolower($this->author_search), true);
+		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 
 		if(!isset($_GET['DigitalAuthors_sort']))
 			$criteria->order = 't.id DESC';
@@ -197,8 +227,22 @@ class DigitalAuthors extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'digital_id';
-			$this->defaultColumns[] = 'author_id';
+			if(!isset($_GET['digital'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'digital_search',
+					'value' => '$data->digital->digital_title',
+				);
+			}
+			if(!isset($_GET['author'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'author_search',
+					'value' => '$data->author->author_name',
+				);
+			}
+			$this->defaultColumns[] = array(
+				'name' => 'creation_search',
+				'value' => '$data->creation->displayname',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
@@ -225,7 +269,6 @@ class DigitalAuthors extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'creation_id';
 		}
 		parent::afterConstruct();
 	}
@@ -250,68 +293,41 @@ class DigitalAuthors extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	/*
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			// Create action
+			if($this->isNewRecord)
+				$this->creation_id = Yii::app()->user->id;
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
 	
 	/**
 	 * before save attributes
 	 */
-	/*
 	protected function beforeSave() {
 		if(parent::beforeSave()) {
-		}
-		return true;	
-	}
-	*/
-	
-	/**
-	 * After save attributes
-	 */
-	/*
-	protected function afterSave() {
-		parent::afterSave();
-		// Create action
-	}
-	*/
-
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
+			if($this->isNewRecord) {
+				if($this->author_id == 0) {
+					$author = DigitalAuthor::model()->find(array(
+						'select' => 'author_id, author_name',
+						'condition' => 'publish = 1 AND author_name = :name',
+						'params' => array(
+							':name' => $this->author_input,
+						),
+					));
+					if($author != null) {
+						$this->author_id = $author->author_id;
+					} else {
+						$data = new DigitalAuthor;
+						$data->author_name = $this->author_input;
+						if($data->save()) {
+							$this->author_id = $data->author_id;
+						}
+					}					
+				}
+			}
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
-	}
-	*/
 
 }

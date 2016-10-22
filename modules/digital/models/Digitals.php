@@ -83,7 +83,7 @@ class Digitals extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_cover, publish_year, publish_location, isbn, subjects, pages, series', 'required'),
+			array('cat_id, publish, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_cover, publish_year, publish_location, isbn, subjects, pages, series', 'required'),
 			array('publish, cat_id, language_id, opac_id', 'numerical', 'integerOnly'=>true),
 			array('publisher_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('digital_code', 'length', 'max'=>16),
