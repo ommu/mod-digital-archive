@@ -72,12 +72,12 @@ class DigitalCategory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cat_title, cat_desc, cat_code', 'required'),
+			array('publish, cat_title, cat_code', 'required'),
 			array('publish', 'numerical', 'integerOnly'=>true),
 			array('cat_title, cat_icon', 'length', 'max'=>32),
 			array('creation_id, modified_id', 'length', 'max'=>11),
 			array('cat_code', 'length', 'max'=>6),
-			array('cat_icon', 'safe'),
+			array('cat_desc, cat_icon', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cat_id, publish, cat_title, cat_desc, cat_code, cat_icon, creation_date, creation_id, modified_date, modified_id,

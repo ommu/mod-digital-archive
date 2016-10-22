@@ -65,10 +65,10 @@ class DigitalAuthor extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('publish, author_name, creation_date, creation_id, modified_id', 'required'),
+			array('publish, author_name', 'required'),
 			array('publish', 'numerical', 'integerOnly'=>true),
 			array('creation_id, modified_id', 'length', 'max'=>11),
-			array('modified_date', 'safe'),
+			array('', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('author_id, publish, author_name, creation_date, creation_id, modified_date, modified_id', 'safe', 'on'=>'search'),

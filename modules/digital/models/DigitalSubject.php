@@ -67,11 +67,11 @@ class DigitalSubject extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('publish, subject_title, subject_desc', 'required'),
+			array('publish, subject_title', 'required'),
 			array('publish', 'numerical', 'integerOnly'=>true),
 			array('subject_title', 'length', 'max'=>32),
 			array('creation_id, modified_id', 'length', 'max'=>11),
-			array('', 'safe'),
+			array('subject_desc', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('subject_id, publish, subject_title, subject_desc, creation_date, creation_id, modified_date, modified_id,
