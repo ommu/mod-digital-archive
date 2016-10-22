@@ -24,6 +24,7 @@
  *
  * The followings are the available columns in table 'ommu_digital_language':
  * @property integer $language_id
+ * @property integer $publish
  * @property string $language_name
  * @property string $language_desc
  * @property string $language_code
@@ -70,13 +71,15 @@ class DigitalLanguage extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('language_name, language_desc, language_code', 'required'),
+			array('publish, language_name, language_code', 'required'),
+			array('publish', 'numerical', 'integerOnly'=>true),
 			array('language_name', 'length', 'max'=>32),
 			array('creation_id', 'length', 'max'=>11),
 			array('language_code', 'length', 'max'=>4),
+			array('language_desc', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('language_id, language_name, language_desc, language_code, creation_date, creation_id, modified_date, modified_id,
+			array('language_id, publish, language_name, language_desc, language_code, creation_date, creation_id, modified_date, modified_id,
 				creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -102,6 +105,7 @@ class DigitalLanguage extends CActiveRecord
 	{
 		return array(
 			'language_id' => Yii::t('attribute', 'Language'),
+			'publish' => Yii::t('attribute', 'Publish'),
 			'language_name' => Yii::t('attribute', 'Language'),
 			'language_desc' => Yii::t('attribute', 'Description'),
 			'language_code' => Yii::t('attribute', 'Code'),
@@ -141,6 +145,16 @@ class DigitalLanguage extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.language_id',$this->language_id);
+		if(isset($_GET['type']) && $_GET['type'] == 'publish')
+			$criteria->compare('t.publish',1);
+		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
+			$criteria->compare('t.publish',0);
+		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
+			$criteria->compare('t.publish',2);
+		else {
+			$criteria->addInCondition('t.publish',array(0,1));
+			$criteria->compare('t.publish',$this->publish);
+		}
 		$criteria->compare('t.language_name',strtolower($this->language_name),true);
 		$criteria->compare('t.language_desc',strtolower($this->language_desc),true);
 		$criteria->compare('t.language_code',strtolower($this->language_code),true);
@@ -201,6 +215,7 @@ class DigitalLanguage extends CActiveRecord
 			}
 		} else {
 			//$this->defaultColumns[] = 'language_id';
+			$this->defaultColumns[] = 'publish';
 			$this->defaultColumns[] = 'language_name';
 			$this->defaultColumns[] = 'language_desc';
 			$this->defaultColumns[] = 'language_code';
@@ -266,6 +281,20 @@ class DigitalLanguage extends CActiveRecord
 					),
 				), true),
 			);
+			if(!isset($_GET['type'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'publish',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->language_id)), $data->publish, 1)',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+					'filter'=>array(
+						1=>Yii::t('phrase', 'Yes'),
+						0=>Yii::t('phrase', 'No'),
+					),
+					'type' => 'raw',
+				);
+			}
 		}
 		parent::afterConstruct();
 	}
