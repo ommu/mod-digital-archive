@@ -64,12 +64,7 @@
 			<?php echo $model->getAttributeLabel('digital_intro'); ?><br/>
 			<?php echo $form->textArea($model,'digital_intro',array('rows'=>6, 'cols'=>50)); ?>
 		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('digital_cover'); ?><br/>
-			<?php echo $form->textArea($model,'digital_cover',array('rows'=>6, 'cols'=>50)); ?>
-		</li>
-
+		
 		<li>
 			<?php echo $model->getAttributeLabel('publish_year'); ?><br/>
 			<?php echo $form->textField($model,'publish_year',array('size'=>4,'maxlength'=>4)); ?>

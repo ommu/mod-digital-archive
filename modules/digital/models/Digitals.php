@@ -32,7 +32,7 @@
  * @property string $digital_code
  * @property string $digital_title
  * @property string $digital_intro
- * @property string $digital_cover
+ * @property string $digital_path
  * @property string $publish_year
  * @property string $publish_location
  * @property string $isbn
@@ -55,6 +55,13 @@
 class Digitals extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $digital_file_input;
+	public $multiple_file_input;
+	
+	// Variable Search
+	public $publisher_search;
+	public $creation_search;
+	public $modified_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -83,17 +90,19 @@ class Digitals extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cat_id, publish, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_cover, publish_year, publish_location, isbn, subjects, pages, series', 'required'),
+			array('cat_id, publish, language_id, digital_title, digital_intro, subjects', 'required'),
 			array('publish, cat_id, language_id, opac_id', 'numerical', 'integerOnly'=>true),
 			array('publisher_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('digital_code', 'length', 'max'=>16),
 			array('publish_year', 'length', 'max'=>4),
 			array('isbn', 'length', 'max'=>32),
 			array('pages', 'length', 'max'=>5),
-			array('', 'safe'),
+			array('publisher_id, opac_id, digital_code, digital_path, publish_year, publish_location, isbn, subjects, pages, series,
+				digital_file_input, multiple_file_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_cover, publish_year, publish_location, isbn, subjects, pages, series, creation_date, creation_id, modified_date, modified_id', 'safe', 'on'=>'search'),
+			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, subjects, pages, series, creation_date, creation_id, modified_date, modified_id,
+				publisher_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -111,6 +120,8 @@ class Digitals extends CActiveRecord
 			'category' => array(self::BELONGS_TO, 'DigitalCategory', 'cat_id'),
 			'language' => array(self::BELONGS_TO, 'DigitalLanguage', 'language_id'),
 			'publisher' => array(self::BELONGS_TO, 'DigitalPublisher', 'publisher_id'),
+			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
+			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 		);
 	}
 
@@ -125,21 +136,26 @@ class Digitals extends CActiveRecord
 			'cat_id' => Yii::t('attribute', 'Category'),
 			'publisher_id' => Yii::t('attribute', 'Publisher'),
 			'language_id' => Yii::t('attribute', 'Language'),
-			'opac_id' => Yii::t('attribute', 'Opac'),
+			'opac_id' => Yii::t('attribute', 'OPAC'),
 			'digital_code' => Yii::t('attribute', 'Code'),
 			'digital_title' => Yii::t('attribute', 'Title'),
 			'digital_intro' => Yii::t('attribute', 'Introduction'),
-			'digital_cover' => Yii::t('attribute', 'Cover'),
+			'digital_path' => Yii::t('attribute', 'Directory'),
 			'publish_year' => Yii::t('attribute', 'Publish Year'),
 			'publish_location' => Yii::t('attribute', 'Publish Location'),
 			'isbn' => Yii::t('attribute', 'Isbn'),
 			'subjects' => Yii::t('attribute', 'Subjects'),
 			'pages' => Yii::t('attribute', 'Pages'),
 			'series' => Yii::t('attribute', 'Series'),
+			'digital_file_input' => Yii::t('attribute', 'Digital File'),
+			'multiple_file_input' => Yii::t('attribute', 'Multiple File'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
+			'publisher_search' => Yii::t('attribute', 'Publisher'),
+			'creation_search' => Yii::t('attribute', 'Creation'),
+			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 		/*
 			'Digital' => 'Digital',
@@ -195,8 +211,8 @@ class Digitals extends CActiveRecord
 			$criteria->addInCondition('t.publish',array(0,1));
 			$criteria->compare('t.publish',$this->publish);
 		}
-		if(isset($_GET['cat']))
-			$criteria->compare('t.cat_id',$_GET['cat']);
+		if(isset($_GET['category']))
+			$criteria->compare('t.cat_id',$_GET['category']);
 		else
 			$criteria->compare('t.cat_id',$this->cat_id);
 		if(isset($_GET['publisher']))
@@ -211,7 +227,7 @@ class Digitals extends CActiveRecord
 		$criteria->compare('t.digital_code',strtolower($this->digital_code),true);
 		$criteria->compare('t.digital_title',strtolower($this->digital_title),true);
 		$criteria->compare('t.digital_intro',strtolower($this->digital_intro),true);
-		$criteria->compare('t.digital_cover',strtolower($this->digital_cover),true);
+		$criteria->compare('t.digital_path',strtolower($this->digital_path),true);
 		$criteria->compare('t.publish_year',strtolower($this->publish_year),true);
 		$criteria->compare('t.publish_location',strtolower($this->publish_location),true);
 		$criteria->compare('t.isbn',strtolower($this->isbn),true);
@@ -230,6 +246,25 @@ class Digitals extends CActiveRecord
 			$criteria->compare('t.modified_id',$_GET['modified']);
 		else
 			$criteria->compare('t.modified_id',$this->modified_id);
+		
+		// Custom Search
+		$criteria->with = array(
+			'publisher' => array(
+				'alias'=>'publisher',
+				'select'=>'publisher_name',
+			),
+			'creation' => array(
+				'alias'=>'creation',
+				'select'=>'displayname',
+			),
+			'modified' => array(
+				'alias'=>'modified',
+				'select'=>'displayname',
+			),
+		);
+		$criteria->compare('publisher.publisher_name',strtolower($this->publisher_search), true);
+		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
+		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
 		if(!isset($_GET['Digitals_sort']))
 			$criteria->order = 't.digital_id DESC';
@@ -269,7 +304,7 @@ class Digitals extends CActiveRecord
 			$this->defaultColumns[] = 'digital_code';
 			$this->defaultColumns[] = 'digital_title';
 			$this->defaultColumns[] = 'digital_intro';
-			$this->defaultColumns[] = 'digital_cover';
+			$this->defaultColumns[] = 'digital_path';
 			$this->defaultColumns[] = 'publish_year';
 			$this->defaultColumns[] = 'publish_location';
 			$this->defaultColumns[] = 'isbn';
@@ -303,12 +338,35 @@ class Digitals extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			$this->defaultColumns[] = 'digital_code';
-			$this->defaultColumns[] = 'cat_id';
+			if(!isset($_GET['category'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'cat_id',
+					'value' => '$data->category->cat_title',
+					'filter' => DigitalCategory::getCategory(),
+				);
+			}
 			$this->defaultColumns[] = 'digital_title';
-			$this->defaultColumns[] = 'publisher_id';
-			$this->defaultColumns[] = 'language_id';
-			$this->defaultColumns[] = 'opac_id';
-			$this->defaultColumns[] = 'publish_year';
+			if(!isset($_GET['publisher'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'publisher_search',
+					'value' => '$data->publisher->publisher_name',
+				);
+			}
+			if(!isset($_GET['category'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'language_id',
+					'value' => '$data->language->language_name',
+					'filter' => DigitalLanguage::getLanguage(),
+				);
+			}
+			$this->defaultColumns[] = array(
+				'name' => 'opac_id',
+				'value' => '$data->opac_id != 0 ? $data->opac_id : \'-\'',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'publish_year',
+				'value' => '!in_array($data->publish_year, array(\'0000\', \'1970\')) ? $data->publish_year : "-"',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
@@ -381,6 +439,44 @@ class Digitals extends CActiveRecord
 				$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
+	}
+	
+	/**
+	 * before save attributes
+	 */
+	protected function beforeSave() {
+		if(parent::beforeSave()) {
+			$this->subjects = serialize($this->subjects);
+		}
+		return true;
+	}
+	
+	/**
+	 * After save attributes
+	 */
+	protected function afterSave() {
+		parent::afterSave();
+			
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'cover_limit, cover_resize, cover_resize_size, cover_file_type, digital_path, digital_file_type',
+		));
+		
+		// Add directory		
+		$pathTitle = Utility::getUrlTitle($this->digital_id.' '.$this->digital_title);
+		if($setting != null)
+			$digital_path = $setting->digital_path.'/'.$pathTitle;
+		else
+			$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathTitle;
+		
+		if(!file_exists($digital_path)) {
+			@mkdir($digital_path, 0755, true);
+
+			// Add file in directory (index.php)
+			$newFile = $digital_path.'/index.php';
+			$FileHandle = fopen($newFile, 'w');
+		}
+		self::model()->updateByPk($this->digital_id, array('digital_path'=>$digital_path));
+		
 	}
 
 }

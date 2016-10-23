@@ -42,6 +42,12 @@ content_menu	:
 	- urlTitle: Add Materi Digital
 		urlRules: {digital, o/admin, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: add, attr: -, icon: -}
+	- urlTitle: Back to manage
+		urlRules: {digital, o/admin, add,edit,view, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: manage, attr: -, icon: -}
+	- urlTitle: Upload file digital
+		urlRules: {digital, o/admin, edit, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: upload, attr: -, icon: -}
         
 # controller o/category
 	- urlTitle: Add Category
