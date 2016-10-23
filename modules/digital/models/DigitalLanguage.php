@@ -317,6 +317,33 @@ class DigitalLanguage extends CActiveRecord
 	}
 
 	/**
+	 * Get category
+	 * 0 = unpublish
+	 * 1 = publish
+	 */
+	public static function getLanguage($publish=null, $code=false) 
+	{		
+		$criteria=new CDbCriteria;
+		if($publish != null)
+			$criteria->compare('t.publish',$publish);
+		
+		$model = self::model()->findAll($criteria);
+
+		$items = array();
+		if($model != null) {
+			foreach($model as $key => $val) {
+				if($code == true && $val->language_code != '')
+					$items[$val->language_id] = $val->language_name.' ('.$val->language_code.')';
+				else
+					$items[$val->language_id] = $val->language_name;
+			}
+			return $items;
+			
+		} else
+			return false;
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
