@@ -32,6 +32,9 @@
  * @property integer $cover_resize
  * @property string $cover_resize_size
  * @property string $cover_view_size
+ * @property string $cover_file_type
+ * @property string $digital_path
+ * @property string $digital_file_type
  * @property string $modified_date
  * @property string $modified_id
  */
@@ -69,14 +72,14 @@ class DigitalSetting extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize', 'required'),
+			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_file_type, digital_path, digital_file_type', 'required'),
 			array('permission, cover_limit, cover_resize', 'numerical', 'integerOnly'=>true),
 			array('license', 'length', 'max'=>32),
 			array('modified_id', 'length', 'max'=>11),
 			array('cover_resize_size, cover_view_size', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_resize_size, cover_view_size, modified_date, modified_id,
+			array('id, license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_resize_size, cover_view_size, cover_file_type, digital_path, digital_file_type, modified_date, modified_id,
 				modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -108,6 +111,9 @@ class DigitalSetting extends CActiveRecord
 			'cover_resize' => Yii::t('attribute', 'Cover Resize'),
 			'cover_resize_size' => Yii::t('attribute', 'Cover Resize Size'),
 			'cover_view_size' => Yii::t('attribute', 'Cover View Size'),
+			'cover_file_type' => Yii::t('attribute', 'Cover File Type'),
+			'digital_path' => Yii::t('attribute', 'Digital Directory'),
+			'digital_file_type' => Yii::t('attribute', 'Digital File Type'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
@@ -155,6 +161,9 @@ class DigitalSetting extends CActiveRecord
 		$criteria->compare('t.cover_resize',$this->cover_resize);
 		$criteria->compare('t.cover_resize_size',strtolower($this->cover_resize_size),true);
 		$criteria->compare('t.cover_view_size',strtolower($this->cover_view_size),true);
+		$criteria->compare('t.cover_file_type',strtolower($this->cover_file_type),true);
+		$criteria->compare('t.digital_path',strtolower($this->digital_path),true);
+		$criteria->compare('t.digital_file_type',strtolower($this->digital_file_type),true);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
 		if(isset($_GET['modified']))
@@ -209,6 +218,9 @@ class DigitalSetting extends CActiveRecord
 			$this->defaultColumns[] = 'cover_resize';
 			$this->defaultColumns[] = 'cover_resize_size';
 			$this->defaultColumns[] = 'cover_view_size';
+			$this->defaultColumns[] = 'cover_file_type';
+			$this->defaultColumns[] = 'digital_path';
+			$this->defaultColumns[] = 'digital_file_type';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = 'modified_id';
 		}
@@ -229,6 +241,9 @@ class DigitalSetting extends CActiveRecord
 			$this->defaultColumns[] = 'cover_resize';
 			$this->defaultColumns[] = 'cover_resize_size';
 			$this->defaultColumns[] = 'cover_view_size';
+			$this->defaultColumns[] = 'cover_file_type';
+			$this->defaultColumns[] = 'digital_path';
+			$this->defaultColumns[] = 'digital_file_type';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = array(
 				'name' => 'modified_search',
@@ -289,6 +304,8 @@ class DigitalSetting extends CActiveRecord
 		if(parent::beforeSave()) {
 			$this->cover_resize_size = serialize($this->cover_resize_size);
 			$this->cover_view_size = serialize($this->cover_view_size);
+			$this->cover_file_type = serialize(Utility::formatFileType($this->cover_file_type));
+			$this->digital_file_type = serialize(Utility::formatFileType($this->digital_file_type));
 		}
 		return true;
 	}

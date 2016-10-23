@@ -114,6 +114,48 @@
 			</div>
 		</div>
 
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'cover_file_type'); ?>
+			<div class="desc">
+				<?php 
+				if(!$model->getErrors()) {
+					$cover_file_type = unserialize($model->cover_file_type);
+					if(!empty($cover_file_type))
+						$model->cover_file_type = Utility::formatFileType($cover_file_type, false);
+				}
+				echo $form->textField($model,'cover_file_type', array('class'=>'span-6')); ?>
+				<?php echo $form->error($model,'cover_file_type'); ?>
+				<span class="small-px">pisahkan jenis file dengan koma (,). example: "jpg, png, bmp"</span>
+			</div>
+		</div>
+
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'digital_path'); ?>
+			<div class="desc">
+				<?php 
+				if($model->isNewRecord || (!$model->isNewRecord && $model->digital_path == ''))
+					$model->digital_path = YiiBase::getPathOfAlias('webroot.public.digital');
+				echo $form->textField($model,'digital_path', array('class'=>'span-9')); ?>
+				<?php echo $form->error($model,'digital_path'); ?>
+				<span class="small-px">example: "<?php echo YiiBase::getPathOfAlias('webroot.public.digital')?>"</span>
+			</div>
+		</div>
+
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'digital_file_type'); ?>
+			<div class="desc">
+				<?php				
+				if(!$model->getErrors()) {
+					$digital_file_type = unserialize($model->digital_file_type);
+					if(!empty($digital_file_type))
+						$model->digital_file_type = Utility::formatFileType($digital_file_type, false);
+				}
+				echo $form->textField($model,'digital_file_type', array('class'=>'span-6')); ?>
+				<?php echo $form->error($model,'digital_file_type'); ?>
+				<span class="small-px">pisahkan type file dengan koma (,). example: "mp3, mp4, pdf, doc, docx"</span>
+			</div>
+		</div>
+
 		<div class="submit clearfix">
 			<label>&nbsp;</label>
 			<div class="desc">

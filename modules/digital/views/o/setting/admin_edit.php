@@ -19,6 +19,18 @@
 		$model->id=>array('view','id'=>$model->id),
 		'Update',
 	);
+	$cs = Yii::app()->getClientScript();
+$js=<<<EOP
+	$('input[name="DigitalSetting[cover_resize]"]').live('change', function() {
+		var id = $(this).val();
+		if(id == '1') {
+			$('div#resize_size').slideDown();
+		} else {
+			$('div#resize_size').slideUp();
+		}
+	});
+EOP;
+	$cs->registerScript('resize', $js, CClientScript::POS_END);
 ?>
 
 <div class="form" name="post-on">
