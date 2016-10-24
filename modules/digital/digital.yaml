@@ -47,7 +47,7 @@ content_menu	:
 		urlPath: {url: manage, attr: -, icon: -}
 	- urlTitle: Upload file digital
 		urlRules: {digital, o/admin, edit, siteType: 0,1, userLevel: 1,2}
-		urlPath: {url: upload, attr: -, icon: -}
+		urlPath: {url: upload, attr: id=$_GET*id, icon: -}
         
 # controller o/category
 	- urlTitle: Add Category

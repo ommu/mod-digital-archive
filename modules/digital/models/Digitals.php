@@ -445,7 +445,7 @@ class Digitals extends CActiveRecord
 	 * before save attributes
 	 */
 	protected function beforeSave() {
-		if(parent::beforeSave()) {
+		if(parent::beforeSave()) {			
 			$this->subjects = serialize($this->subjects);
 		}
 		return true;
@@ -456,26 +456,50 @@ class Digitals extends CActiveRecord
 	 */
 	protected function afterSave() {
 		parent::afterSave();
+		$action = strtolower(Yii::app()->controller->action->id);
 			
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'cover_limit, cover_resize, cover_resize_size, cover_file_type, digital_path, digital_file_type',
 		));
 		
-		// Add directory		
-		$pathTitle = Utility::getUrlTitle($this->digital_id.' '.$this->digital_title);
-		if($setting != null)
-			$digital_path = $setting->digital_path.'/'.$pathTitle;
-		else
-			$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathTitle;
+		// Add directory
+		if($model->isNewRecord) {
+			$pathTitle = Utility::getUrlTitle($this->digital_id.' '.$this->digital_title);
+			if($setting != null)
+				$digital_path = $setting->digital_path.'/'.$pathTitle;
+			else
+				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathTitle;
 		
-		if(!file_exists($digital_path)) {
-			@mkdir($digital_path, 0755, true);
+			if(!file_exists($digital_path)) {
+				@mkdir($digital_path, 0755, true);
 
-			// Add file in directory (index.php)
-			$newFile = $digital_path.'/index.php';
-			$FileHandle = fopen($newFile, 'w');
+				// Add file in directory (index.php)
+				$newFile = $digital_path.'/index.php';
+				$FileHandle = fopen($newFile, 'w');
+			}
+			self::model()->updateByPk($this->digital_id, array('digital_path'=>$digital_path));
+			
+		} else
+			$digital_path = $this->digital_path;
+		
+		if(!$model->isNewRecord && $action == 'upload') {
+			$this->digital_file_input = CUploadedFile::getInstance($this, 'digital_file_input');
+			if($this->digital_file_input instanceOf CUploadedFile) {
+				$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital_title).'.'.strtolower($this->digital_file_input->extensionName);
+				if($this->digital_file_input->saveAs($digital_path.'/'.$fileName)) {
+					if($this->multiple_file_input == 0) {
+						$digital = new DigitalFile;
+						$digital->digital_id = $this->digital_id;
+						$digital->digital_filename = $fileName;
+						$digital->save();
+						
+					} else {
+						echo 'upload compress file';
+					}
+				}
+			}
+			
 		}
-		self::model()->updateByPk($this->digital_id, array('digital_path'=>$digital_path));
 		
 	}
 

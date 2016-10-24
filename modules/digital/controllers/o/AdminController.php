@@ -10,6 +10,7 @@
  * TOC :
  *	Index
  *	Manage
+ *	Upload
  *	Add
  *	Edit
  *	View
@@ -86,7 +87,7 @@ class AdminController extends Controller
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','add','edit','view','runaction','delete','publish'),
+				'actions'=>array('manage','upload','add','edit','view','runaction','delete','publish'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -136,7 +137,42 @@ class AdminController extends Controller
 			'model'=>$model,
 			'columns' => $columns,
 		));
-	}	
+	}
+	
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
+	public function actionUpload($id) 
+	{
+		$model=$this->loadModel($id);
+		if($model != null) {
+			// Uncomment the following line if AJAX validation is needed
+			$this->performAjaxValidation($model);
+
+			if(isset($_POST['Digitals'])) {
+				$model->attributes=$_POST['Digitals'];
+				
+				if($model->save()) {
+					Yii::app()->user->setFlash('success', Yii::t('phrase', 'Digitals success uploaded.'));
+					$this->redirect(array('edit','id'=>$model->digital_id));
+				}
+			}
+			
+			$this->dialogDetail = true;
+			$this->dialogGroundUrl = Yii::app()->controller->createUrl('edit', array('id'=>$model->digital_id));
+			$this->dialogWidth = 450;
+
+			$this->pageTitle = Yii::t('phrase', 'Create Digital Categories');
+			$this->pageDescription = '';
+			$this->pageMeta = '';
+			$this->render('admin_upload',array(
+				'model'=>$model,
+			));
+			
+		} else
+			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
+	}
 	
 	/**
 	 * Creates a new model.
