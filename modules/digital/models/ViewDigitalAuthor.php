@@ -1,11 +1,11 @@
 <?php
 /**
- * ViewDigitalCategory
+ * ViewDigitalAuthor
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2016 Ommu Platform (ommu.co)
- * @created date 27 October 2016, 04:08 WIB
+ * @created date 28 October 2016, 19:46 WIB
  * @link http://company.ommu.co
  * @contact (+62)856-299-4114
  *
@@ -20,15 +20,15 @@
  *
  * --------------------------------------------------------------------------------------
  *
- * This is the model class for table "_view_digital_category".
+ * This is the model class for table "_view_digital_author".
  *
- * The followings are the available columns in table '_view_digital_category':
- * @property integer $cat_id
+ * The followings are the available columns in table '_view_digital_author':
+ * @property string $author_id
  * @property string $digitals
  * @property string $digital_publish
  * @property string $digital_unpublish
  */
-class ViewDigitalCategory extends CActiveRecord
+class ViewDigitalAuthor extends CActiveRecord
 {
 	public $defaultColumns = array();
 
@@ -36,7 +36,7 @@ class ViewDigitalCategory extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ViewDigitalCategory the static model class
+	 * @return ViewDigitalAuthor the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -48,7 +48,7 @@ class ViewDigitalCategory extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return '_view_digital_category';
+		return '_view_digital_author';
 	}
 
 	/**
@@ -56,7 +56,7 @@ class ViewDigitalCategory extends CActiveRecord
 	 */
 	public function primaryKey()
 	{
-		return 'cat_id';
+		return 'author_id';
 	}
 
 	/**
@@ -67,11 +67,11 @@ class ViewDigitalCategory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cat_id', 'numerical', 'integerOnly'=>true),
+			array('author_id', 'length', 'max'=>11),
 			array('digitals, digital_publish, digital_unpublish', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cat_id, digitals, digital_publish, digital_unpublish', 'safe', 'on'=>'search'),
+			array('author_id, digitals, digital_publish, digital_unpublish', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -92,13 +92,13 @@ class ViewDigitalCategory extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'cat_id' => Yii::t('attribute', 'Cat'),
+			'author_id' => Yii::t('attribute', 'Author'),
 			'digitals' => Yii::t('attribute', 'Digitals'),
 			'digital_publish' => Yii::t('attribute', 'Digital Publish'),
 			'digital_unpublish' => Yii::t('attribute', 'Digital Unpublish'),
 		);
 		/*
-			'Cat' => 'Cat',
+			'Author' => 'Author',
 			'Digitals' => 'Digitals',
 			'Digital Publish' => 'Digital Publish',
 			'Digital Unpublish' => 'Digital Unpublish',
@@ -124,13 +124,13 @@ class ViewDigitalCategory extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.cat_id',$this->cat_id);
+		$criteria->compare('t.author_id',strtolower($this->author_id),true);
 		$criteria->compare('t.digitals',strtolower($this->digitals),true);
 		$criteria->compare('t.digital_publish',strtolower($this->digital_publish),true);
 		$criteria->compare('t.digital_unpublish',strtolower($this->digital_unpublish),true);
 
-		if(!isset($_GET['ViewDigitalCategory_sort']))
-			$criteria->order = 't.cat_id DESC';
+		if(!isset($_GET['ViewDigitalAuthor_sort']))
+			$criteria->order = 't.author_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -158,7 +158,7 @@ class ViewDigitalCategory extends CActiveRecord
 				$this->defaultColumns[] = $val;
 			}
 		} else {
-			$this->defaultColumns[] = 'cat_id';
+			$this->defaultColumns[] = 'author_id';
 			$this->defaultColumns[] = 'digitals';
 			$this->defaultColumns[] = 'digital_publish';
 			$this->defaultColumns[] = 'digital_unpublish';
@@ -176,7 +176,7 @@ class ViewDigitalCategory extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'cat_id';
+			$this->defaultColumns[] = 'author_id';
 			$this->defaultColumns[] = 'digitals';
 			$this->defaultColumns[] = 'digital_publish';
 			$this->defaultColumns[] = 'digital_unpublish';

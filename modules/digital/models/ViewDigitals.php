@@ -1,11 +1,11 @@
 <?php
 /**
- * ViewDigitalCategory
+ * ViewDigitals
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2016 Ommu Platform (ommu.co)
- * @created date 27 October 2016, 04:08 WIB
+ * @created date 28 October 2016, 19:45 WIB
  * @link http://company.ommu.co
  * @contact (+62)856-299-4114
  *
@@ -20,15 +20,16 @@
  *
  * --------------------------------------------------------------------------------------
  *
- * This is the model class for table "_view_digital_category".
+ * This is the model class for table "_view_digitals".
  *
- * The followings are the available columns in table '_view_digital_category':
- * @property integer $cat_id
- * @property string $digitals
- * @property string $digital_publish
- * @property string $digital_unpublish
+ * The followings are the available columns in table '_view_digitals':
+ * @property string $digital_id
+ * @property string $covers
+ * @property string $files
+ * @property string $authors
+ * @property string $tags
  */
-class ViewDigitalCategory extends CActiveRecord
+class ViewDigitals extends CActiveRecord
 {
 	public $defaultColumns = array();
 
@@ -36,7 +37,7 @@ class ViewDigitalCategory extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ViewDigitalCategory the static model class
+	 * @return ViewDigitals the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -48,7 +49,7 @@ class ViewDigitalCategory extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return '_view_digital_category';
+		return '_view_digitals';
 	}
 
 	/**
@@ -67,11 +68,11 @@ class ViewDigitalCategory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cat_id', 'numerical', 'integerOnly'=>true),
-			array('digitals, digital_publish, digital_unpublish', 'length', 'max'=>21),
+			array('digital_id', 'length', 'max'=>11),
+			array('covers, files, authors, tags', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cat_id, digitals, digital_publish, digital_unpublish', 'safe', 'on'=>'search'),
+			array('digital_id, covers, files, authors, tags', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -92,16 +93,18 @@ class ViewDigitalCategory extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'cat_id' => Yii::t('attribute', 'Cat'),
-			'digitals' => Yii::t('attribute', 'Digitals'),
-			'digital_publish' => Yii::t('attribute', 'Digital Publish'),
-			'digital_unpublish' => Yii::t('attribute', 'Digital Unpublish'),
+			'digital_id' => Yii::t('attribute', 'Digital'),
+			'covers' => Yii::t('attribute', 'Covers'),
+			'files' => Yii::t('attribute', 'Files'),
+			'authors' => Yii::t('attribute', 'Authors'),
+			'tags' => Yii::t('attribute', 'Tags'),
 		);
 		/*
-			'Cat' => 'Cat',
-			'Digitals' => 'Digitals',
-			'Digital Publish' => 'Digital Publish',
-			'Digital Unpublish' => 'Digital Unpublish',
+			'Digital' => 'Digital',
+			'Covers' => 'Covers',
+			'Files' => 'Files',
+			'Authors' => 'Authors',
+			'Tags' => 'Tags',
 		
 		*/
 	}
@@ -124,13 +127,14 @@ class ViewDigitalCategory extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.cat_id',$this->cat_id);
-		$criteria->compare('t.digitals',strtolower($this->digitals),true);
-		$criteria->compare('t.digital_publish',strtolower($this->digital_publish),true);
-		$criteria->compare('t.digital_unpublish',strtolower($this->digital_unpublish),true);
+		$criteria->compare('t.digital_id',strtolower($this->digital_id),true);
+		$criteria->compare('t.covers',strtolower($this->covers),true);
+		$criteria->compare('t.files',strtolower($this->files),true);
+		$criteria->compare('t.authors',strtolower($this->authors),true);
+		$criteria->compare('t.tags',strtolower($this->tags),true);
 
-		if(!isset($_GET['ViewDigitalCategory_sort']))
-			$criteria->order = 't.cat_id DESC';
+		if(!isset($_GET['ViewDigitals_sort']))
+			$criteria->order = 't.digital_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -158,10 +162,11 @@ class ViewDigitalCategory extends CActiveRecord
 				$this->defaultColumns[] = $val;
 			}
 		} else {
-			$this->defaultColumns[] = 'cat_id';
-			$this->defaultColumns[] = 'digitals';
-			$this->defaultColumns[] = 'digital_publish';
-			$this->defaultColumns[] = 'digital_unpublish';
+			$this->defaultColumns[] = 'digital_id';
+			$this->defaultColumns[] = 'covers';
+			$this->defaultColumns[] = 'files';
+			$this->defaultColumns[] = 'authors';
+			$this->defaultColumns[] = 'tags';
 		}
 
 		return $this->defaultColumns;
@@ -176,10 +181,11 @@ class ViewDigitalCategory extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'cat_id';
-			$this->defaultColumns[] = 'digitals';
-			$this->defaultColumns[] = 'digital_publish';
-			$this->defaultColumns[] = 'digital_unpublish';
+			$this->defaultColumns[] = 'digital_id';
+			$this->defaultColumns[] = 'covers';
+			$this->defaultColumns[] = 'files';
+			$this->defaultColumns[] = 'authors';
+			$this->defaultColumns[] = 'tags';
 		}
 		parent::afterConstruct();
 	}
