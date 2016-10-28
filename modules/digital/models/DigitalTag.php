@@ -136,19 +136,6 @@ class DigitalTag extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
-		$criteria->compare('t.id',strtolower($this->id),true);
-		if(isset($_GET['digital']))
-			$criteria->compare('t.digital_id',$_GET['digital']);
-		else
-			$criteria->compare('t.digital_id',$this->digital_id);
-		$criteria->compare('t.tag_id',strtolower($this->tag_id),true);
-		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
-		if(isset($_GET['creation']))
-			$criteria->compare('t.creation_id',$_GET['creation']);
-		else
-			$criteria->compare('t.creation_id',$this->creation_id);
 		
 		// Custom Search
 		$criteria->with = array(
@@ -165,6 +152,20 @@ class DigitalTag extends CActiveRecord
 				'select'=>'displayname',
 			),
 		);
+
+		$criteria->compare('t.id',strtolower($this->id),true);
+		if(isset($_GET['digital']))
+			$criteria->compare('t.digital_id',$_GET['digital']);
+		else
+			$criteria->compare('t.digital_id',$this->digital_id);
+		$criteria->compare('t.tag_id',strtolower($this->tag_id),true);
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
+		if(isset($_GET['creation']))
+			$criteria->compare('t.creation_id',$_GET['creation']);
+		else
+			$criteria->compare('t.creation_id',$this->creation_id);
+		
 		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
 		$criteria->compare('tag.body',strtolower($this->tag_search), true);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);

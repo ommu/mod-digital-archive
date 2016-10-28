@@ -135,6 +135,22 @@ class DigitalAuthors extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'digital' => array(
+				'alias'=>'digital',
+				'select'=>'digital_title',
+			),
+			'author' => array(
+				'alias'=>'author',
+				'select'=>'author_name',
+			),
+			'creation' => array(
+				'alias'=>'creation',
+				'select'=>'displayname',
+			),
+		);
 
 		$criteria->compare('t.id',strtolower($this->id),true);
 		if(isset($_GET['digital']))
@@ -152,21 +168,6 @@ class DigitalAuthors extends CActiveRecord
 		else
 			$criteria->compare('t.creation_id',$this->creation_id);
 		
-		// Custom Search
-		$criteria->with = array(
-			'digital' => array(
-				'alias'=>'digital',
-				'select'=>'digital_title',
-			),
-			'author' => array(
-				'alias'=>'author',
-				'select'=>'author_name',
-			),
-			'creation' => array(
-				'alias'=>'creation',
-				'select'=>'displayname',
-			),
-		);
 		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
 		$criteria->compare('author.author_name',strtolower($this->author_search), true);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);

@@ -144,7 +144,7 @@ class Digitals extends CActiveRecord
 			'digital_path' => Yii::t('attribute', 'Directory'),
 			'publish_year' => Yii::t('attribute', 'Publish Year'),
 			'publish_location' => Yii::t('attribute', 'Publish Location'),
-			'isbn' => Yii::t('attribute', 'Isbn'),
+			'isbn' => Yii::t('attribute', 'ISBN/ISSN/ISMN'),
 			'subjects' => Yii::t('attribute', 'Subjects'),
 			'pages' => Yii::t('attribute', 'Pages'),
 			'series' => Yii::t('attribute', 'Series'),
@@ -200,6 +200,22 @@ class Digitals extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'publisher' => array(
+				'alias'=>'publisher',
+				'select'=>'publisher_name',
+			),
+			'creation' => array(
+				'alias'=>'creation',
+				'select'=>'displayname',
+			),
+			'modified' => array(
+				'alias'=>'modified',
+				'select'=>'displayname',
+			),
+		);
 
 		$criteria->compare('t.digital_id',strtolower($this->digital_id),true);
 		if(isset($_GET['type']) && $_GET['type'] == 'publish')
@@ -248,21 +264,6 @@ class Digitals extends CActiveRecord
 		else
 			$criteria->compare('t.modified_id',$this->modified_id);
 		
-		// Custom Search
-		$criteria->with = array(
-			'publisher' => array(
-				'alias'=>'publisher',
-				'select'=>'publisher_name',
-			),
-			'creation' => array(
-				'alias'=>'creation',
-				'select'=>'displayname',
-			),
-			'modified' => array(
-				'alias'=>'modified',
-				'select'=>'displayname',
-			),
-		);
 		$criteria->compare('publisher.publisher_name',strtolower($this->publisher_search), true);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
