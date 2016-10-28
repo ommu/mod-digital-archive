@@ -151,26 +151,11 @@ class CategoryController extends Controller
 
 		if(isset($_POST['DigitalCategory'])) {
 			$model->attributes=$_POST['DigitalCategory'];
-			
-			$jsonError = CActiveForm::validate($model);
-			if(strlen($jsonError) > 2) {
-				echo $jsonError;
-
-			} else {
-				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
-					if($model->save()) {
-						echo CJSON::encode(array(
-							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('manage'),
-							'id' => 'partial-digital-category',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'DigitalCategory success created.').'</strong></div>',
-						));
-					} else {
-						print_r($model->getErrors());
-					}
-				}
+				
+			if($model->save()) {
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'DigitalCategory success created.'));
+				$this->redirect(Yii::app()->controller->createUrl('edit', array('id'=>$model->cat_id)));
 			}
-			Yii::app()->end();
 		}
 		
 		$this->dialogDetail = true;
@@ -199,26 +184,12 @@ class CategoryController extends Controller
 
 		if(isset($_POST['DigitalCategory'])) {
 			$model->attributes=$_POST['DigitalCategory'];
-			
-			$jsonError = CActiveForm::validate($model);
-			if(strlen($jsonError) > 2) {
-				echo $jsonError;
-
-			} else {
-				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
-					if($model->save()) {
-						echo CJSON::encode(array(
-							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('manage'),
-							'id' => 'partial-digital-category',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'DigitalCategory success updated.').'</strong></div>',
-						));
-					} else {
-						print_r($model->getErrors());
-					}
-				}
+			print_r($model->getErrors());
+				
+			if($model->save()) {
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'DigitalCategory success updated.'));
+				$this->redirect(Yii::app()->controller->createUrl('manage'));
 			}
-			Yii::app()->end();
 		}
 		
 		$this->dialogDetail = true;

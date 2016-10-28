@@ -18,17 +18,22 @@
 <?php $form=$this->beginWidget('application.components.system.OActiveForm', array(
 	'id'=>'digital-category-form',
 	'enableAjaxValidation'=>true,
-	//'htmlOptions' => array('enctype' => 'multipart/form-data')
+	'htmlOptions' => array(
+		'enctype' => 'multipart/form-data',
+		'on_post' => true,
+	),
 )); ?>
 
 <div class="dialog-content">
 	<fieldset>
 
-		<?php //begin.Messages ?>
+		<?php /*
+		//begin.Messages ?>
 		<div id="ajax-message">
 			<?php echo $form->errorSummary($model); ?>
 		</div>
-		<?php //begin.Messages ?>
+		<?php //begin.Messages 
+		*/?>
 
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'cat_title'); ?>
@@ -62,6 +67,25 @@
 			<div class="desc">
 				<?php echo $form->textField($model,'cat_icon',array('maxlength'=>32)); ?>
 				<?php echo $form->error($model,'cat_icon'); ?>
+				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
+		</div>
+
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'cat_cover'); ?>
+			<div class="desc">
+				<?php 
+				if(!$model->isNewRecord) {
+					if(!$model->getErrors())
+						$model->old_cat_cover_input = $model->cat_cover;
+					echo $form->hiddenField($model,'old_cat_cover_input');
+					if($model->cat_cover != '') {
+						$file = Yii::app()->request->baseUrl.'/public/digital/'.$model->old_cat_cover_input;?>
+						<img class="mb-15" src="<?php echo Utility::getTimThumb($file, 300, 400, 3);?>" alt="">					
+				<?php }
+				}
+				echo $form->fileField($model,'cat_cover'); ?>
+				<?php echo $form->error($model,'cat_cover'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>

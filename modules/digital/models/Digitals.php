@@ -114,9 +114,10 @@ class Digitals extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'covers' => array(self::HAS_MANY, 'DigitalCover', 'digital_id'),
 			'authors' => array(self::HAS_MANY, 'DigitalAuthors', 'digital_id'),
-			'history_prints' => array(self::HAS_MANY, 'DigitalHistoryPrint', 'digital_id'),
 			'tags' => array(self::HAS_MANY, 'DigitalTag', 'digital_id'),
+			'history_prints' => array(self::HAS_MANY, 'DigitalHistoryPrint', 'digital_id'),
 			'category' => array(self::BELONGS_TO, 'DigitalCategory', 'cat_id'),
 			'language' => array(self::BELONGS_TO, 'DigitalLanguage', 'language_id'),
 			'publisher' => array(self::BELONGS_TO, 'DigitalPublisher', 'publisher_id'),

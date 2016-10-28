@@ -29,6 +29,7 @@
  * @property string $cat_desc
  * @property string $cat_code
  * @property string $cat_icon
+ * @property string $cat_cover
  * @property string $creation_date
  * @property string $creation_id
  * @property string $modified_date
@@ -40,6 +41,7 @@
 class DigitalCategory extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $old_cat_cover_input;
 	
 	// Variable Search
 	public $creation_search;
@@ -77,10 +79,11 @@ class DigitalCategory extends CActiveRecord
 			array('cat_title, cat_icon', 'length', 'max'=>32),
 			array('creation_id, modified_id', 'length', 'max'=>11),
 			array('cat_code', 'length', 'max'=>6),
-			array('cat_desc, cat_icon', 'safe'),
+			array('cat_desc, cat_icon, cat_cover,
+				old_cat_cover_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cat_id, publish, cat_title, cat_desc, cat_code, cat_icon, creation_date, creation_id, modified_date, modified_id,
+			array('cat_id, publish, cat_title, cat_desc, cat_code, cat_icon, cat_cover, creation_date, creation_id, modified_date, modified_id,
 				creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -93,6 +96,7 @@ class DigitalCategory extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'view' => array(self::BELONGS_TO, 'ViewDigitalCategory', 'cat_id'),
 			'digitals' => array(self::HAS_MANY, 'Digitals', 'cat_id'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
@@ -111,10 +115,12 @@ class DigitalCategory extends CActiveRecord
 			'cat_desc' => Yii::t('attribute', 'Description'),
 			'cat_code' => Yii::t('attribute', 'Code'),
 			'cat_icon' => Yii::t('attribute', 'Icon'),
+			'cat_cover' => Yii::t('attribute', 'Cover'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
+			'old_cat_cover_input' => Yii::t('attribute', 'Old Cover'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
@@ -164,6 +170,7 @@ class DigitalCategory extends CActiveRecord
 		$criteria->compare('t.cat_desc',strtolower($this->cat_desc),true);
 		$criteria->compare('t.cat_code',strtolower($this->cat_code),true);
 		$criteria->compare('t.cat_icon',strtolower($this->cat_icon),true);
+		$criteria->compare('t.cat_cover',strtolower($this->cat_cover),true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
 		if(isset($_GET['creation']))
@@ -226,6 +233,7 @@ class DigitalCategory extends CActiveRecord
 			$this->defaultColumns[] = 'cat_desc';
 			$this->defaultColumns[] = 'cat_code';
 			$this->defaultColumns[] = 'cat_icon';
+			$this->defaultColumns[] = 'cat_cover';
 			$this->defaultColumns[] = 'creation_date';
 			$this->defaultColumns[] = 'creation_id';
 			$this->defaultColumns[] = 'modified_date';
@@ -351,16 +359,122 @@ class DigitalCategory extends CActiveRecord
 	}
 
 	/**
+	 * Get Article
+	 */
+	public static function resizeCategoryCover($cover, $size) {
+		Yii::import('ext.phpthumb.PhpThumbFactory');
+		$categoryCover = PhpThumbFactory::create($cover, array('jpegQuality' => 90, 'correctPermissions' => true));
+		$resizeSize = explode(',', $size);
+		$categoryCover->adaptiveResize($resizeSize[0], $resizeSize[1]);					
+		$categoryCover->save($cover);
+		
+		return true;
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'cover_file_type',
+		));
+		$cover_file_type = unserialize($setting->cover_file_type);
+		
 		if(parent::beforeValidate()) {
+			$cat_cover = CUploadedFile::getInstance($this, 'cat_cover');
+			if($cat_cover->name != '') {
+				$extension = pathinfo($cat_cover->name, PATHINFO_EXTENSION);
+				if(!in_array(strtolower($extension), $cover_file_type))
+					$this->addError('cat_cover', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
+						'{name}'=>$cat_cover->name,
+						'{extensions}'=>Utility::formatFileType($cover_file_type, false),
+					)));
+			}
+			
 			if($this->isNewRecord)
 				$this->creation_id = Yii::app()->user->id;
 			else
 				$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
+	}
+	
+	/**
+	 * before save attributes
+	 */
+	protected function beforeSave() {
+		$action = strtolower(Yii::app()->controller->action->id);
+		if(parent::beforeSave()) {
+			if(!$this->isNewRecord && in_array($action, array('edit'))) {
+				//Update article location photo
+				$digital_path = "public/digital";
+				
+				// Add article directory
+				if(!file_exists($digital_path)) {
+					@mkdir($digital_path, 0777, true);
+
+					// Add file in article directory (index.php)
+					$newFile = $digital_path.'/index.php';
+					$FileHandle = fopen($newFile, 'w');
+				}
+				
+				$this->cat_cover = CUploadedFile::getInstance($this, 'cat_cover');
+				if($this->cat_cover instanceOf CUploadedFile) {
+					$fileName = $this->cat_id.'_'.time().'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_cover->extensionName);
+					if($this->cat_cover->saveAs($digital_path.'/'.$fileName)) {
+						self::resizeCategoryCover($digital_path.'/'.$fileName, '360,380');
+						if($this->old_cat_cover_input != '' && file_exists($digital_path.'/'.$this->old_cat_cover_input))
+							rename($digital_path.'/'.$this->old_cat_cover_input, 'public/digital/verwijderen/'.$this->old_cat_cover_input);
+						$this->cat_cover = $fileName;
+					}
+				}					
+				if($this->cat_cover == '')
+					$this->cat_cover = $this->old_cat_cover_input;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * After save attributes
+	 */
+	protected function afterSave() {
+		parent::afterSave();
+		
+		if($this->isNewRecord) {
+			//Update article location photo
+			$digital_path = "public/digital";
+			
+			// Add article directory
+			if(!file_exists($digital_path)) {
+				@mkdir($digital_path, 0777, true);
+
+				// Add file in article directory (index.php)
+				$newFile = $digital_path.'/index.php';
+				$FileHandle = fopen($newFile, 'w');
+			}
+			
+			$this->cat_cover = CUploadedFile::getInstance($this, 'cat_cover');
+			if($this->cat_cover instanceOf CUploadedFile) {
+				$fileName = $this->cat_id.'_'.time().'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_cover->extensionName);
+				if($this->cat_cover->saveAs($digital_path.'/'.$fileName)) {
+					self::resizeCategoryCover($digital_path.'/'.$fileName, '360,380');
+					self::model()->updateByPk($this->cat_id, array('cat_cover'=>$fileName));
+				}
+			}
+		}
+	}
+
+	/**
+	 * After delete attributes
+	 */
+	protected function afterDelete() {
+		parent::afterDelete();
+		//delete article location image
+		$digital_path = "public/digital";
+		
+		if($this->cat_cover != '' && file_exists($digital_path.'/'.$this->cat_cover))
+			rename($digital_path.'/'.$this->cat_cover, 'public/digital/verwijderen/'.$this->location_id.'_'.$this->cat_cover);
 	}
 
 }
