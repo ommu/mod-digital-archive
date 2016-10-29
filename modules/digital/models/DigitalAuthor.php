@@ -322,7 +322,7 @@ class DigitalAuthor extends CActiveRecord
 	 */
 	protected function beforeSave() {
 		if(parent::beforeSave()) {
-			$this->author_name = strtolower(trim($this->author_name));
+			$this->author_name = trim($this->author_name);
 		}
 		return true;
 	}

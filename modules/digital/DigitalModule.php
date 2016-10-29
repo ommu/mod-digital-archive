@@ -12,7 +12,8 @@ class DigitalModule extends CWebModule
 		$this->setImport(array(
 			'digital.models.*',
 			'digital.components.*',
-			'digital.models.model_bpad_sync.*',
+			'digital.model_bpad_digital.*',
+			'digital.model_bpad_sync.*',
 		));
 	}
 

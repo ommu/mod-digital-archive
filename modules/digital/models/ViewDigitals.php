@@ -24,6 +24,8 @@
  *
  * The followings are the available columns in table '_view_digitals':
  * @property string $digital_id
+ * @property string $md5path
+ * @property string $uniquepath
  * @property string $covers
  * @property string $files
  * @property string $authors
@@ -57,7 +59,7 @@ class ViewDigitals extends CActiveRecord
 	 */
 	public function primaryKey()
 	{
-		return 'cat_id';
+		return 'digital_id';
 	}
 
 	/**
@@ -69,10 +71,10 @@ class ViewDigitals extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('digital_id', 'length', 'max'=>11),
-			array('covers, files, authors, tags', 'length', 'max'=>21),
+			array('md5path, uniquepath, covers, files, authors, tags', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('digital_id, covers, files, authors, tags', 'safe', 'on'=>'search'),
+			array('digital_id, md5path, uniquepath, covers, files, authors, tags', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -94,6 +96,8 @@ class ViewDigitals extends CActiveRecord
 	{
 		return array(
 			'digital_id' => Yii::t('attribute', 'Digital'),
+			'md5path' => Yii::t('attribute', 'MD5 Path'),
+			'uniquepath' => Yii::t('attribute', 'Unique Path'),
 			'covers' => Yii::t('attribute', 'Covers'),
 			'files' => Yii::t('attribute', 'Files'),
 			'authors' => Yii::t('attribute', 'Authors'),
@@ -128,6 +132,8 @@ class ViewDigitals extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.digital_id',strtolower($this->digital_id),true);
+		$criteria->compare('t.md5path',strtolower($this->md5path),true);
+		$criteria->compare('t.uniquepath',strtolower($this->uniquepath),true);
 		$criteria->compare('t.covers',strtolower($this->covers),true);
 		$criteria->compare('t.files',strtolower($this->files),true);
 		$criteria->compare('t.authors',strtolower($this->authors),true);
@@ -163,6 +169,8 @@ class ViewDigitals extends CActiveRecord
 			}
 		} else {
 			$this->defaultColumns[] = 'digital_id';
+			$this->defaultColumns[] = 'md5path';
+			$this->defaultColumns[] = 'uniquepath';
 			$this->defaultColumns[] = 'covers';
 			$this->defaultColumns[] = 'files';
 			$this->defaultColumns[] = 'authors';
@@ -181,7 +189,9 @@ class ViewDigitals extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'digital_id';
+			//$this->defaultColumns[] = 'digital_id';
+			$this->defaultColumns[] = 'md5path';
+			$this->defaultColumns[] = 'uniquepath';
 			$this->defaultColumns[] = 'covers';
 			$this->defaultColumns[] = 'files';
 			$this->defaultColumns[] = 'authors';

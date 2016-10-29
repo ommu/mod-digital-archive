@@ -39,6 +39,7 @@
  * @property string $subjects
  * @property string $pages
  * @property string $series
+ * @property string $salt
  * @property string $creation_date
  * @property string $creation_id
  * @property string $modified_date
@@ -90,18 +91,18 @@ class Digitals extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cat_id, publish, language_id, digital_title, digital_intro, subjects', 'required'),
+			array('cat_id, publish, language_id, digital_title, digital_intro', 'required'),
 			array('publish, cat_id, language_id, opac_id', 'numerical', 'integerOnly'=>true),
 			array('publisher_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('digital_code', 'length', 'max'=>16),
 			array('publish_year', 'length', 'max'=>4),
-			array('isbn', 'length', 'max'=>32),
+			array('isbn, salt', 'length', 'max'=>32),
 			array('pages', 'length', 'max'=>5),
-			array('publisher_id, opac_id, digital_code, digital_path, publish_year, publish_location, isbn, subjects, pages, series,
+			array('publisher_id, opac_id, digital_code, digital_path, publish_year, publish_location, isbn, subjects, pages, series, salt,
 				digital_file_input, multiple_file_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, subjects, pages, series, creation_date, creation_id, modified_date, modified_id,
+			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, subjects, pages, series, salt, creation_date, creation_id, modified_date, modified_id,
 				publisher_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -114,6 +115,7 @@ class Digitals extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'view' => array(self::BELONGS_TO, 'ViewDigitals', 'digital_id'),
 			'covers' => array(self::HAS_MANY, 'DigitalCover', 'digital_id'),
 			'authors' => array(self::HAS_MANY, 'DigitalAuthors', 'digital_id'),
 			'tags' => array(self::HAS_MANY, 'DigitalTag', 'digital_id'),
@@ -148,6 +150,7 @@ class Digitals extends CActiveRecord
 			'subjects' => Yii::t('attribute', 'Subjects'),
 			'pages' => Yii::t('attribute', 'Pages'),
 			'series' => Yii::t('attribute', 'Series'),
+			'salt' => Yii::t('attribute', 'Salt'),
 			'digital_file_input' => Yii::t('attribute', 'Digital File'),
 			'multiple_file_input' => Yii::t('attribute', 'Multiple File'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
@@ -251,6 +254,7 @@ class Digitals extends CActiveRecord
 		$criteria->compare('t.subjects',strtolower($this->subjects),true);
 		$criteria->compare('t.pages',strtolower($this->pages),true);
 		$criteria->compare('t.series',strtolower($this->series),true);
+		$criteria->compare('t.salt',strtolower($this->salt),true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
 		if(isset($_GET['creation']))
@@ -313,6 +317,7 @@ class Digitals extends CActiveRecord
 			$this->defaultColumns[] = 'subjects';
 			$this->defaultColumns[] = 'pages';
 			$this->defaultColumns[] = 'series';
+			$this->defaultColumns[] = 'salt';
 			$this->defaultColumns[] = 'creation_date';
 			$this->defaultColumns[] = 'creation_id';
 			$this->defaultColumns[] = 'modified_date';
@@ -431,6 +436,33 @@ class Digitals extends CActiveRecord
 	}
 
 	/**
+	 * Digital Unique Directory
+	 */
+	public static function getSalt() {
+		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		srand((double)microtime()*1000000);
+		$i = 0;
+		$salt = '' ;
+
+		while ($i <= 15) {
+			$num = rand() % 33;
+			$tmp = substr($chars, $num, 2);
+			$salt = $salt . $tmp; 
+			$i++;
+		}
+
+		return $salt;
+	}
+
+	/**
+	 * Digital Unique Directory
+	 */
+	public static function getUniqueDirectory($id, $salt, $md5path) 
+	{
+		return $salt.$id.$md5path;
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
@@ -447,8 +479,10 @@ class Digitals extends CActiveRecord
 	 * before save attributes
 	 */
 	protected function beforeSave() {
-		if(parent::beforeSave()) {			
+		if(parent::beforeSave()) {
 			$this->subjects = serialize($this->subjects);
+			if($this->isNewRecord)
+				$this->salt = self::getSalt();
 		}
 		return true;
 	}
@@ -465,12 +499,12 @@ class Digitals extends CActiveRecord
 		));
 		
 		// Add directory
-		if($model->isNewRecord) {
-			$pathTitle = Utility::getUrlTitle($this->digital_id.' '.$this->digital_title);
+		if($this->isNewRecord) {
+			$pathUnique = self::getUniqueDirectory($this->digital_id, $this->salt, $this->view->md5path);
 			if($setting != null)
-				$digital_path = $setting->digital_path.'/'.$pathTitle;
+				$digital_path = $setting->digital_path.'/'.$pathUnique;
 			else
-				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathTitle;
+				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
 		
 			if(!file_exists($digital_path)) {
 				@mkdir($digital_path, 0755, true);
@@ -484,7 +518,7 @@ class Digitals extends CActiveRecord
 		} else
 			$digital_path = $this->digital_path;
 		
-		if(!$model->isNewRecord && $action == 'upload') {
+		if(!$this->isNewRecord && $action == 'upload') {
 			$this->digital_file_input = CUploadedFile::getInstance($this, 'digital_file_input');
 			if($this->digital_file_input instanceOf CUploadedFile) {
 				$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital_title).'.'.strtolower($this->digital_file_input->extensionName);
@@ -500,7 +534,6 @@ class Digitals extends CActiveRecord
 					}
 				}
 			}
-			
 		}
 		
 	}
