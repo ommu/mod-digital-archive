@@ -291,8 +291,6 @@ class DigitalSetting extends CActiveRecord
 			if($this->cover_view_size['small']['width'] == '' || $this->cover_view_size['small']['height'] == '')
 				$this->addError('cover_view_size[small]', Yii::t('phrase', 'Small Size cannot be blank.'));
 			
-			// Article type is active
-			
 			$this->modified_id = Yii::app()->user->id;
 		}
 		return true;

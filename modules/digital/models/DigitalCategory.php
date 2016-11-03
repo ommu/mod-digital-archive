@@ -360,7 +360,7 @@ class DigitalCategory extends CActiveRecord
 	}
 
 	/**
-	 * Get Article
+	 * Resize Category Cover
 	 */
 	public static function resizeCategoryCover($cover, $size) {
 		Yii::import('ext.phpthumb.PhpThumbFactory');
@@ -407,14 +407,14 @@ class DigitalCategory extends CActiveRecord
 		$action = strtolower(Yii::app()->controller->action->id);
 		if(parent::beforeSave()) {
 			if(!$this->isNewRecord && in_array($action, array('edit'))) {
-				//Update article location photo
+				//digital photo location
 				$digital_path = "public/digital";
 				
-				// Add article directory
+				// Add digital directory
 				if(!file_exists($digital_path)) {
 					@mkdir($digital_path, 0777, true);
 
-					// Add file in article directory (index.php)
+					// Add file in digital directory (index.php)
 					$newFile = $digital_path.'/index.php';
 					$FileHandle = fopen($newFile, 'w');
 				}
@@ -443,14 +443,14 @@ class DigitalCategory extends CActiveRecord
 		parent::afterSave();
 		
 		if($this->isNewRecord) {
-			//Update article location photo
+			//digital photo location
 			$digital_path = "public/digital";
 			
-			// Add article directory
+			// Add digital directory
 			if(!file_exists($digital_path)) {
 				@mkdir($digital_path, 0777, true);
 
-				// Add file in article directory (index.php)
+				// Add file in digital directory (index.php)
 				$newFile = $digital_path.'/index.php';
 				$FileHandle = fopen($newFile, 'w');
 			}
@@ -471,7 +471,7 @@ class DigitalCategory extends CActiveRecord
 	 */
 	protected function afterDelete() {
 		parent::afterDelete();
-		//delete article location image
+		//delete digital location image
 		$digital_path = "public/digital";
 		
 		if($this->cat_cover != '' && file_exists($digital_path.'/'.$this->cat_cover))

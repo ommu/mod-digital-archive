@@ -96,7 +96,7 @@
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'publish_location'); ?>
 					<div class="desc">
-						<?php echo $form->textField($model,'publish_location',array('rows'=>6, 'cols'=>50, 'class'=>'span-8')); ?>
+						<?php echo $form->textField($model,'publish_location',array('rows'=>6, 'cols'=>50, 'class'=>'span-7')); ?>
 						<?php echo $form->error($model,'publish_location'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
@@ -105,7 +105,7 @@
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'isbn'); ?>
 					<div class="desc">
-						<?php echo $form->textField($model,'isbn',array('maxlength'=>32)); ?>
+						<?php echo $form->textField($model,'isbn',array('maxlength'=>32, 'class'=>'span-7')); ?>
 						<?php echo $form->error($model,'isbn'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
@@ -114,7 +114,7 @@
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'pages'); ?>
 					<div class="desc">
-						<?php echo $form->textField($model,'pages',array('maxlength'=>5)); ?>
+						<?php echo $form->textField($model,'pages',array('maxlength'=>5, 'class'=>'span-7')); ?>
 						<?php echo $form->error($model,'pages'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
@@ -123,7 +123,7 @@
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'series'); ?>
 					<div class="desc">
-						<?php echo $form->textArea($model,'series',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller')); ?>
+						<?php echo $form->textField($model,'series',array('rows'=>6, 'cols'=>50, 'class'=>'span-7')); ?>
 						<?php echo $form->error($model,'series'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>

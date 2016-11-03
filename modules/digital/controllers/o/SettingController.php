@@ -139,7 +139,7 @@ class SettingController extends Controller
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 0,
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Article setting success updated.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Digital setting success updated.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
