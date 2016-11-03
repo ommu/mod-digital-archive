@@ -47,15 +47,6 @@
 				</div>
 
 				<div class="clearfix">
-					<?php echo $form->labelEx($model,'digital_code'); ?>
-					<div class="desc">
-						<?php echo $form->textField($model,'digital_code',array('maxlength'=>16)); ?>
-						<?php echo $form->error($model,'digital_code'); ?>
-						<?php /*<div class="small-px silent"></div>*/?>
-					</div>
-				</div>
-
-				<div class="clearfix">
 					<?php echo $form->labelEx($publisher,'publisher_name'); ?>
 					<div class="desc">
 						<?php 
@@ -87,7 +78,9 @@
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'publish_year'); ?>
 					<div class="desc">
-						<?php echo $form->textField($model,'publish_year',array('maxlength'=>4)); ?>
+						<?php 
+						$model->publish_year = !in_array($model->publish_year, array('0000','1970')) ? $model->publish_year : '';
+						echo $form->textField($model,'publish_year',array('maxlength'=>4)); ?>
 						<?php echo $form->error($model,'publish_year'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
@@ -128,9 +121,128 @@
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>
+				
+				<div class="clearfix">
+					<?php echo $form->labelEx($model,'author_input'); ?>
+					<div class="desc">
+						<?php 
+						if($model->isNewRecord) {
+							echo $form->textArea($model,'author_input',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller'));
+							
+						} else {
+							//echo $form->textField($model,'author_input',array('maxlength'=>32,'class'=>'span-6'));
+							$url = Yii::app()->controller->createUrl('o/authors/add', array('type'=>'digital'));
+							$digital = $model->digital_id;
+							$authorId = 'Digitals_author_input';
+							$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+								'model' => $model,
+								'attribute' => 'author_input',
+								'source' => Yii::app()->controller->createUrl('o/author/suggest'),
+								'options' => array(
+									//'delay '=> 50,
+									'minLength' => 1,
+									'showAnim' => 'fold',
+									'select' => "js:function(event, ui) {
+										$.ajax({
+											type: 'post',
+											url: '$url',
+											data: { digital_id: '$digital', author_id: ui.item.id, author: ui.item.value },
+											dataType: 'json',
+											success: function(response) {
+												$('form #$authorId').val('');
+												$('form #author-suggest').append(response.data);
+											}
+										});
+
+									}"
+								),
+								'htmlOptions' => array(
+									'class'	=> 'span-7',
+								),
+							));
+							echo $form->error($model,'author_input');
+						}?>
+						<div id="author-suggest" class="suggest clearfix">
+							<?php 
+							if(!$model->isNewRecord) {
+								$authors = $model->authors;
+								if(!empty($authors)) {
+									foreach($authors as $key => $val) {?>
+									<div><?php echo $val->author->author_name;?><a href="<?php echo Yii::app()->controller->createUrl('o/authors/delete',array('id'=>$val->id,'type'=>'digital'));?>" title="<?php echo Yii::t('phrase', 'Delete');?>"><?php echo Yii::t('phrase', 'Delete');?></a></div>
+								<?php }
+								}
+							}?>				
+						</div>
+						<?php if($model->isNewRecord) {?><span class="small-px">tambahkan tanda pagar (#) jika ingin menambahkan aothor lebih dari satu</span><?php }?>
+					</div>
+				</div>
+				
+				<div class="clearfix">
+					<?php echo $form->labelEx($model,'subject_input'); ?>
+					<div class="desc">
+						<?php 
+						if($model->isNewRecord) {
+							echo $form->textArea($model,'subject_input',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller'));
+							
+						} else {
+							//echo $form->textField($model,'subject_input',array('maxlength'=>32,'class'=>'span-6'));
+							$url = Yii::app()->controller->createUrl('o/subjects/add', array('type'=>'digital'));
+							$digital = $model->digital_id;
+							$subjectId = 'Digitals_subject_input';
+							$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+								'model' => $model,
+								'attribute' => 'subject_input',
+								'source' => Yii::app()->createUrl('globaltag/suggest'),
+								'options' => array(
+									//'delay '=> 50,
+									'minLength' => 1,
+									'showAnim' => 'fold',
+									'select' => "js:function(event, ui) {
+										$.ajax({
+											type: 'post',
+											url: '$url',
+											data: { digital_id: '$digital', tag_id: ui.item.id, subject: ui.item.value },
+											dataType: 'json',
+											success: function(response) {
+												$('form #$subjectId').val('');
+												$('form #subject-suggest').append(response.data);
+											}
+										});
+
+									}"
+								),
+								'htmlOptions' => array(
+									'class'	=> 'span-7',
+								),
+							));
+							echo $form->error($model,'subject_input');
+						}?>
+						<div id="subject-suggest" class="suggest clearfix">
+							<?php 
+							if(!$model->isNewRecord) {
+								$subjects = $model->subjects;
+								if(!empty($subjects)) {
+									foreach($subjects as $key => $val) {?>
+									<div><?php echo $val->tag->body;?><a href="<?php echo Yii::app()->controller->createUrl('o/subjects/delete',array('id'=>$val->id,'type'=>'digital'));?>" title="<?php echo Yii::t('phrase', 'Delete');?>"><?php echo Yii::t('phrase', 'Delete');?></a></div>
+								<?php }
+								}
+							}?>				
+						</div>
+						<?php if($model->isNewRecord) {?><span class="small-px">tambahkan tanda koma (,) jika ingin menambahkan subject lebih dari satu</span><?php }?>
+					</div>
+				</div>
 			</div>
 			
 			<div class="right">
+				<div class="clearfix">
+					<?php echo $form->labelEx($model,'digital_code'); ?>
+					<div class="desc">
+						<?php echo $form->textField($model,'digital_code',array('maxlength'=>16)); ?>
+						<?php echo $form->error($model,'digital_code'); ?>
+						<?php /*<div class="small-px silent"></div>*/?>
+					</div>
+				</div>
+				
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'cat_id'); ?>
 					<div class="desc">
@@ -141,17 +253,6 @@
 						else
 							echo $form->dropDownList($model,'cat_id', array('prompt'=>Yii::t('phrase', 'Select One')));?>
 						<?php echo $form->error($model,'cat_id'); ?>
-						<?php /*<div class="small-px silent"></div>*/?>
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<?php echo $form->labelEx($model,'subjects'); ?>
-					<div class="desc">
-						<?php 
-						$model->subjects = unserialize($model->subjects);
-						echo $form->checkBoxList($model,'subjects', DigitalSubject::getSubject()); ?>
-						<?php echo $form->error($model,'subjects'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>

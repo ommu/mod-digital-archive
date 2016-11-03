@@ -81,11 +81,6 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('subjects'); ?><br/>
-			<?php echo $form->textArea($model,'subjects',array('rows'=>6, 'cols'=>50)); ?>
-		</li>
-
-		<li>
 			<?php echo $model->getAttributeLabel('pages'); ?><br/>
 			<?php echo $form->textField($model,'pages',array('size'=>5,'maxlength'=>5)); ?>
 		</li>

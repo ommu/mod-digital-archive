@@ -36,7 +36,6 @@
  * @property string $publish_year
  * @property string $publish_location
  * @property string $isbn
- * @property string $subjects
  * @property string $pages
  * @property string $series
  * @property string $salt
@@ -58,6 +57,8 @@ class Digitals extends CActiveRecord
 	public $defaultColumns = array();
 	public $digital_file_input;
 	public $multiple_file_input;
+	public $author_input;
+	public $subject_input;
 	
 	// Variable Search
 	public $publisher_search;
@@ -98,11 +99,11 @@ class Digitals extends CActiveRecord
 			array('publish_year', 'length', 'max'=>4),
 			array('isbn, salt', 'length', 'max'=>32),
 			array('pages', 'length', 'max'=>5),
-			array('publisher_id, opac_id, digital_code, digital_path, publish_year, publish_location, isbn, subjects, pages, series, salt,
-				digital_file_input, multiple_file_input', 'safe'),
+			array('publisher_id, opac_id, digital_code, digital_path, publish_year, publish_location, isbn, pages, series, salt,
+				digital_file_input, multiple_file_input, author_input, subject_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, subjects, pages, series, salt, creation_date, creation_id, modified_date, modified_id,
+			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, pages, series, salt, creation_date, creation_id, modified_date, modified_id,
 				publisher_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -120,6 +121,7 @@ class Digitals extends CActiveRecord
 			'authors' => array(self::HAS_MANY, 'DigitalAuthors', 'digital_id'),
 			'tags' => array(self::HAS_MANY, 'DigitalTag', 'digital_id'),
 			'history_prints' => array(self::HAS_MANY, 'DigitalHistoryPrint', 'digital_id'),
+			'subjects' => array(self::HAS_MANY, 'DigitalSubjects', 'digital_id'),
 			'category' => array(self::BELONGS_TO, 'DigitalCategory', 'cat_id'),
 			'language' => array(self::BELONGS_TO, 'DigitalLanguage', 'language_id'),
 			'publisher' => array(self::BELONGS_TO, 'DigitalPublisher', 'publisher_id'),
@@ -147,12 +149,13 @@ class Digitals extends CActiveRecord
 			'publish_year' => Yii::t('attribute', 'Publish Year'),
 			'publish_location' => Yii::t('attribute', 'Publish Location'),
 			'isbn' => Yii::t('attribute', 'ISBN/ISSN/ISMN'),
-			'subjects' => Yii::t('attribute', 'Subjects'),
 			'pages' => Yii::t('attribute', 'Pages'),
 			'series' => Yii::t('attribute', 'Series'),
 			'salt' => Yii::t('attribute', 'Salt'),
 			'digital_file_input' => Yii::t('attribute', 'Digital File'),
 			'multiple_file_input' => Yii::t('attribute', 'Multiple File'),
+			'author_input' => Yii::t('attribute', 'Authors'),
+			'subject_input' => Yii::t('attribute', 'Subjects'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
@@ -175,7 +178,6 @@ class Digitals extends CActiveRecord
 			'Publish Year' => 'Publish Year',
 			'Publish Location' => 'Publish Location',
 			'Isbn' => 'Isbn',
-			'Subjects' => 'Subjects',
 			'Pages' => 'Pages',
 			'Series' => 'Series',
 			'Creation Date' => 'Creation Date',
@@ -251,7 +253,6 @@ class Digitals extends CActiveRecord
 		$criteria->compare('t.publish_year',strtolower($this->publish_year),true);
 		$criteria->compare('t.publish_location',strtolower($this->publish_location),true);
 		$criteria->compare('t.isbn',strtolower($this->isbn),true);
-		$criteria->compare('t.subjects',strtolower($this->subjects),true);
 		$criteria->compare('t.pages',strtolower($this->pages),true);
 		$criteria->compare('t.series',strtolower($this->series),true);
 		$criteria->compare('t.salt',strtolower($this->salt),true);
@@ -314,7 +315,6 @@ class Digitals extends CActiveRecord
 			$this->defaultColumns[] = 'publish_year';
 			$this->defaultColumns[] = 'publish_location';
 			$this->defaultColumns[] = 'isbn';
-			$this->defaultColumns[] = 'subjects';
 			$this->defaultColumns[] = 'pages';
 			$this->defaultColumns[] = 'series';
 			$this->defaultColumns[] = 'salt';
@@ -480,7 +480,6 @@ class Digitals extends CActiveRecord
 	 */
 	protected function beforeSave() {
 		if(parent::beforeSave()) {
-			$this->subjects = serialize($this->subjects);
 			if($this->isNewRecord)
 				$this->salt = self::getSalt();
 		}
@@ -496,10 +495,10 @@ class Digitals extends CActiveRecord
 			
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'cover_limit, cover_resize, cover_resize_size, cover_file_type, digital_path, digital_file_type',
-		));
+		));		
 		
-		// Add directory
 		if($this->isNewRecord) {
+			// Add directory
 			$pathUnique = self::getUniqueDirectory($this->digital_id, $this->salt, $this->view->md5path);
 			if($setting != null)
 				$digital_path = $setting->digital_path.'/'.$pathUnique;
@@ -514,6 +513,30 @@ class Digitals extends CActiveRecord
 				$FileHandle = fopen($newFile, 'w');
 			}
 			self::model()->updateByPk($this->digital_id, array('digital_path'=>$digital_path));
+			
+			//input author
+			$author_input = Utility::formatFileType($this->author_input, true, '#');
+			if(!empty($author_input)) {
+				foreach($author_input as $key => $val) {
+					$author = new DigitalAuthors;
+					$author->digital_id = $this->digital_id;
+					$author->author_id = 0;
+					$author->author_input = $val;
+					$author->save();
+				}
+			}
+			
+			//input subject
+			$subject_input = Utility::formatFileType($this->subject_input);
+			if(!empty($subject_input)) {
+				foreach($subject_input as $key => $val) {
+					$subject = new DigitalSubjects;
+					$subject->digital_id = $this->digital_id;
+					$subject->tag_id = 0;
+					$subject->tag_input = $val;
+					$subject->save();
+				}
+			}
 			
 		} else
 			$digital_path = $this->digital_path;
@@ -535,7 +558,6 @@ class Digitals extends CActiveRecord
 				}
 			}
 		}
-		
 	}
 
 }
