@@ -72,6 +72,8 @@ class DigitalSubjects extends CActiveRecord
 		return array(
 			array('digital_id, tag_id', 'required'),
 			array('digital_id, tag_id, creation_id', 'length', 'max'=>11),
+			array('
+				tag_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, digital_id, tag_id, creation_date, creation_id,
