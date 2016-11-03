@@ -54,11 +54,6 @@ content_menu	:
 		urlRules: {digital, o/category, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: add, attr: -, icon: -}
         
-# controller o/subject
-	- urlTitle: Add Subject
-		urlRules: {digital, o/subject, manage, siteType: 0,1, userLevel: 1,2}
-		urlPath: {url: add, attr: -, icon: -}
-        
 # controller o/language
 	- urlTitle: Add Language
 		urlRules: {digital, o/language, manage, siteType: 0,1, userLevel: 1,2}

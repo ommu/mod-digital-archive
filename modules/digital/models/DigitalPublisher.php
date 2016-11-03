@@ -71,8 +71,8 @@ class DigitalPublisher extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			//array('', 'required'),
-			array('publisher_name, publisher_location', 'required', 'on'=>'formEdit'),
+			array('publish, publisher_name', 'required'),
+			array('publisher_location', 'required', 'on'=>'formEdit'),
 			array('publish', 'numerical', 'integerOnly'=>true),
 			array('creation_id, modified_id', 'length', 'max'=>11),
 			array('publisher_location, publisher_address', 'safe'),

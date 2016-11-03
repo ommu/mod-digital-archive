@@ -72,6 +72,8 @@ class DigitalAuthors extends CActiveRecord
 		return array(
 			array('digital_id, author_id', 'required'),
 			array('digital_id, author_id, creation_id', 'length', 'max'=>11),
+			array('
+				author_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, digital_id, author_id, creation_date, creation_id,
@@ -311,7 +313,7 @@ class DigitalAuthors extends CActiveRecord
 				if($this->author_id == 0) {
 					$author = DigitalAuthor::model()->find(array(
 						'select' => 'author_id, author_name',
-						'condition' => 'publish = 1 AND author_name = :name',
+						'condition' => 'author_name = :name',
 						'params' => array(
 							':name' => $this->author_input,
 						),
