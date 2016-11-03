@@ -91,6 +91,7 @@ class DigitalPublisher extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'view' => array(self::BELONGS_TO, 'ViewDigitalPublisher', 'publisher_id'),
 			'digitals' => array(self::HAS_MANY, 'Digitals', 'publisher_id'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),

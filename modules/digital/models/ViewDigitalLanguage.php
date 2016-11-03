@@ -1,11 +1,11 @@
 <?php
 /**
- * ViewDigitals
+ * ViewDigitalLanguage
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2016 Ommu Platform (ommu.co)
- * @created date 28 October 2016, 19:45 WIB
+ * @created date 3 November 2016, 16:18 WIB
  * @link http://company.ommu.co
  * @contact (+62)856-299-4114
  *
@@ -20,22 +20,15 @@
  *
  * --------------------------------------------------------------------------------------
  *
- * This is the model class for table "_view_digitals".
+ * This is the model class for table "_view_digital_language".
  *
- * The followings are the available columns in table '_view_digitals':
- * @property string $digital_id
- * @property string $md5path
- * @property string $uniquepath
- * @property string $covers
- * @property string $cover_publish
- * @property string $cover_unpublish
- * @property string $files
- * @property string $file_publish
- * @property string $file_unpublish
- * @property string $authors
- * @property string $tags
+ * The followings are the available columns in table '_view_digital_language':
+ * @property integer $language_id
+ * @property string $digitals
+ * @property string $digital_publish
+ * @property string $digital_unpublish
  */
-class ViewDigitals extends CActiveRecord
+class ViewDigitalLanguage extends CActiveRecord
 {
 	public $defaultColumns = array();
 
@@ -43,7 +36,7 @@ class ViewDigitals extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ViewDigitals the static model class
+	 * @return ViewDigitalLanguage the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -55,7 +48,7 @@ class ViewDigitals extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return '_view_digitals';
+		return '_view_digital_language';
 	}
 
 	/**
@@ -63,7 +56,7 @@ class ViewDigitals extends CActiveRecord
 	 */
 	public function primaryKey()
 	{
-		return 'digital_id';
+		return 'language_id';
 	}
 
 	/**
@@ -74,11 +67,12 @@ class ViewDigitals extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('digital_id', 'length', 'max'=>11),
-			array('md5path, uniquepath, covers, cover_publish, cover_unpublish, files, file_publish, file_unpublish, authors, tags', 'length', 'max'=>21),
+			array('language_id', 'numerical', 'integerOnly'=>true),
+			array('digitals', 'length', 'max'=>21),
+			array('digital_publish, digital_unpublish', 'length', 'max'=>23),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('digital_id, md5path, uniquepath, covers, cover_publish, cover_unpublish, files, file_publish, file_unpublish, authors, tags', 'safe', 'on'=>'search'),
+			array('language_id, digitals, digital_publish, digital_unpublish', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -99,24 +93,16 @@ class ViewDigitals extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'digital_id' => Yii::t('attribute', 'Digital'),
-			'md5path' => Yii::t('attribute', 'MD5 Path'),
-			'uniquepath' => Yii::t('attribute', 'Unique Path'),
-			'covers' => Yii::t('attribute', 'Covers'),
-			'cover_publish' => Yii::t('attribute', 'Cover Publish'),
-			'cover_unpublish' => Yii::t('attribute', 'Cover Unpublish'),
-			'files' => Yii::t('attribute', 'Files'),
-			'file_publish' => Yii::t('attribute', 'File Publish'),
-			'file_unpublish' => Yii::t('attribute', 'File Unpublish'),
-			'authors' => Yii::t('attribute', 'Authors'),
-			'tags' => Yii::t('attribute', 'Tags'),
+			'language_id' => Yii::t('attribute', 'Language'),
+			'digitals' => Yii::t('attribute', 'Digitals'),
+			'digital_publish' => Yii::t('attribute', 'Digital Publish'),
+			'digital_unpublish' => Yii::t('attribute', 'Digital Unpublish'),
 		);
 		/*
-			'Digital' => 'Digital',
-			'Covers' => 'Covers',
-			'Files' => 'Files',
-			'Authors' => 'Authors',
-			'Tags' => 'Tags',
+			'Language' => 'Language',
+			'Digitals' => 'Digitals',
+			'Digital Publish' => 'Digital Publish',
+			'Digital Unpublish' => 'Digital Unpublish',
 		
 		*/
 	}
@@ -139,20 +125,13 @@ class ViewDigitals extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.digital_id',strtolower($this->digital_id),true);
-		$criteria->compare('t.md5path',strtolower($this->md5path),true);
-		$criteria->compare('t.uniquepath',strtolower($this->uniquepath),true);
-		$criteria->compare('t.covers',strtolower($this->covers),true);
-		$criteria->compare('t.cover_publish',strtolower($this->cover_publish),true);
-		$criteria->compare('t.cover_unpublish',strtolower($this->cover_unpublish),true);
-		$criteria->compare('t.files',strtolower($this->files),true);
-		$criteria->compare('t.file_publish',strtolower($this->file_publish),true);
-		$criteria->compare('t.file_unpublish',strtolower($this->file_unpublish),true);
-		$criteria->compare('t.authors',strtolower($this->authors),true);
-		$criteria->compare('t.tags',strtolower($this->tags),true);
+		$criteria->compare('t.language_id',$this->language_id);
+		$criteria->compare('t.digitals',strtolower($this->digitals),true);
+		$criteria->compare('t.digital_publish',strtolower($this->digital_publish),true);
+		$criteria->compare('t.digital_unpublish',strtolower($this->digital_unpublish),true);
 
-		if(!isset($_GET['ViewDigitals_sort']))
-			$criteria->order = 't.digital_id DESC';
+		if(!isset($_GET['ViewDigitalLanguage_sort']))
+			$criteria->order = 't.language_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -180,17 +159,10 @@ class ViewDigitals extends CActiveRecord
 				$this->defaultColumns[] = $val;
 			}
 		} else {
-			$this->defaultColumns[] = 'digital_id';
-			$this->defaultColumns[] = 'md5path';
-			$this->defaultColumns[] = 'uniquepath';
-			$this->defaultColumns[] = 'covers';
-			$this->defaultColumns[] = 'cover_publish';
-			$this->defaultColumns[] = 'cover_unpublish';
-			$this->defaultColumns[] = 'files';
-			$this->defaultColumns[] = 'file_publish';
-			$this->defaultColumns[] = 'file_unpublish';
-			$this->defaultColumns[] = 'authors';
-			$this->defaultColumns[] = 'tags';
+			$this->defaultColumns[] = 'language_id';
+			$this->defaultColumns[] = 'digitals';
+			$this->defaultColumns[] = 'digital_publish';
+			$this->defaultColumns[] = 'digital_unpublish';
 		}
 
 		return $this->defaultColumns;
@@ -201,21 +173,22 @@ class ViewDigitals extends CActiveRecord
 	 */
 	protected function afterConstruct() {
 		if(count($this->defaultColumns) == 0) {
+			/*
+			$this->defaultColumns[] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
+			);
+			*/
 			$this->defaultColumns[] = array(
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			//$this->defaultColumns[] = 'digital_id';
-			$this->defaultColumns[] = 'md5path';
-			$this->defaultColumns[] = 'uniquepath';
-			$this->defaultColumns[] = 'covers';
-			$this->defaultColumns[] = 'cover_publish';
-			$this->defaultColumns[] = 'cover_unpublish';
-			$this->defaultColumns[] = 'files';
-			$this->defaultColumns[] = 'file_publish';
-			$this->defaultColumns[] = 'file_unpublish';
-			$this->defaultColumns[] = 'authors';
-			$this->defaultColumns[] = 'tags';
+			$this->defaultColumns[] = 'language_id';
+			$this->defaultColumns[] = 'digitals';
+			$this->defaultColumns[] = 'digital_publish';
+			$this->defaultColumns[] = 'digital_unpublish';
 		}
 		parent::afterConstruct();
 	}

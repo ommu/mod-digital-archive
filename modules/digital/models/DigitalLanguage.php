@@ -92,6 +92,7 @@ class DigitalLanguage extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'view' => array(self::BELONGS_TO, 'ViewDigitalLanguage', 'language_id'),
 			'digitals' => array(self::HAS_MANY, 'Digitals', 'language_id'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
