@@ -1,8 +1,8 @@
 <?php
 /**
- * Digital Tags (digital-tag)
+ * Digital Tags (digital-tags)
  * @var $this TagsController
- * @var $model DigitalTag
+ * @var $model DigitalTags
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
@@ -50,7 +50,7 @@
 </div>
 <?php //end.Grid Option ?>
 
-<div id="partial-digital-tag">
+<div id="partial-digital-tags">
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
 	<?php
@@ -93,7 +93,7 @@
 			));
 
 			$this->widget('application.components.system.OGridView', array(
-				'id'=>'digital-tag-grid',
+				'id'=>'digital-tags-grid',
 				'dataProvider'=>$model->search(),
 				'filter'=>$model,
 				'columns' => $columnData,

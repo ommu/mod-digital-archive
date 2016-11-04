@@ -1,8 +1,8 @@
 <?php
 /**
- * Digital Tags (digital-tag)
+ * Digital Tags (digital-tags)
  * @var $this TagsController
- * @var $model DigitalTag
+ * @var $model DigitalTags
  * @var $form CActiveForm
  * version: 0.0.1
  *

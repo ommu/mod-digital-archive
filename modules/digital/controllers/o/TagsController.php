@@ -2,7 +2,7 @@
 /**
  * TagsController
  * @var $this TagsController
- * @var $model DigitalTag
+ * @var $model DigitalTags
  * @var $form CActiveForm
  * version: 0.0.1
  * Reference start
@@ -109,10 +109,10 @@ class TagsController extends Controller
 	 */
 	public function actionManage() 
 	{
-		$model=new DigitalTag('search');
+		$model=new DigitalTags('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['DigitalTag'])) {
-			$model->attributes=$_GET['DigitalTag'];
+		if(isset($_GET['DigitalTags'])) {
+			$model->attributes=$_GET['DigitalTags'];
 		}
 
 		$columnTemp = array();
@@ -140,7 +140,7 @@ class TagsController extends Controller
 	 */
 	public function actionAdd() 
 	{
-		$model=new DigitalTag;
+		$model=new DigitalTags;
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
@@ -183,8 +183,8 @@ class TagsController extends Controller
 					echo CJSON::encode(array(
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-digital-tag',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'DigitalTag success deleted.').'</strong></div>',
+						'id' => 'partial-digital-tags',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'DigitalTags success deleted.').'</strong></div>',
 					));
 				}
 			}
@@ -199,7 +199,7 @@ class TagsController extends Controller
 			$this->dialogGroundUrl = $url;
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'DigitalTag Delete.');
+			$this->pageTitle = Yii::t('phrase', 'DigitalTags Delete.');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -213,7 +213,7 @@ class TagsController extends Controller
 	 */
 	public function loadModel($id) 
 	{
-		$model = DigitalTag::model()->findByPk($id);
+		$model = DigitalTags::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 		return $model;
@@ -225,7 +225,7 @@ class TagsController extends Controller
 	 */
 	protected function performAjaxValidation($model) 
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='digital-tag-form') {
+		if(isset($_POST['ajax']) && $_POST['ajax']==='digital-tags-form') {
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}

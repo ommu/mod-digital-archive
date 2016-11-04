@@ -1,8 +1,8 @@
 <?php
 /**
- * Digital Tags (digital-tag)
+ * Digital Tags (digital-tags)
  * @var $this TagsController
- * @var $model DigitalTag
+ * @var $model DigitalTags
  * @var $form CActiveForm
  * version: 0.0.1
  *
@@ -21,7 +21,7 @@
 ?>
 
 <?php $form=$this->beginWidget('application.components.system.OActiveForm', array(
-	'id'=>'digital-tag-form',
+	'id'=>'digital-tags-form',
 	'enableAjaxValidation'=>true,
 	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
