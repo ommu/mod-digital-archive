@@ -21,7 +21,7 @@ plugin_menu		:
 			- urlTitle: Categories
 				urlRules: {siteType: 0,1, userLevel: 1}
 				urlPath: {url: o/category/manage, attr: -, icon: -}
-			- urlTitle: Subjecs
+			- urlTitle: Subjects
 				urlRules: {siteType: 0,1, userLevel: 1,2}
 				urlPath: {url: o/subject/manage, attr: -, icon: -}
 			- urlTitle: Languages
@@ -69,7 +69,12 @@ content_menu	:
 		urlRules: {digital, o/author, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: add, attr: -, icon: -}
         
-# controller o/tag
-	- urlTitle: Back to mateti digital
-		urlRules: {digital, o/tag, manage, siteType: 0,1, userLevel: 1,2}
-		urlPath: {url: o/admin/manage, attr: -, icon: -}
+# controller o/subjects
+	- urlTitle: Back to Subject Manage
+		urlRules: {digital, o/subjects, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: o/subject/manage, attr: -, icon: -}
+        
+# controller o/tags
+	- urlTitle: Back to Tag Manage
+		urlRules: {digital, o/tags, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: o/tag/manage, attr: -, icon: -}

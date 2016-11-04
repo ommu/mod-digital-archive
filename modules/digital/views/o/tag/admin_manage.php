@@ -66,6 +66,7 @@
 		<?php //begin.Grid Item ?>
 		<?php 
 			$columnData   = $columns;
+			/*
 			array_push($columnData, array(
 				'header' => Yii::t('phrase', 'Options'),
 				'class'=>'CButtonColumn',
@@ -74,10 +75,8 @@
 						'label' => 'view',
 						'options' => array(							
 							'class' => 'view',
-							'off_address' => '',
-							'target' => '_blank',
 						),
-						'url' => 'Yii::app()->controller->createUrl("site/view",array("id"=>$data->primaryKey))'),
+						'url' => 'Yii::app()->controller->createUrl("view",array("id"=>$data->primaryKey))'),
 					'update' => array(
 						'label' => 'update',
 						'options' => array(
@@ -93,6 +92,7 @@
 				),
 				'template' => '{view}|{update}|{delete}',
 			));
+			*/
 
 			$this->widget('application.components.system.OGridView', array(
 				'id'=>'view-digital-tag-grid',
