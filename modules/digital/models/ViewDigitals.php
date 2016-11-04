@@ -33,6 +33,7 @@
  * @property string $file_publish
  * @property string $file_unpublish
  * @property string $authors
+ * @property string $subjects
  * @property string $tags
  */
 class ViewDigitals extends CActiveRecord
@@ -75,10 +76,10 @@ class ViewDigitals extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('digital_id', 'length', 'max'=>11),
-			array('md5path, uniquepath, covers, cover_publish, cover_unpublish, files, file_publish, file_unpublish, authors, tags', 'length', 'max'=>21),
+			array('md5path, uniquepath, covers, cover_publish, cover_unpublish, files, file_publish, file_unpublish, authors, subjects, tags', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('digital_id, md5path, uniquepath, covers, cover_publish, cover_unpublish, files, file_publish, file_unpublish, authors, tags', 'safe', 'on'=>'search'),
+			array('digital_id, md5path, uniquepath, covers, cover_publish, cover_unpublish, files, file_publish, file_unpublish, authors, subjects, tags', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -109,6 +110,7 @@ class ViewDigitals extends CActiveRecord
 			'file_publish' => Yii::t('attribute', 'File Publish'),
 			'file_unpublish' => Yii::t('attribute', 'File Unpublish'),
 			'authors' => Yii::t('attribute', 'Authors'),
+			'subjects' => Yii::t('attribute', 'Subjects'),
 			'tags' => Yii::t('attribute', 'Tags'),
 		);
 		/*
@@ -149,6 +151,7 @@ class ViewDigitals extends CActiveRecord
 		$criteria->compare('t.file_publish',strtolower($this->file_publish),true);
 		$criteria->compare('t.file_unpublish',strtolower($this->file_unpublish),true);
 		$criteria->compare('t.authors',strtolower($this->authors),true);
+		$criteria->compare('t.subjects',strtolower($this->subjects),true);
 		$criteria->compare('t.tags',strtolower($this->tags),true);
 
 		if(!isset($_GET['ViewDigitals_sort']))
@@ -190,6 +193,7 @@ class ViewDigitals extends CActiveRecord
 			$this->defaultColumns[] = 'file_publish';
 			$this->defaultColumns[] = 'file_unpublish';
 			$this->defaultColumns[] = 'authors';
+			$this->defaultColumns[] = 'subjects';
 			$this->defaultColumns[] = 'tags';
 		}
 
@@ -215,6 +219,7 @@ class ViewDigitals extends CActiveRecord
 			$this->defaultColumns[] = 'file_publish';
 			$this->defaultColumns[] = 'file_unpublish';
 			$this->defaultColumns[] = 'authors';
+			$this->defaultColumns[] = 'subjects';
 			$this->defaultColumns[] = 'tags';
 		}
 		parent::afterConstruct();
