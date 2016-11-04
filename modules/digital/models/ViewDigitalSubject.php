@@ -31,6 +31,9 @@
 class ViewDigitalSubject extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $tag_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -73,7 +76,8 @@ class ViewDigitalSubject extends CActiveRecord
 			array('digital_publish, digital_unpublish', 'length', 'max'=>23),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('tag_id, digitals, digital_publish, digital_unpublish', 'safe', 'on'=>'search'),
+			array('tag_id, digitals, digital_publish, digital_unpublish,
+				tag_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -85,6 +89,7 @@ class ViewDigitalSubject extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'tag' => array(self::BELONGS_TO, 'OmmuTags', 'tag_id'),
 		);
 	}
 
@@ -94,10 +99,11 @@ class ViewDigitalSubject extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'tag_id' => Yii::t('attribute', 'Tag'),
+			'tag_id' => Yii::t('attribute', 'Subject'),
 			'digitals' => Yii::t('attribute', 'Digitals'),
 			'digital_publish' => Yii::t('attribute', 'Digital Publish'),
 			'digital_unpublish' => Yii::t('attribute', 'Digital Unpublish'),
+			'tag_search' => Yii::t('attribute', 'Subject'),
 		);
 		/*
 			'Tag' => 'Tag',
@@ -125,11 +131,21 @@ class ViewDigitalSubject extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'tag' => array(
+				'alias'=>'tag',
+				'select'=>'body',
+			),
+		);
 
 		$criteria->compare('t.tag_id',strtolower($this->tag_id),true);
 		$criteria->compare('t.digitals',strtolower($this->digitals),true);
 		$criteria->compare('t.digital_publish',strtolower($this->digital_publish),true);
 		$criteria->compare('t.digital_unpublish',strtolower($this->digital_unpublish),true);
+		
+		$criteria->compare('tag.body',strtolower($this->tag_search), true);
 
 		if(!isset($_GET['ViewDigitalSubject_sort']))
 			$criteria->order = 't.tag_id DESC';
@@ -186,7 +202,10 @@ class ViewDigitalSubject extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'tag_id';
+			$this->defaultColumns[] = array(
+				'name' => 'tag_search',
+				'value' => '$data->tag->body',
+			);
 			$this->defaultColumns[] = 'digitals';
 			$this->defaultColumns[] = 'digital_publish';
 			$this->defaultColumns[] = 'digital_unpublish';
