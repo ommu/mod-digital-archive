@@ -35,6 +35,8 @@
  * @property string $authors
  * @property string $subjects
  * @property string $tags
+ * @property string $likes
+ * @property string $views
  */
 class ViewDigitals extends CActiveRecord
 {
@@ -76,10 +78,10 @@ class ViewDigitals extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('digital_id', 'length', 'max'=>11),
-			array('md5path, uniquepath, covers, cover_publish, cover_unpublish, files, file_publish, file_unpublish, authors, subjects, tags', 'length', 'max'=>21),
+			array('md5path, uniquepath, covers, cover_publish, cover_unpublish, files, file_publish, file_unpublish, authors, subjects, tags, likes, views', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('digital_id, md5path, uniquepath, covers, cover_publish, cover_unpublish, files, file_publish, file_unpublish, authors, subjects, tags', 'safe', 'on'=>'search'),
+			array('digital_id, md5path, uniquepath, covers, cover_publish, cover_unpublish, files, file_publish, file_unpublish, authors, subjects, tags, likes, views', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -112,6 +114,8 @@ class ViewDigitals extends CActiveRecord
 			'authors' => Yii::t('attribute', 'Authors'),
 			'subjects' => Yii::t('attribute', 'Subjects'),
 			'tags' => Yii::t('attribute', 'Tags'),
+			'likes' => Yii::t('attribute', 'Likes'),
+			'views' => Yii::t('attribute', 'Views'),
 		);
 		/*
 			'Digital' => 'Digital',
@@ -153,6 +157,8 @@ class ViewDigitals extends CActiveRecord
 		$criteria->compare('t.authors',strtolower($this->authors),true);
 		$criteria->compare('t.subjects',strtolower($this->subjects),true);
 		$criteria->compare('t.tags',strtolower($this->tags),true);
+		$criteria->compare('t.likes',strtolower($this->likes),true);
+		$criteria->compare('t.views',strtolower($this->views),true);
 
 		if(!isset($_GET['ViewDigitals_sort']))
 			$criteria->order = 't.digital_id DESC';
@@ -195,6 +201,8 @@ class ViewDigitals extends CActiveRecord
 			$this->defaultColumns[] = 'authors';
 			$this->defaultColumns[] = 'subjects';
 			$this->defaultColumns[] = 'tags';
+			$this->defaultColumns[] = 'likes';
+			$this->defaultColumns[] = 'views';
 		}
 
 		return $this->defaultColumns;
@@ -221,6 +229,8 @@ class ViewDigitals extends CActiveRecord
 			$this->defaultColumns[] = 'authors';
 			$this->defaultColumns[] = 'subjects';
 			$this->defaultColumns[] = 'tags';
+			$this->defaultColumns[] = 'likes';
+			$this->defaultColumns[] = 'views';
 		}
 		parent::afterConstruct();
 	}
