@@ -36,6 +36,12 @@ plugin_menu		:
 			- urlTitle: Languages
 				urlRules: {siteType: 0,1, userLevel: 1,2}
 				urlPath: {url: o/language/manage, attr: -, icon: -}
+			- urlTitle: Likes
+				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlPath: {url: o/like/manage, attr: -, icon: -}
+			- urlTitle: Views
+				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlPath: {url: o/view/manage, attr: -, icon: -}
 
 content_menu	:
 # controller o/admin
