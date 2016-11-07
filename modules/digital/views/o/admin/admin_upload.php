@@ -35,7 +35,7 @@
 
 		<?php //begin.Messages ?>
 		<div id="ajax-message">
-			<?php echo $form->errorSummary($model); ?>
+			<?php //echo $form->errorSummary($model); ?>
 		</div>
 		<?php //begin.Messages ?>
 
@@ -44,7 +44,7 @@
 			<div class="desc">
 				<?php echo $form->fileField($model,'digital_file_input'); ?>
 				<?php echo $form->error($model,'digital_file_input'); ?>
-				<?php /*<div class="small-px silent"></div>*/?>
+				<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType(unserialize($setting->digital_file_type), false);?></span>
 			</div>
 		</div>
 

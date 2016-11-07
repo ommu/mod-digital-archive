@@ -49,7 +49,7 @@
 				<div class="clearfix">
 					<?php echo $form->labelEx($publisher,'publisher_name'); ?>
 					<div class="desc">
-						<?php 
+						<?php
 						//echo $form->textField($publisher,'publisher_name',array('maxlength'=>64,'class'=>'span-7'));		
 						$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 							'model' => $publisher,
@@ -234,6 +234,26 @@
 			</div>
 			
 			<div class="right">
+				<?php if($model->isNewRecord) {?>
+				<div class="clearfix">
+					<?php echo $form->labelEx($model,'digital_file_input'); ?>
+					<div class="desc">
+						<?php echo $form->fileField($model,'digital_file_input'); ?>
+						<?php echo $form->error($model,'digital_file_input'); ?>
+						<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType(unserialize($setting->digital_file_type), false);?></span>
+					</div>
+				</div>
+
+				<div class="clearfix">
+					<?php echo $form->labelEx($model,'multiple_file_input'); ?>
+					<div class="desc">
+						<?php echo $form->checkBox($model,'multiple_file_input'); ?>
+						<?php echo $form->error($model,'multiple_file_input'); ?>
+						<?php /*<div class="small-px silent"></div>*/?>
+					</div>
+				</div>
+				<?php }?>
+				
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'digital_code'); ?>
 					<div class="desc">

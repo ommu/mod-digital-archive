@@ -145,6 +145,10 @@ class AdminController extends Controller
 	 */
 	public function actionUpload($id) 
 	{
+		$setting = DigitalSetting::model()->findByPk(1,array(
+			'select' => 'digital_file_type',
+		));
+		
 		$model=$this->loadModel($id);
 		if($model != null) {
 			// Uncomment the following line if AJAX validation is needed
@@ -161,13 +165,14 @@ class AdminController extends Controller
 			
 			$this->dialogDetail = true;
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('edit', array('id'=>$model->digital_id));
-			$this->dialogWidth = 450;
+			$this->dialogWidth = 600;
 
 			$this->pageTitle = Yii::t('phrase', 'Create Digital Categories');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_upload',array(
 				'model'=>$model,
+				'setting'=>$setting,
 			));
 			
 		} else
@@ -180,6 +185,10 @@ class AdminController extends Controller
 	 */
 	public function actionAdd() 
 	{
+		$setting = DigitalSetting::model()->findByPk(1,array(
+			'select' => 'cover_file_type, digital_file_type',
+		));
+		
 		$model=new Digitals;
 		$publisher=new DigitalPublisher;
 
@@ -222,6 +231,7 @@ class AdminController extends Controller
 		$this->render('admin_add',array(
 			'model'=>$model,
 			'publisher'=>$publisher,
+			'setting'=>$setting,
 		));
 	}
 
@@ -233,7 +243,9 @@ class AdminController extends Controller
 	public function actionEdit($id) 
 	{
 		$model=$this->loadModel($id);
-		$publisher = DigitalPublisher::model()->findByPk($model->publisher_id);	
+		$publisher = DigitalPublisher::model()->findByPk($model->publisher_id);
+		if($model->publisher_id == null)
+			$publisher=new DigitalPublisher;
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);

@@ -466,11 +466,28 @@ class Digitals extends CActiveRecord
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
+		$controller = strtolower(Yii::app()->controller->id);			
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'cover_file_type, digital_file_type',
+		));
+		$cover_file_type = unserialize($setting->cover_file_type);
+		$digital_file_type = unserialize($setting->digital_file_type);
+		
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
 				$this->creation_id = Yii::app()->user->id;
 			else
 				$this->modified_id = Yii::app()->user->id;
+			
+			$digital_file_input = CUploadedFile::getInstance($this, 'digital_file_input');
+			if($digital_file_input->name != '') {
+				$extension = pathinfo($digital_file_input->name, PATHINFO_EXTENSION);
+				if(!in_array(strtolower($extension), $digital_file_type))
+					$this->addError('digital_file_input', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
+						'{name}'=>$digital_file_input->name,
+						'{extensions}'=>Utility::formatFileType($digital_file_type, false),
+					)));
+			}
 		}
 		return true;
 	}
@@ -495,7 +512,8 @@ class Digitals extends CActiveRecord
 			
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'cover_limit, cover_resize, cover_resize_size, cover_file_type, digital_path, digital_file_type',
-		));		
+		));
+		$digital_file_type = unserialize($setting->digital_file_type);
 		
 		if($this->isNewRecord) {
 			// Add directory
@@ -515,45 +533,72 @@ class Digitals extends CActiveRecord
 			self::model()->updateByPk($this->digital_id, array('digital_path'=>$digital_path));
 			
 			//input author
-			$author_input = Utility::formatFileType($this->author_input, true, '#');
-			if(!empty($author_input)) {
-				foreach($author_input as $key => $val) {
-					$author = new DigitalAuthors;
-					$author->digital_id = $this->digital_id;
-					$author->author_id = 0;
-					$author->author_input = $val;
-					$author->save();
+			if(trim($this->author_input) != '') {
+				$author_input = Utility::formatFileType($this->author_input, true, '#');
+				if(!empty($author_input)) {
+					foreach($author_input as $key => $val) {
+						$author = new DigitalAuthors;
+						$author->digital_id = $this->digital_id;
+						$author->author_id = 0;
+						$author->author_input = $val;
+						$author->save();
+					}
 				}
 			}
 			
 			//input subject
-			$subject_input = Utility::formatFileType($this->subject_input);
-			if(!empty($subject_input)) {
-				foreach($subject_input as $key => $val) {
-					$subject = new DigitalSubjects;
-					$subject->digital_id = $this->digital_id;
-					$subject->tag_id = 0;
-					$subject->tag_input = $val;
-					$subject->save();
+			if(trim($this->subject_input) != '') {
+				$subject_input = Utility::formatFileType($this->subject_input);
+				if(!empty($subject_input)) {
+					foreach($subject_input as $key => $val) {
+						$subject = new DigitalSubjects;
+						$subject->digital_id = $this->digital_id;
+						$subject->tag_id = 0;
+						$subject->tag_input = $val;
+						$subject->save();
+					}
 				}
 			}
 			
 		} else
 			$digital_path = $this->digital_path;
 		
-		if(!$this->isNewRecord && $action == 'upload') {
+		if($this->isNewRecord || (!$this->isNewRecord && $action == 'upload')) {
 			$this->digital_file_input = CUploadedFile::getInstance($this, 'digital_file_input');
 			if($this->digital_file_input instanceOf CUploadedFile) {
 				$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital_title).'.'.strtolower($this->digital_file_input->extensionName);
 				if($this->digital_file_input->saveAs($digital_path.'/'.$fileName)) {
 					if($this->multiple_file_input == 0) {
-						$digital = new DigitalFile;
-						$digital->digital_id = $this->digital_id;
-						$digital->digital_filename = $fileName;
-						$digital->save();
+						$file = new DigitalFile;
+						$file->digital_id = $this->digital_id;
+						$file->digital_filename = $fileName;
+						$file->save();
 						
 					} else {
-						echo 'upload compress file';
+						$zip = new ZipArchive;
+						$open = $zip->open($digital_path.'/'.$fileName);
+						if($open === true) {
+							//print_r($zip);
+							for($i = 0; $i < $zip->numFiles; $i++) {
+								$filename = $zip->getNameIndex($i);
+								$fileinfo = pathinfo($filename);
+								$extension = pathinfo($filename, PATHINFO_EXTENSION);
+								if(in_array(strtolower($extension), $digital_file_type)) {
+									if(copy('zip://'.$digital_path.'/'.$fileName.'#'.$filename, $digital_path.'/'.$fileinfo['basename'])) {
+										$fileNameOnZip = time().'_'.$this->digital_id.'_'.$i.'_'.Utility::getUrlTitle($this->digital_title).'.'.strtolower($fileinfo['extension']);
+										rename($digital_path.'/'.$fileinfo['basename'], $digital_path.'/'.$fileNameOnZip);
+										
+										$file = new DigitalFile;
+										$file->digital_id = $this->digital_id;
+										$file->digital_filename = $fileNameOnZip;
+										$file->save();
+									}
+								}
+								//echo $filename.'<br/>';
+								//echo print_r($fileinfo).'<br/>';								
+							}
+							//exit();
+						}
 					}
 				}
 			}

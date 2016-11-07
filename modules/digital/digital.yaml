@@ -70,6 +70,11 @@ content_menu	:
 		urlRules: {digital, o/author, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: add, attr: -, icon: -}
         
+# controller o/language
+	- urlTitle: Add Language
+		urlRules: {digital, o/language, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
+        
 # controller o/subjects
 	- urlTitle: Back to Subject Manage
 		urlRules: {digital, o/subjects, manage, siteType: 0,1, userLevel: 1,2}
@@ -80,7 +85,12 @@ content_menu	:
 		urlRules: {digital, o/tags, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: o/tag/manage, attr: -, icon: -}
         
-# controller o/language
-	- urlTitle: Add Language
-		urlRules: {digital, o/language, manage, siteType: 0,1, userLevel: 1,2}
-		urlPath: {url: add, attr: -, icon: -}
+# controller o/likes
+	- urlTitle: Back to Tag Manage
+		urlRules: {digital, o/likes, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: o/like/manage, attr: -, icon: -}
+        
+# controller o/views
+	- urlTitle: Back to Tag Manage
+		urlRules: {digital, o/views, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: o/view/manage, attr: -, icon: -}

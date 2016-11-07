@@ -27,6 +27,7 @@
  * @property integer $publish
  * @property string $digital_id
  * @property string $user_id
+ * @property integer $views
  * @property string $views_date
  * @property string $views_ip
  * @property string $deleted_date
@@ -70,13 +71,13 @@ class DigitalViews extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('publish, digital_id, user_id', 'required'),
-			array('publish', 'numerical', 'integerOnly'=>true),
-			array('digital_id, user_id', 'length', 'max'=>11),
+			array('publish, views', 'numerical', 'integerOnly'=>true),
+			array('digital_id, user_id, views', 'length', 'max'=>11),
 			array('views_ip', 'length', 'max'=>20),
 			array('', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('view_id, publish, digital_id, user_id, views_date, views_ip, deleted_date,
+			array('view_id, publish, digital_id, user_id, views, views_date, views_ip, deleted_date,
 				digital_search, user_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -104,6 +105,7 @@ class DigitalViews extends CActiveRecord
 			'publish' => Yii::t('attribute', 'Publish'),
 			'digital_id' => Yii::t('attribute', 'Digital'),
 			'user_id' => Yii::t('attribute', 'User'),
+			'views' => Yii::t('attribute', 'Views'),
 			'views_date' => Yii::t('attribute', 'Views Date'),
 			'views_ip' => Yii::t('attribute', 'Views Ip'),
 			'deleted_date' => Yii::t('attribute', 'Deleted Date'),
@@ -171,6 +173,7 @@ class DigitalViews extends CActiveRecord
 			$criteria->compare('t.user_id',$_GET['user']);
 		else
 			$criteria->compare('t.user_id',$this->user_id);
+		$criteria->compare('t.views',$this->views);
 		if($this->views_date != null && !in_array($this->views_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.views_date)',date('Y-m-d', strtotime($this->views_date)));
 		$criteria->compare('t.views_ip',strtolower($this->views_ip),true);
@@ -213,6 +216,7 @@ class DigitalViews extends CActiveRecord
 			$this->defaultColumns[] = 'publish';
 			$this->defaultColumns[] = 'digital_id';
 			$this->defaultColumns[] = 'user_id';
+			$this->defaultColumns[] = 'views';
 			$this->defaultColumns[] = 'views_date';
 			$this->defaultColumns[] = 'views_ip';
 			$this->defaultColumns[] = 'deleted_date';
@@ -250,6 +254,13 @@ class DigitalViews extends CActiveRecord
 					'value' => '$data->user->displayname',
 				);
 			}
+			$this->defaultColumns[] = array(
+				'name' => 'views',
+				'value' => '$data->views',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'views_date',
 				'value' => 'Utility::dateFormat($data->views_date)',
@@ -336,5 +347,18 @@ class DigitalViews extends CActiveRecord
 			$model = self::model()->findByPk($id);
 			return $model;			
 		}
+	}
+
+	/**
+	 * before validate attributes
+	 */
+	protected function beforeValidate() {
+		if(parent::beforeValidate()) {
+			if($this->isNewRecord) {
+				$this->user_id = Yii::app()->user->id;
+				$this->views_ip = $_SERVER['REMOTE_ADDR'];
+			}
+		}
+		return true;
 	}
 }

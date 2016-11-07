@@ -338,4 +338,17 @@ class DigitalLikes extends CActiveRecord
 		}
 	}
 
+	/**
+	 * before validate attributes
+	 */
+	protected function beforeValidate() {
+		if(parent::beforeValidate()) {
+			if($this->isNewRecord) {
+				$this->user_id = Yii::app()->user->id;
+				$this->likes_ip = $_SERVER['REMOTE_ADDR'];				
+			}
+		}
+		return true;
+	}
+
 }
