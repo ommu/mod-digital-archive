@@ -72,6 +72,25 @@
 		</div>
 
 		<div class="clearfix">
+			<?php echo $form->labelEx($model,'cat_icon_image'); ?>
+			<div class="desc">
+				<?php 
+				if(!$model->isNewRecord) {
+					if(!$model->getErrors())
+						$model->old_cat_icon_image_input = $model->cat_icon_image;
+					echo $form->hiddenField($model,'old_cat_icon_image_input');
+					if($model->cat_icon_image != '') {
+						$file = Yii::app()->request->baseUrl.'/public/digital/'.$model->old_cat_icon_image_input;?>
+						<img class="mb-15" src="<?php echo Utility::getTimThumb($file, 200, 300, 3);?>" alt="">					
+				<?php }
+				}
+				echo $form->fileField($model,'cat_icon_image'); ?>
+				<?php echo $form->error($model,'cat_icon_image'); ?>
+				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
+		</div>
+
+		<div class="clearfix">
 			<?php echo $form->labelEx($model,'cat_cover'); ?>
 			<div class="desc">
 				<?php 

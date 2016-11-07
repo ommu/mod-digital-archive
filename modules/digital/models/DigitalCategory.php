@@ -29,6 +29,7 @@
  * @property string $cat_desc
  * @property string $cat_code
  * @property string $cat_icon
+ * @property string $cat_icon_image
  * @property string $cat_cover
  * @property string $creation_date
  * @property string $creation_id
@@ -41,6 +42,7 @@
 class DigitalCategory extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $old_cat_icon_image_input;
 	public $old_cat_cover_input;
 	
 	// Variable Search
@@ -79,11 +81,11 @@ class DigitalCategory extends CActiveRecord
 			array('cat_title, cat_icon', 'length', 'max'=>32),
 			array('creation_id, modified_id', 'length', 'max'=>11),
 			array('cat_code', 'length', 'max'=>6),
-			array('cat_desc, cat_icon, cat_cover,
-				old_cat_cover_input', 'safe'),
+			array('cat_desc, cat_icon, cat_icon_image, cat_cover,
+				old_cat_icon_image_input, old_cat_cover_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cat_id, publish, cat_title, cat_desc, cat_code, cat_icon, cat_cover, creation_date, creation_id, modified_date, modified_id,
+			array('cat_id, publish, cat_title, cat_desc, cat_code, cat_icon, cat_icon_image, cat_cover, creation_date, creation_id, modified_date, modified_id,
 				creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -115,6 +117,7 @@ class DigitalCategory extends CActiveRecord
 			'cat_desc' => Yii::t('attribute', 'Description'),
 			'cat_code' => Yii::t('attribute', 'Code'),
 			'cat_icon' => Yii::t('attribute', 'Icon'),
+			'cat_icon_image' => Yii::t('attribute', 'Icon Image'),
 			'cat_cover' => Yii::t('attribute', 'Cover'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
@@ -182,6 +185,7 @@ class DigitalCategory extends CActiveRecord
 		$criteria->compare('t.cat_desc',strtolower($this->cat_desc),true);
 		$criteria->compare('t.cat_code',strtolower($this->cat_code),true);
 		$criteria->compare('t.cat_icon',strtolower($this->cat_icon),true);
+		$criteria->compare('t.cat_icon_image',strtolower($this->cat_icon_image),true);
 		$criteria->compare('t.cat_cover',strtolower($this->cat_cover),true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
@@ -234,6 +238,7 @@ class DigitalCategory extends CActiveRecord
 			$this->defaultColumns[] = 'cat_desc';
 			$this->defaultColumns[] = 'cat_code';
 			$this->defaultColumns[] = 'cat_icon';
+			$this->defaultColumns[] = 'cat_icon_image';
 			$this->defaultColumns[] = 'cat_cover';
 			$this->defaultColumns[] = 'creation_date';
 			$this->defaultColumns[] = 'creation_id';
@@ -296,6 +301,22 @@ class DigitalCategory extends CActiveRecord
 						'showButtonPanel' => true,
 					),
 				), true),
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'cat_icon_image',
+				'value' => '$data->cat_icon_image != \'\' ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'cat_cover',
+				'value' => '$data->cat_cover != \'\' ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
 			);
 			if(!isset($_GET['type'])) {
 				$this->defaultColumns[] = array(
@@ -382,6 +403,16 @@ class DigitalCategory extends CActiveRecord
 		$cover_file_type = unserialize($setting->cover_file_type);
 		
 		if(parent::beforeValidate()) {
+			$cat_icon_image = CUploadedFile::getInstance($this, 'cat_icon_image');
+			if($cat_icon_image->name != '') {
+				$extension = pathinfo($cat_icon_image->name, PATHINFO_EXTENSION);
+				if(!in_array(strtolower($extension), $cover_file_type))
+					$this->addError('cat_icon_image', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
+						'{name}'=>$cat_icon_image->name,
+						'{extensions}'=>Utility::formatFileType($cover_file_type, false),
+					)));
+			}
+			
 			$cat_cover = CUploadedFile::getInstance($this, 'cat_cover');
 			if($cat_cover->name != '') {
 				$extension = pathinfo($cat_cover->name, PATHINFO_EXTENSION);
@@ -419,6 +450,19 @@ class DigitalCategory extends CActiveRecord
 					$FileHandle = fopen($newFile, 'w');
 				}
 				
+				$this->cat_icon_image = CUploadedFile::getInstance($this, 'cat_icon_image');
+				if($this->cat_icon_image instanceOf CUploadedFile) {
+					$fileName = $this->cat_id.'_'.time().'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_icon_image->extensionName);
+					if($this->cat_icon_image->saveAs($digital_path.'/'.$fileName)) {
+						self::resizeCategoryCover($digital_path.'/'.$fileName, '300,300');
+						if($this->old_cat_icon_image_input != '' && file_exists($digital_path.'/'.$this->old_cat_icon_image_input))
+							rename($digital_path.'/'.$this->old_cat_icon_image_input, 'public/digital/verwijderen/'.$this->old_cat_icon_image_input);
+						$this->cat_icon_image = $fileName;
+					}
+				}					
+				if($this->cat_icon_image == '')
+					$this->cat_icon_image = $this->old_cat_icon_image_input;
+				
 				$this->cat_cover = CUploadedFile::getInstance($this, 'cat_cover');
 				if($this->cat_cover instanceOf CUploadedFile) {
 					$fileName = $this->cat_id.'_'.time().'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_cover->extensionName);
@@ -455,6 +499,15 @@ class DigitalCategory extends CActiveRecord
 				$FileHandle = fopen($newFile, 'w');
 			}
 			
+			$this->cat_icon_image = CUploadedFile::getInstance($this, 'cat_icon_image');
+			if($this->cat_icon_image instanceOf CUploadedFile) {
+				$fileName = $this->cat_id.'_'.time().'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_icon_image->extensionName);
+				if($this->cat_icon_image->saveAs($digital_path.'/'.$fileName)) {
+					self::resizeCategoryCover($digital_path.'/'.$fileName, '300,300');
+					self::model()->updateByPk($this->cat_id, array('cat_icon_image'=>$fileName));
+				}
+			}
+			
 			$this->cat_cover = CUploadedFile::getInstance($this, 'cat_cover');
 			if($this->cat_cover instanceOf CUploadedFile) {
 				$fileName = $this->cat_id.'_'.time().'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_cover->extensionName);
@@ -474,8 +527,11 @@ class DigitalCategory extends CActiveRecord
 		//delete digital location image
 		$digital_path = "public/digital";
 		
+		if($this->cat_icon_image != '' && file_exists($digital_path.'/'.$this->cat_icon_image))
+			rename($digital_path.'/'.$this->cat_icon_image, 'public/digital/verwijderen/'.$this->cat_icon_image);
+		
 		if($this->cat_cover != '' && file_exists($digital_path.'/'.$this->cat_cover))
-			rename($digital_path.'/'.$this->cat_cover, 'public/digital/verwijderen/'.$this->location_id.'_'.$this->cat_cover);
+			rename($digital_path.'/'.$this->cat_cover, 'public/digital/verwijderen/'.$this->cat_cover);
 	}
 
 }
