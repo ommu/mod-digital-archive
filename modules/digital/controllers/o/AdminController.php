@@ -144,10 +144,13 @@ class AdminController extends Controller
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionUpload($id) 
-	{
+	{		
 		$setting = DigitalSetting::model()->findByPk(1,array(
 			'select' => 'digital_file_type',
 		));
+		
+		ini_set('max_execution_time', 0);
+		ob_start();
 		
 		$model=$this->loadModel($id);
 		if($model != null) {
@@ -177,6 +180,8 @@ class AdminController extends Controller
 			
 		} else
 			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
+
+		ob_end_flush();
 	}
 	
 	/**
@@ -188,6 +193,9 @@ class AdminController extends Controller
 		$setting = DigitalSetting::model()->findByPk(1,array(
 			'select' => 'cover_file_type, digital_file_type',
 		));
+		
+		ini_set('max_execution_time', 0);
+		ob_start();
 		
 		$model=new Digitals;
 		$publisher=new DigitalPublisher;
@@ -224,6 +232,8 @@ class AdminController extends Controller
 				}				
 			}
 		}
+
+		ob_end_flush();
 
 		$this->pageTitle = Yii::t('phrase', 'Create Digitals');
 		$this->pageDescription = '';
