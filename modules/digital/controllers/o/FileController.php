@@ -144,7 +144,15 @@ class FileController extends Controller
 	 */
 	public function actionEdit($id) 
 	{
-		$model=$this->loadModel($id);
+		$model=$this->loadModel($id);		
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'digital_path',
+		));
+		$pathUnique = Digitals::getUniqueDirectory($model->digital_id, $model->digital->salt, $model->digital->view->md5path);
+		if($setting != null)
+			$digital_path = $setting->digital_path.'/'.$pathUnique;
+		else
+			$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
@@ -168,6 +176,7 @@ class FileController extends Controller
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
 			'model'=>$model,
+			'digital_path'=>$digital_path,
 		));
 	}
 	

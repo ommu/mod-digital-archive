@@ -70,12 +70,6 @@
 			'type'=>'raw',
 		),
 		array(
-			'name'=>'digital_cover',
-			'value'=>$model->digital_cover != '' ? $model->digital_cover : '-',
-			//'value'=>$model->digital_cover != '' ? CHtml::link($model->digital_cover, Yii::app()->request->baseUrl.'/public/visit/'.$model->digital_cover, array('target' => '_blank')) : '-',
-			'type'=>'raw',
-		),
-		array(
 			'name'=>'publish_year',
 			'value'=>$model->publish_year,
 			//'value'=>$model->publish_year != '' ? $model->publish_year : '-',

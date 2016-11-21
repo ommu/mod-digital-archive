@@ -36,6 +36,7 @@
 class DigitalCover extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $old_cover_filename_input;
 	
 	// Variable Search
 	public $digital_search;
@@ -72,7 +73,8 @@ class DigitalCover extends CActiveRecord
 			array('digital_id, cover_filename', 'required'),
 			array('publish, status', 'numerical', 'integerOnly'=>true),
 			array('digital_id, creation_id, modified_id', 'length', 'max'=>11),
-			array('', 'safe'),
+			array('
+				old_cover_filename_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cover_id, publish, status, digital_id, cover_filename, creation_date, creation_id, modified_date, modified_id,
@@ -104,11 +106,12 @@ class DigitalCover extends CActiveRecord
 			'publish' => Yii::t('attribute', 'Publish'),
 			'status' => Yii::t('attribute', 'Status'),
 			'digital_id' => Yii::t('attribute', 'Digital'),
-			'cover_filename' => Yii::t('attribute', 'Cover Filename'),
+			'cover_filename' => Yii::t('attribute', 'Cover'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
+			'old_cover_filename_input' => Yii::t('attribute', 'Old Cover'),
 			'digital_search' => Yii::t('attribute', 'Digital'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
@@ -173,7 +176,10 @@ class DigitalCover extends CActiveRecord
 			$criteria->compare('t.publish',$this->publish);
 		}
 		$criteria->compare('t.status',$this->status);
-		$criteria->compare('t.digital_id',strtolower($this->digital_id),true);
+		if(isset($_GET['digital']))
+			$criteria->compare('t.digital_id',$_GET['digital']);
+		else
+			$criteria->compare('t.digital_id',$this->digital_id);
 		$criteria->compare('t.cover_filename',strtolower($this->cover_filename),true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
@@ -340,11 +346,72 @@ class DigitalCover extends CActiveRecord
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
+		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'cover_file_type',
+		));
+		$cover_file_type = unserialize($setting->cover_file_type);
+		
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
 				$this->creation_id = Yii::app()->user->id;
 			else
 				$this->modified_id = Yii::app()->user->id;
+			
+			$cover_filename = CUploadedFile::getInstance($this, 'cover_filename');
+			if($currentAction != 'o/cover/edit' && $cover_filename->name != '') {
+				$extension = pathinfo($cover_filename->name, PATHINFO_EXTENSION);
+				if(!in_array(strtolower($extension), $cover_file_type))
+					$this->addError('cover_filename', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
+						'{name}'=>$cover_filename->name,
+						'{extensions}'=>Utility::formatFileType($cover_file_type, false),
+					)));
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * before save attributes
+	 */
+	protected function beforeSave() {
+		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);			
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'digital_path, digital_file_type',
+		));
+		
+		if(parent::beforeSave()) 
+		{
+			if(!$this->isNewRecord && $currentAction == 'o/cover/edit') 
+			{
+				$pathUnique = self::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
+				if($setting != null)
+					$digital_path = $setting->digital_path.'/'.$pathUnique;
+				else
+					$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+		
+				if(!file_exists($digital_path)) {
+					@mkdir($digital_path, 0755, true);
+
+					// Add file in directory (index.php)
+					$newFile = $digital_path.'/index.php';
+					$FileHandle = fopen($newFile, 'w');
+				} else 
+					@chmod($digital_path, 0755, true);
+				
+				$this->cover_filename = CUploadedFile::getInstance($this, 'cover_filename');
+				if($this->cover_filename instanceOf CUploadedFile) {
+					$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital->digital_title).'.'.strtolower($this->cover_filename->extensionName);
+					if($this->cover_filename->saveAs($digital_path.'/'.$fileName)) {
+						if($this->old_cover_filename_input != '' && file_exists($digital_path.'/'.$this->old_cover_filename_input))
+							rename($digital_path.'/'.$this->old_cover_filename_input, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->old_cover_filename_input);
+						$this->cover_filename = $fileName;
+					}
+				}					
+				if($this->cover_filename == '') {
+					$this->cover_filename = $this->old_cover_filename_input;
+				}
+			}
 		}
 		return true;
 	}
