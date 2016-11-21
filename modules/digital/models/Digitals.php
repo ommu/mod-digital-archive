@@ -62,6 +62,7 @@ class Digitals extends CActiveRecord
 	
 	// Variable Search
 	public $publisher_search;
+	public $file_search;
 	public $creation_search;
 	public $modified_search;
 
@@ -104,7 +105,7 @@ class Digitals extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, pages, series, salt, creation_date, creation_id, modified_date, modified_id,
-				publisher_search, creation_search, modified_search', 'safe', 'on'=>'search'),
+				publisher_search, file_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -118,6 +119,7 @@ class Digitals extends CActiveRecord
 		return array(
 			'view' => array(self::BELONGS_TO, 'ViewDigitals', 'digital_id'),
 			'covers' => array(self::HAS_MANY, 'DigitalCover', 'digital_id'),
+			'files' => array(self::HAS_MANY, 'DigitalFile', 'digital_id'),
 			'authors' => array(self::HAS_MANY, 'DigitalAuthors', 'digital_id'),
 			'tags' => array(self::HAS_MANY, 'DigitalTag', 'digital_id'),
 			'history_prints' => array(self::HAS_MANY, 'DigitalHistoryPrint', 'digital_id'),
@@ -161,6 +163,7 @@ class Digitals extends CActiveRecord
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'publisher_search' => Yii::t('attribute', 'Publisher'),
+			'file_search' => Yii::t('attribute', 'Files'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
@@ -211,6 +214,10 @@ class Digitals extends CActiveRecord
 			'publisher' => array(
 				'alias'=>'publisher',
 				'select'=>'publisher_name',
+			),
+			'view' => array(
+				'alias'=>'view',
+				'select'=>'files, file_publish, file_unpublish',
 			),
 			'creation' => array(
 				'alias'=>'creation',
@@ -270,6 +277,7 @@ class Digitals extends CActiveRecord
 			$criteria->compare('t.modified_id',$this->modified_id);
 		
 		$criteria->compare('publisher.publisher_name',strtolower($this->publisher_search), true);
+		$criteria->compare('view.files',$this->file_search);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
@@ -344,7 +352,7 @@ class Digitals extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'digital_code';
+			//$this->defaultColumns[] = 'digital_code';
 			if(!isset($_GET['category'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'cat_id',
@@ -373,6 +381,13 @@ class Digitals extends CActiveRecord
 			$this->defaultColumns[] = array(
 				'name' => 'publish_year',
 				'value' => '!in_array($data->publish_year, array(\'0000\', \'1970\')) ? $data->publish_year : "-"',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'file_search',
+				'value' => '$data->view->files',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
@@ -487,6 +502,12 @@ class Digitals extends CActiveRecord
 						'{name}'=>$digital_file_input->name,
 						'{extensions}'=>Utility::formatFileType($digital_file_type, false),
 					)));
+					
+				if(strtolower($extension) != 'zip' && $this->multiple_file_input == 1)
+					$this->addError('digital_file_input', Yii::t('phrase', 'The file {name} cannot be uploaded. File bukan termasuk multiple format.', array(
+						'{name}'=>$digital_file_input->name,
+					)));
+					
 			}
 		}
 		return true;
