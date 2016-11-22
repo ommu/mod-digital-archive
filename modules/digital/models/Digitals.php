@@ -550,7 +550,9 @@ class Digitals extends CActiveRecord
 				// Add file in directory (index.php)
 				$newFile = $digital_path.'/index.php';
 				$FileHandle = fopen($newFile, 'w');
-			}
+			} else
+				@chmod($digital_path, 0755, true);
+			
 			self::model()->updateByPk($this->digital_id, array('digital_path'=>$digital_path));
 			
 			//input author

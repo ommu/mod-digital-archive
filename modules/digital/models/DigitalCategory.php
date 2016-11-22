@@ -448,7 +448,8 @@ class DigitalCategory extends CActiveRecord
 					// Add file in digital directory (index.php)
 					$newFile = $digital_path.'/index.php';
 					$FileHandle = fopen($newFile, 'w');
-				}
+				} else
+					@chmod($digital_path, 0755, true);
 				
 				$this->cat_icon_image = CUploadedFile::getInstance($this, 'cat_icon_image');
 				if($this->cat_icon_image instanceOf CUploadedFile) {
@@ -497,7 +498,8 @@ class DigitalCategory extends CActiveRecord
 				// Add file in digital directory (index.php)
 				$newFile = $digital_path.'/index.php';
 				$FileHandle = fopen($newFile, 'w');
-			}
+			} else
+				@chmod($digital_path, 0755, true);
 			
 			$this->cat_icon_image = CUploadedFile::getInstance($this, 'cat_icon_image');
 			if($this->cat_icon_image instanceOf CUploadedFile) {
