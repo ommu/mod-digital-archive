@@ -38,10 +38,10 @@ plugin_menu		:
 				urlPath: {url: o/language/manage, attr: -, icon: -}
 			- urlTitle: Likes
 				urlRules: {siteType: 0,1, userLevel: 1,2}
-				urlPath: {url: o/like/manage, attr: -, icon: -}
+				urlPath: {url: o/likes/manage, attr: -, icon: -}
 			- urlTitle: Views
 				urlRules: {siteType: 0,1, userLevel: 1,2}
-				urlPath: {url: o/view/manage, attr: -, icon: -}
+				urlPath: {url: o/views/manage, attr: -, icon: -}
 
 content_menu	:
 # controller o/admin

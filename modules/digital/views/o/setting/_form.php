@@ -140,14 +140,19 @@
 					'cat_id' => $digital->getAttributeLabel('cat_id'),
 					'publisher_id' => $digital->getAttributeLabel('publisher_id'),
 					'language_id' => $digital->getAttributeLabel('language_id'),
-					'opac_id' => $digital->getAttributeLabel('opac_id'),
 					'digital_code' => $digital->getAttributeLabel('digital_code'),
 					'publish_year' => $digital->getAttributeLabel('publish_year'),
 					'publish_location' => $digital->getAttributeLabel('publish_location'),
+					'author_input' => $digital->getAttributeLabel('author_input'),
 					'isbn' => $digital->getAttributeLabel('isbn'),
 					'pages' => $digital->getAttributeLabel('pages'),
 					'series' => $digital->getAttributeLabel('series'),
+					'subject_input' => $digital->getAttributeLabel('subject_input'),
+					'tag_input' => $digital->getAttributeLabel('tag_input'),
+					'opac_id' => $digital->getAttributeLabel('opac_id'),
 				);
+				if(!$model->getErrors())
+					$model->form_custom_field = unserialize($model->form_custom_field);
 				echo $form->checkBoxList($model, 'form_custom_field', $customField); ?>
 				<?php echo $form->error($model,'form_custom_field'); ?>
 			</div>

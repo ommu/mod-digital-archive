@@ -59,6 +59,7 @@ class Digitals extends CActiveRecord
 	public $multiple_file_input;
 	public $author_input;
 	public $subject_input;
+	public $tag_input;
 	
 	// Variable Search
 	public $publisher_search;
@@ -93,7 +94,8 @@ class Digitals extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cat_id, publish, language_id, digital_title, digital_intro', 'required'),
+			array('publish, digital_title, digital_intro', 'required'),
+			array('cat_id, language_id', 'required', 'on'=>'standardForm'),
 			array('publish, cat_id, language_id, opac_id', 'numerical', 'integerOnly'=>true),
 			array('publisher_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('digital_code', 'length', 'max'=>16),
@@ -101,7 +103,7 @@ class Digitals extends CActiveRecord
 			array('isbn, salt', 'length', 'max'=>32),
 			array('pages', 'length', 'max'=>5),
 			array('publisher_id, opac_id, digital_code, digital_path, publish_year, publish_location, isbn, pages, series, salt,
-				digital_file_input, multiple_file_input, author_input, subject_input', 'safe'),
+				digital_file_input, multiple_file_input, author_input, subject_input, tag_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, pages, series, salt, creation_date, creation_id, modified_date, modified_id,
@@ -121,7 +123,7 @@ class Digitals extends CActiveRecord
 			'covers' => array(self::HAS_MANY, 'DigitalCover', 'digital_id'),
 			'files' => array(self::HAS_MANY, 'DigitalFile', 'digital_id'),
 			'authors' => array(self::HAS_MANY, 'DigitalAuthors', 'digital_id'),
-			'tags' => array(self::HAS_MANY, 'DigitalTag', 'digital_id'),
+			'tags' => array(self::HAS_MANY, 'DigitalTags', 'digital_id'),
 			'history_prints' => array(self::HAS_MANY, 'DigitalHistoryPrint', 'digital_id'),
 			'subjects' => array(self::HAS_MANY, 'DigitalSubjects', 'digital_id'),
 			'category' => array(self::BELONGS_TO, 'DigitalCategory', 'cat_id'),
@@ -158,6 +160,7 @@ class Digitals extends CActiveRecord
 			'multiple_file_input' => Yii::t('attribute', 'Multiple File'),
 			'author_input' => Yii::t('attribute', 'Authors'),
 			'subject_input' => Yii::t('attribute', 'Subjects'),
+			'tag_input' => Yii::t('attribute', 'Tags'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
@@ -579,6 +582,20 @@ class Digitals extends CActiveRecord
 						$subject->tag_id = 0;
 						$subject->tag_input = $val;
 						$subject->save();
+					}
+				}
+			}
+			
+			//input tag
+			if(trim($this->tag_input) != '') {
+				$tag_input = Utility::formatFileType($this->tag_input);
+				if(!empty($tag_input)) {
+					foreach($tag_input as $key => $val) {
+						$tag = new DigitalTags;
+						$tag->digital_id = $this->digital_id;
+						$tag->tag_id = 0;
+						$tag->tag_input = $val;
+						$tag->save();
 					}
 				}
 			}

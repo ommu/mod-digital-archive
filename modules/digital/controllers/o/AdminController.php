@@ -191,45 +191,61 @@ class AdminController extends Controller
 	public function actionAdd() 
 	{
 		$setting = DigitalSetting::model()->findByPk(1,array(
-			'select' => 'cover_file_type, digital_file_type',
+			'select' => 'cover_file_type, digital_file_type, form_standard, form_custom_field',
 		));
+		$form_custom_field = unserialize($setting->form_custom_field);
+		if(empty($form_custom_field))
+			$form_custom_field = array();
 		
 		ini_set('max_execution_time', 0);
 		ob_start();
 		
 		$model=new Digitals;
-		$publisher=new DigitalPublisher;
+		if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publisher_id', $form_custom_field)))
+			$publisher=new DigitalPublisher;
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
-		$this->performAjaxValidation($publisher);
+		if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publisher_id', $form_custom_field)))
+			$this->performAjaxValidation($publisher);
 
 		if(isset($_POST['Digitals'])) {
 			$model->attributes=$_POST['Digitals'];
-			$publisher->attributes=$_POST['DigitalPublisher'];
+			if($setting->form_standard == 1)
+				$model->scenario = 'standardForm';
 			
-			$publisher->validate();
-			
-			if($model->validate() && $publisher->validate()) {
-				//if($model->publisher_id != '' && $model->publisher_id != 0) {
-					$publisherFind = DigitalPublisher::model()->find(array(
-						'select' => 'publisher_id, publisher_id',
-						'condition' => 'publisher_name = :publisher',
-						'params' => array(
-							':publisher' => $publisher->publisher_name,
-						),
-					));
-					if($publisherFind != null)
-						$model->publisher_id = $publisherFind->publisher_id;
-					else {
-						if($publisher->save())
-							$model->publisher_id = $publisher->publisher_id;
+			if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publisher_id', $form_custom_field))) {
+				$publisher->attributes=$_POST['DigitalPublisher'];
+				
+				$publisher->validate();
+				
+				if($model->validate() && $publisher->validate()) {
+					//if($model->publisher_id != '' && $model->publisher_id != 0) {
+						$publisherFind = DigitalPublisher::model()->find(array(
+							'select' => 'publisher_id, publisher_id',
+							'condition' => 'publisher_name = :publisher',
+							'params' => array(
+								':publisher' => $publisher->publisher_name,
+							),
+						));
+						if($publisherFind != null)
+							$model->publisher_id = $publisherFind->publisher_id;
+						else {
+							if($publisher->save())
+								$model->publisher_id = $publisher->publisher_id;
+						}
+					//}
+					if($model->save()) {
+						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Digitals success created.'));
+						$this->redirect(array('edit','id'=>$model->digital_id));
 					}
-				//}			
+				}
+				
+			} else {
 				if($model->save()) {
 					Yii::app()->user->setFlash('success', Yii::t('phrase', 'Digitals success created.'));
 					$this->redirect(array('edit','id'=>$model->digital_id));
-				}				
+				}
 			}
 		}
 
@@ -252,46 +268,67 @@ class AdminController extends Controller
 	 */
 	public function actionEdit($id) 
 	{
+		$setting = DigitalSetting::model()->findByPk(1,array(
+			'select' => 'form_standard, form_custom_field',
+		));
+		$form_custom_field = unserialize($setting->form_custom_field);
+		if(empty($form_custom_field))
+			$form_custom_field = array();
+		
 		$model=$this->loadModel($id);
-		$publisher = DigitalPublisher::model()->findByPk($model->publisher_id);
-		if($model->publisher_id == null)
-			$publisher=new DigitalPublisher;
+		if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publisher_id', $form_custom_field))) {
+			$publisher = DigitalPublisher::model()->findByPk($model->publisher_id);
+			if($model->publisher_id == null)
+				$publisher=new DigitalPublisher;			
+		}
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
-		$this->performAjaxValidation($publisher);
+		if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publisher_id', $form_custom_field)))
+			$this->performAjaxValidation($publisher);
 			
-		if(!$model->getErrors()) {
+		if(!$model->getErrors() && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publisher_id', $form_custom_field)))) {
 			$publisher_id = $model->publisher_id;
 			$publisher_name = $publisher->publisher_name;
 		}
 
 		if(isset($_POST['Digitals'])) {
 			$model->attributes=$_POST['Digitals'];
-			$publisher->attributes=$_POST['DigitalPublisher'];
-			$publisher->validate();
+			if($setting->form_standard == 1)
+				$model->scenario = 'standardForm';
 			
-			if($model->validate() && $publisher->validate()) {
-				if($publisher_id != $model->publisher_id || $publisher_name != $publisher->publisher_name) {
-					//if($model->publisher_id != '' && $model->publisher_id != 0) {
-						$publisherFind = DigitalPublisher::model()->find(array(
-							'select' => 'publisher_id, publisher_name',
-							'condition' => 'publisher_name = :publisher',
-							'params' => array(
-								':publisher' => $publisher->publisher_name,
-							),
-						));
-						if($publisherFind != null)
-							$model->publisher_id = $publisherFind->publisher_id;
-						else {
-							$publishers=new DigitalPublisher;
-							$publishers->publisher_name = $publisher->publisher_name;
-							if($publishers->save())
-								$model->publisher_id = $publishers->publisher_id;
-						}
-					//}
+			if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publisher_id', $form_custom_field))) {
+				$publisher->attributes=$_POST['DigitalPublisher'];
+				$publisher->validate();
+				
+				if($model->validate() && $publisher->validate()) {
+					if($publisher_id != $model->publisher_id || $publisher_name != $publisher->publisher_name) {
+						//if($model->publisher_id != '' && $model->publisher_id != 0) {
+							$publisherFind = DigitalPublisher::model()->find(array(
+								'select' => 'publisher_id, publisher_name',
+								'condition' => 'publisher_name = :publisher',
+								'params' => array(
+									':publisher' => $publisher->publisher_name,
+								),
+							));
+							if($publisherFind != null)
+								$model->publisher_id = $publisherFind->publisher_id;
+							else {
+								$publishers=new DigitalPublisher;
+								$publishers->publisher_name = $publisher->publisher_name;
+								if($publishers->save())
+									$model->publisher_id = $publishers->publisher_id;
+							}
+						//}
+					}
+					
+					if($model->save()) {
+						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Digitals success updated.'));
+						$this->redirect(array('edit','id'=>$model->digital_id));
+					}
 				}
 				
+			} else {
 				if($model->save()) {
 					Yii::app()->user->setFlash('success', Yii::t('phrase', 'Digitals success updated.'));
 					$this->redirect(array('edit','id'=>$model->digital_id));
@@ -305,6 +342,7 @@ class AdminController extends Controller
 		$this->render('admin_edit',array(
 			'model'=>$model,
 			'publisher'=>$publisher,
+			'setting'=>$setting,
 		));
 	}
 	

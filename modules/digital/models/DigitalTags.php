@@ -309,7 +309,7 @@ class DigitalTags extends CActiveRecord
 				if($this->tag_id == 0) {
 					$tag = OmmuTags::model()->find(array(
 						'select' => 'tag_id, body',
-						'condition' => 'publish = 1 AND body = :body',
+						'condition' => 'body = :body',
 						'params' => array(
 							':body' => $this->tag_input,
 						),

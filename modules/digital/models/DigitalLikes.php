@@ -344,7 +344,7 @@ class DigitalLikes extends CActiveRecord
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
-				$this->user_id = Yii::app()->user->id;
+				$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 				$this->likes_ip = $_SERVER['REMOTE_ADDR'];				
 			}
 		}

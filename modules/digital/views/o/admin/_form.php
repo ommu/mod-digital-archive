@@ -13,12 +13,16 @@
  * @contect (+62)856-299-4114
  *
  */
+
+	$form_custom_field = unserialize($setting->form_custom_field);
+	if(empty($form_custom_field))
+		$form_custom_field = array();
 ?>
 
 <?php $form=$this->beginWidget('application.components.system.OActiveForm', array(
 	'id'=>'digitals-form',
 	'enableAjaxValidation'=>true,
-	//'htmlOptions' => array('enctype' => 'multipart/form-data')
+	'htmlOptions' => array('enctype' => 'multipart/form-data'),
 )); ?>
 
 	<?php //begin.Messages ?>
@@ -46,6 +50,7 @@
 					</div>
 				</div>
 
+				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publisher_id', $form_custom_field))) {?>
 				<div class="clearfix">
 					<?php echo $form->labelEx($publisher,'publisher_name'); ?>
 					<div class="desc">
@@ -74,7 +79,9 @@
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>
+				<?php }?>
 
+				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publish_year', $form_custom_field))) {?>
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'publish_year'); ?>
 					<div class="desc">
@@ -85,7 +92,9 @@
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>
+				<?php }?>
 
+				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publish_location', $form_custom_field))) {?>
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'publish_location'); ?>
 					<div class="desc">
@@ -94,7 +103,9 @@
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>
+				<?php }?>
 
+				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('isbn', $form_custom_field))) {?>
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'isbn'); ?>
 					<div class="desc">
@@ -103,7 +114,9 @@
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>
+				<?php }?>
 
+				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('pages', $form_custom_field))) {?>
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'pages'); ?>
 					<div class="desc">
@@ -112,7 +125,9 @@
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>
+				<?php }?>
 
+				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('series', $form_custom_field))) {?>
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'series'); ?>
 					<div class="desc">
@@ -121,7 +136,9 @@
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>
+				<?php }?>
 				
+				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('author_input', $form_custom_field))) {?>
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'author_input'); ?>
 					<div class="desc">
@@ -176,7 +193,9 @@
 						<?php if($model->isNewRecord) {?><span class="small-px">tambahkan tanda pagar (#) jika ingin menambahkan aothor lebih dari satu</span><?php }?>
 					</div>
 				</div>
+				<?php }?>
 				
+				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('subject_input', $form_custom_field))) {?>
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'subject_input'); ?>
 					<div class="desc">
@@ -231,6 +250,64 @@
 						<?php if($model->isNewRecord) {?><span class="small-px">tambahkan tanda koma (,) jika ingin menambahkan subject lebih dari satu</span><?php }?>
 					</div>
 				</div>
+				<?php }?>
+				
+				<?php if($setting->form_standard == 0 && in_array('tag_input', $form_custom_field)) {?>
+				<div class="clearfix">
+					<?php echo $form->labelEx($model,'tag_input'); ?>
+					<div class="desc">
+						<?php 
+						if($model->isNewRecord) {
+							echo $form->textArea($model,'tag_input',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller'));
+							
+						} else {
+							//echo $form->textField($model,'tag_input',array('maxlength'=>32,'class'=>'span-6'));
+							$url = Yii::app()->controller->createUrl('o/tags/add', array('type'=>'digital'));
+							$digital = $model->digital_id;
+							$tagId = 'Digitals_tag_input';
+							$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+								'model' => $model,
+								'attribute' => 'tag_input',
+								'source' => Yii::app()->createUrl('globaltag/suggest'),
+								'options' => array(
+									//'delay '=> 50,
+									'minLength' => 1,
+									'showAnim' => 'fold',
+									'select' => "js:function(event, ui) {
+										$.ajax({
+											type: 'post',
+											url: '$url',
+											data: { digital_id: '$digital', tag_id: ui.item.id, tag: ui.item.value },
+											dataType: 'json',
+											success: function(response) {
+												$('form #$tagId').val('');
+												$('form #tag-suggest').append(response.data);
+											}
+										});
+
+									}"
+								),
+								'htmlOptions' => array(
+									'class'	=> 'span-7',
+								),
+							));
+							echo $form->error($model,'tag_input');
+						}?>
+						<div id="tag-suggest" class="suggest clearfix">
+							<?php 
+							if(!$model->isNewRecord) {
+								$tags = $model->tags;
+								if(!empty($tags)) {
+									foreach($tags as $key => $val) {?>
+									<div><?php echo $val->tag->body;?><a href="<?php echo Yii::app()->controller->createUrl('o/tags/delete',array('id'=>$val->id,'type'=>'digital'));?>" title="<?php echo Yii::t('phrase', 'Delete');?>"><?php echo Yii::t('phrase', 'Delete');?></a></div>
+								<?php }
+								}
+							}?>				
+						</div>
+						<?php if($model->isNewRecord) {?><span class="small-px">tambahkan tanda koma (,) jika ingin menambahkan tag lebih dari satu</span><?php }?>
+					</div>
+				</div>
+				<?php }?>
 			</div>
 			
 			<div class="right">
@@ -254,6 +331,7 @@
 				</div>
 				<?php }?>
 				
+				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('digital_code', $form_custom_field))) {?>
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'digital_code'); ?>
 					<div class="desc">
@@ -262,7 +340,9 @@
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>
+				<?php }?>
 				
+				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))) {?>
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'cat_id'); ?>
 					<div class="desc">
@@ -276,7 +356,9 @@
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>
+				<?php }?>
 
+				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('language_id', $form_custom_field))) {?>
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'language_id'); ?>
 					<div class="desc">
@@ -290,7 +372,9 @@
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>
+				<?php }?>
 
+				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('opac_id', $form_custom_field))) {?>
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'opac_id'); ?>
 					<div class="desc">
@@ -299,6 +383,7 @@
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>
+				<?php }?>
 
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'publish'); ?>
