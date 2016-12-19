@@ -27,16 +27,16 @@
  * @property string $md5path
  * @property string $uniquepath
  * @property string $covers
- * @property string $cover_publish
- * @property string $cover_unpublish
+ * @property string $cover_all
  * @property string $files
- * @property string $file_publish
- * @property string $file_unpublish
+ * @property string $file_all
  * @property string $authors
  * @property string $subjects
  * @property string $tags
  * @property string $likes
+ * @property string $like_all
  * @property string $views
+ * @property string $view_all
  */
 class ViewDigitals extends CActiveRecord
 {
@@ -78,10 +78,10 @@ class ViewDigitals extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('digital_id', 'length', 'max'=>11),
-			array('md5path, uniquepath, covers, cover_publish, cover_unpublish, files, file_publish, file_unpublish, authors, subjects, tags, likes, views', 'length', 'max'=>21),
+			array('md5path, uniquepath, covers, cover_all, files, file_all, authors, subjects, tags, likes, like_all, views, view_all', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('digital_id, md5path, uniquepath, covers, cover_publish, cover_unpublish, files, file_publish, file_unpublish, authors, subjects, tags, likes, views', 'safe', 'on'=>'search'),
+			array('digital_id, md5path, uniquepath, covers, cover_all, files, file_all, authors, subjects, tags, likes, like_all, views, view_all', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -106,16 +106,16 @@ class ViewDigitals extends CActiveRecord
 			'md5path' => Yii::t('attribute', 'MD5 Path'),
 			'uniquepath' => Yii::t('attribute', 'Unique Path'),
 			'covers' => Yii::t('attribute', 'Covers'),
-			'cover_publish' => Yii::t('attribute', 'Cover Publish'),
-			'cover_unpublish' => Yii::t('attribute', 'Cover Unpublish'),
+			'cover_all' => Yii::t('attribute', 'Cover All'),
 			'files' => Yii::t('attribute', 'Files'),
-			'file_publish' => Yii::t('attribute', 'File Publish'),
-			'file_unpublish' => Yii::t('attribute', 'File Unpublish'),
+			'file_all' => Yii::t('attribute', 'File All'),
 			'authors' => Yii::t('attribute', 'Authors'),
 			'subjects' => Yii::t('attribute', 'Subjects'),
 			'tags' => Yii::t('attribute', 'Tags'),
 			'likes' => Yii::t('attribute', 'Likes'),
+			'like_all' => Yii::t('attribute', 'Like All'),
 			'views' => Yii::t('attribute', 'Views'),
+			'view_all' => Yii::t('attribute', 'View All'),
 		);
 		/*
 			'Digital' => 'Digital',
@@ -149,16 +149,16 @@ class ViewDigitals extends CActiveRecord
 		$criteria->compare('t.md5path',strtolower($this->md5path),true);
 		$criteria->compare('t.uniquepath',strtolower($this->uniquepath),true);
 		$criteria->compare('t.covers',strtolower($this->covers),true);
-		$criteria->compare('t.cover_publish',strtolower($this->cover_publish),true);
-		$criteria->compare('t.cover_unpublish',strtolower($this->cover_unpublish),true);
+		$criteria->compare('t.cover_all',strtolower($this->cover_publish),true);
 		$criteria->compare('t.files',strtolower($this->files),true);
-		$criteria->compare('t.file_publish',strtolower($this->file_publish),true);
-		$criteria->compare('t.file_unpublish',strtolower($this->file_unpublish),true);
+		$criteria->compare('t.file_all',strtolower($this->file_publish),true);
 		$criteria->compare('t.authors',strtolower($this->authors),true);
 		$criteria->compare('t.subjects',strtolower($this->subjects),true);
 		$criteria->compare('t.tags',strtolower($this->tags),true);
 		$criteria->compare('t.likes',strtolower($this->likes),true);
+		$criteria->compare('t.like_all',strtolower($this->like_all),true);
 		$criteria->compare('t.views',strtolower($this->views),true);
+		$criteria->compare('t.view_all',strtolower($this->view_all),true);
 
 		if(!isset($_GET['ViewDigitals_sort']))
 			$criteria->order = 't.digital_id DESC';
@@ -193,16 +193,16 @@ class ViewDigitals extends CActiveRecord
 			$this->defaultColumns[] = 'md5path';
 			$this->defaultColumns[] = 'uniquepath';
 			$this->defaultColumns[] = 'covers';
-			$this->defaultColumns[] = 'cover_publish';
-			$this->defaultColumns[] = 'cover_unpublish';
+			$this->defaultColumns[] = 'cover_all';
 			$this->defaultColumns[] = 'files';
-			$this->defaultColumns[] = 'file_publish';
-			$this->defaultColumns[] = 'file_unpublish';
+			$this->defaultColumns[] = 'file_all';
 			$this->defaultColumns[] = 'authors';
 			$this->defaultColumns[] = 'subjects';
 			$this->defaultColumns[] = 'tags';
 			$this->defaultColumns[] = 'likes';
+			$this->defaultColumns[] = 'like_all';
 			$this->defaultColumns[] = 'views';
+			$this->defaultColumns[] = 'view_all';
 		}
 
 		return $this->defaultColumns;
@@ -221,16 +221,16 @@ class ViewDigitals extends CActiveRecord
 			$this->defaultColumns[] = 'md5path';
 			$this->defaultColumns[] = 'uniquepath';
 			$this->defaultColumns[] = 'covers';
-			$this->defaultColumns[] = 'cover_publish';
-			$this->defaultColumns[] = 'cover_unpublish';
+			$this->defaultColumns[] = 'cover_all';
 			$this->defaultColumns[] = 'files';
-			$this->defaultColumns[] = 'file_publish';
-			$this->defaultColumns[] = 'file_unpublish';
+			$this->defaultColumns[] = 'file_all';
 			$this->defaultColumns[] = 'authors';
 			$this->defaultColumns[] = 'subjects';
 			$this->defaultColumns[] = 'tags';
 			$this->defaultColumns[] = 'likes';
+			$this->defaultColumns[] = 'like_all';
 			$this->defaultColumns[] = 'views';
+			$this->defaultColumns[] = 'view_all';
 		}
 		parent::afterConstruct();
 	}

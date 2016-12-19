@@ -276,7 +276,13 @@ class DigitalLikes extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'likes_ip';
+			$this->defaultColumns[] = array(
+				'name' => 'likes_ip',
+				'value' => '$data->likes_ip',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'deleted_date',
 				'value' => 'Utility::dateFormat($data->deleted_date)',
