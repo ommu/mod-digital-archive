@@ -21,6 +21,9 @@ plugin_menu		:
 			- urlTitle: Categories
 				urlRules: {siteType: 0,1, userLevel: 1}
 				urlPath: {url: o/category/manage, attr: -, icon: -}
+			- urlTitle: Languages
+				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlPath: {url: o/language/manage, attr: -, icon: -}
 			- urlTitle: Publishers
 				urlRules: {siteType: 0,1, userLevel: 1,2}
 				urlPath: {url: o/publisher/manage, attr: -, icon: -}
@@ -33,9 +36,6 @@ plugin_menu		:
 			- urlTitle: Tags
 				urlRules: {siteType: 0,1, userLevel: 1,2}
 				urlPath: {url: o/tag/manage, attr: -, icon: -}
-			- urlTitle: Languages
-				urlRules: {siteType: 0,1, userLevel: 1,2}
-				urlPath: {url: o/language/manage, attr: -, icon: -}
 			- urlTitle: Likes
 				urlRules: {siteType: 0,1, userLevel: 1,2}
 				urlPath: {url: o/likes/manage, attr: -, icon: -}
@@ -60,6 +60,11 @@ content_menu	:
 		urlRules: {digital, o/category, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: add, attr: -, icon: -}
         
+# controller o/language
+	- urlTitle: Add Language
+		urlRules: {digital, o/language, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
+        
 # controller o/publisher
 	- urlTitle: Add Publisher
 		urlRules: {digital, o/publisher, manage, siteType: 0,1, userLevel: 1,2}
@@ -68,11 +73,6 @@ content_menu	:
 # controller o/author
 	- urlTitle: Add Author
 		urlRules: {digital, o/author, manage, siteType: 0,1, userLevel: 1,2}
-		urlPath: {url: add, attr: -, icon: -}
-        
-# controller o/language
-	- urlTitle: Add Language
-		urlRules: {digital, o/language, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: add, attr: -, icon: -}
         
 # controller o/subjects
@@ -84,13 +84,3 @@ content_menu	:
 	- urlTitle: Back to Tag Manage
 		urlRules: {digital, o/tags, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: o/tag/manage, attr: -, icon: -}
-        
-# controller o/likes
-	- urlTitle: Back to Tag Manage
-		urlRules: {digital, o/likes, manage, siteType: 0,1, userLevel: 1,2}
-		urlPath: {url: o/like/manage, attr: -, icon: -}
-        
-# controller o/views
-	- urlTitle: Back to Tag Manage
-		urlRules: {digital, o/views, manage, siteType: 0,1, userLevel: 1,2}
-		urlPath: {url: o/view/manage, attr: -, icon: -}
