@@ -112,6 +112,7 @@ class SettingController extends Controller
 		$model = DigitalSetting::model()->findByPk(1);
 		if($model == null)			
 			$model=new DigitalSetting;
+		$digital=new Digitals;
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
@@ -154,6 +155,7 @@ class SettingController extends Controller
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
 			'model'=>$model,
+			'digital'=>$digital,
 		));
 	}
 

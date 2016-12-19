@@ -122,6 +122,38 @@
 		</div>
 
 		<div class="clearfix">
+			<label><?php echo Yii::t('phrase', 'Form');?> <span class="required">*</span></label>
+			<div class="desc">
+				<?php echo $form->radioButtonList($model, 'form_standard', array(
+					1 => Yii::t('phrase', 'Standard Form.'),
+					0 => Yii::t('phrase', 'Custom Form.'),
+				)); ?>
+				<?php echo $form->error($model,'form_standard'); ?>
+			</div>
+		</div>
+
+		<div class="clearfix <?php echo $model->form_standard == 1 ? 'hide' : '';?>" id="custom_field">
+			<label><?php echo $model->getAttributeLabel('form_custom_field');?> <span class="required">*</span></label>
+			<div class="desc">
+				<?php 				
+				$customField = array(
+					'cat_id' => $digital->getAttributeLabel('cat_id'),
+					'publisher_id' => $digital->getAttributeLabel('publisher_id'),
+					'language_id' => $digital->getAttributeLabel('language_id'),
+					'opac_id' => $digital->getAttributeLabel('opac_id'),
+					'digital_code' => $digital->getAttributeLabel('digital_code'),
+					'publish_year' => $digital->getAttributeLabel('publish_year'),
+					'publish_location' => $digital->getAttributeLabel('publish_location'),
+					'isbn' => $digital->getAttributeLabel('isbn'),
+					'pages' => $digital->getAttributeLabel('pages'),
+					'series' => $digital->getAttributeLabel('series'),
+				);
+				echo $form->checkBoxList($model, 'form_custom_field', $customField); ?>
+				<?php echo $form->error($model,'form_custom_field'); ?>
+			</div>
+		</div>
+
+		<div class="clearfix">
 			<?php echo $form->labelEx($model,'cover_file_type'); ?>
 			<div class="desc">
 				<?php 

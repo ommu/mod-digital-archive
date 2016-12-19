@@ -29,10 +29,21 @@ $js=<<<EOP
 			$('div#resize_size').slideUp();
 		}
 	});
+	$('input[name="DigitalSetting[form_standard]"]').live('change', function() {
+		var id = $(this).val();
+		if(id == '1') {
+			$('div#custom_field').slideUp();
+		} else {
+			$('div#custom_field').slideDown();
+		}
+	});
 EOP;
 	$cs->registerScript('resize', $js, CClientScript::POS_END);
 ?>
 
 <div class="form" name="post-on">
-	<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+	<?php echo $this->renderPartial('_form', array(
+		'model'=>$model,
+		'digital'=>$digital,
+	)); ?>
 </div>

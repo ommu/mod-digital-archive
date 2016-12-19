@@ -35,6 +35,8 @@
  * @property string $cover_file_type
  * @property string $digital_path
  * @property string $digital_file_type
+ * @property string $form_standard
+ * @property string $form_custom_field
  * @property string $modified_date
  * @property string $modified_id
  */
@@ -72,14 +74,14 @@ class DigitalSetting extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_file_type, digital_path, digital_file_type', 'required'),
-			array('permission, cover_limit, cover_resize', 'numerical', 'integerOnly'=>true),
+			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_file_type, digital_path, digital_file_type, form_standard', 'required'),
+			array('permission, cover_limit, cover_resize, form_standard', 'numerical', 'integerOnly'=>true),
 			array('license', 'length', 'max'=>32),
 			array('modified_id', 'length', 'max'=>11),
-			array('cover_resize_size, cover_view_size', 'safe'),
+			array('cover_resize_size, cover_view_size, form_custom_field', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_resize_size, cover_view_size, cover_file_type, digital_path, digital_file_type, modified_date, modified_id,
+			array('id, license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_resize_size, cover_view_size, cover_file_type, digital_path, digital_file_type, form_standard, form_custom_field, modified_date, modified_id,
 				modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -114,6 +116,8 @@ class DigitalSetting extends CActiveRecord
 			'cover_file_type' => Yii::t('attribute', 'Cover File Type'),
 			'digital_path' => Yii::t('attribute', 'Digital Directory'),
 			'digital_file_type' => Yii::t('attribute', 'Digital File Type'),
+			'form_standard' => Yii::t('attribute', 'Standard Form'),
+			'form_custom_field' => Yii::t('attribute', 'Custom Field Form'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
@@ -172,6 +176,8 @@ class DigitalSetting extends CActiveRecord
 		$criteria->compare('t.cover_file_type',strtolower($this->cover_file_type),true);
 		$criteria->compare('t.digital_path',strtolower($this->digital_path),true);
 		$criteria->compare('t.digital_file_type',strtolower($this->digital_file_type),true);
+		$criteria->compare('t.form_standard',$this->form_standard);
+		$criteria->compare('t.form_custom_field',strtolower($this->form_custom_field),true);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
 		if(isset($_GET['modified']))
@@ -222,6 +228,8 @@ class DigitalSetting extends CActiveRecord
 			$this->defaultColumns[] = 'cover_file_type';
 			$this->defaultColumns[] = 'digital_path';
 			$this->defaultColumns[] = 'digital_file_type';
+			$this->defaultColumns[] = 'form_standard';
+			$this->defaultColumns[] = 'form_custom_field';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = 'modified_id';
 		}
@@ -245,6 +253,8 @@ class DigitalSetting extends CActiveRecord
 			$this->defaultColumns[] = 'cover_file_type';
 			$this->defaultColumns[] = 'digital_path';
 			$this->defaultColumns[] = 'digital_file_type';
+			$this->defaultColumns[] = 'form_standard';
+			$this->defaultColumns[] = 'form_custom_field';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = array(
 				'name' => 'modified_search',
@@ -332,6 +342,7 @@ class DigitalSetting extends CActiveRecord
 			$this->cover_view_size = serialize($this->cover_view_size);
 			$this->cover_file_type = serialize(Utility::formatFileType($this->cover_file_type));
 			$this->digital_file_type = serialize(Utility::formatFileType($this->digital_file_type));
+			$this->form_custom_field = serialize($this->form_custom_field);
 		}
 		return true;
 	}
