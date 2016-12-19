@@ -220,7 +220,7 @@ class Digitals extends CActiveRecord
 			),
 			'view' => array(
 				'alias'=>'view',
-				'select'=>'files, file_publish, file_unpublish',
+				'select'=>'files, file_all',
 			),
 			'creation' => array(
 				'alias'=>'creation',

@@ -149,9 +149,9 @@ class ViewDigitals extends CActiveRecord
 		$criteria->compare('t.md5path',strtolower($this->md5path),true);
 		$criteria->compare('t.uniquepath',strtolower($this->uniquepath),true);
 		$criteria->compare('t.covers',strtolower($this->covers),true);
-		$criteria->compare('t.cover_all',strtolower($this->cover_publish),true);
+		$criteria->compare('t.cover_all',strtolower($this->cover_all),true);
 		$criteria->compare('t.files',strtolower($this->files),true);
-		$criteria->compare('t.file_all',strtolower($this->file_publish),true);
+		$criteria->compare('t.file_all',strtolower($this->file_all),true);
 		$criteria->compare('t.authors',strtolower($this->authors),true);
 		$criteria->compare('t.subjects',strtolower($this->subjects),true);
 		$criteria->compare('t.tags',strtolower($this->tags),true);

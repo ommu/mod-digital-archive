@@ -124,7 +124,7 @@ class ViewDigitalAuthor extends CActiveRecord
 
 		$criteria->compare('t.author_id',strtolower($this->author_id),true);
 		$criteria->compare('t.digitals',strtolower($this->digitals),true);
-		$criteria->compare('t.digital_all',strtolower($this->digital_publish),true);
+		$criteria->compare('t.digital_all',strtolower($this->digital_all),true);
 
 		if(!isset($_GET['ViewDigitalAuthor_sort']))
 			$criteria->order = 't.author_id DESC';

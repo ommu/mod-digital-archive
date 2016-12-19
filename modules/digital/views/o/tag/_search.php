@@ -31,13 +31,8 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('digital_publish'); ?><br/>
-			<?php echo $form->textField($model,'digital_publish',array('size'=>23,'maxlength'=>23)); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('digital_unpublish'); ?><br/>
-			<?php echo $form->textField($model,'digital_unpublish',array('size'=>23,'maxlength'=>23)); ?>
+			<?php echo $model->getAttributeLabel('digital_all'); ?><br/>
+			<?php echo $form->textField($model,'digital_all',array('size'=>23,'maxlength'=>23)); ?>
 		</li>
 
 		<li class="submit">
