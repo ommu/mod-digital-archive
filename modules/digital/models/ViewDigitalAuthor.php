@@ -25,8 +25,7 @@
  * The followings are the available columns in table '_view_digital_author':
  * @property string $author_id
  * @property string $digitals
- * @property string $digital_publish
- * @property string $digital_unpublish
+ * @property string $digital_all
  */
 class ViewDigitalAuthor extends CActiveRecord
 {
@@ -68,10 +67,10 @@ class ViewDigitalAuthor extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('author_id', 'length', 'max'=>11),
-			array('digitals, digital_publish, digital_unpublish', 'length', 'max'=>21),
+			array('digitals, digital_all', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('author_id, digitals, digital_publish, digital_unpublish', 'safe', 'on'=>'search'),
+			array('author_id, digitals, digital_all', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -94,8 +93,7 @@ class ViewDigitalAuthor extends CActiveRecord
 		return array(
 			'author_id' => Yii::t('attribute', 'Author'),
 			'digitals' => Yii::t('attribute', 'Digitals'),
-			'digital_publish' => Yii::t('attribute', 'Digital Publish'),
-			'digital_unpublish' => Yii::t('attribute', 'Digital Unpublish'),
+			'digital_all' => Yii::t('attribute', 'Digital All'),
 		);
 		/*
 			'Author' => 'Author',
@@ -126,8 +124,7 @@ class ViewDigitalAuthor extends CActiveRecord
 
 		$criteria->compare('t.author_id',strtolower($this->author_id),true);
 		$criteria->compare('t.digitals',strtolower($this->digitals),true);
-		$criteria->compare('t.digital_publish',strtolower($this->digital_publish),true);
-		$criteria->compare('t.digital_unpublish',strtolower($this->digital_unpublish),true);
+		$criteria->compare('t.digital_all',strtolower($this->digital_publish),true);
 
 		if(!isset($_GET['ViewDigitalAuthor_sort']))
 			$criteria->order = 't.author_id DESC';
@@ -160,8 +157,7 @@ class ViewDigitalAuthor extends CActiveRecord
 		} else {
 			$this->defaultColumns[] = 'author_id';
 			$this->defaultColumns[] = 'digitals';
-			$this->defaultColumns[] = 'digital_publish';
-			$this->defaultColumns[] = 'digital_unpublish';
+			$this->defaultColumns[] = 'digital_all';
 		}
 
 		return $this->defaultColumns;
@@ -178,8 +174,7 @@ class ViewDigitalAuthor extends CActiveRecord
 			);
 			$this->defaultColumns[] = 'author_id';
 			$this->defaultColumns[] = 'digitals';
-			$this->defaultColumns[] = 'digital_publish';
-			$this->defaultColumns[] = 'digital_unpublish';
+			$this->defaultColumns[] = 'digital_all';
 		}
 		parent::afterConstruct();
 	}

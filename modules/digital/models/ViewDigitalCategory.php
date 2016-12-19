@@ -25,8 +25,7 @@
  * The followings are the available columns in table '_view_digital_category':
  * @property integer $cat_id
  * @property string $digitals
- * @property string $digital_publish
- * @property string $digital_unpublish
+ * @property string $digital_all
  */
 class ViewDigitalCategory extends CActiveRecord
 {
@@ -68,10 +67,10 @@ class ViewDigitalCategory extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cat_id', 'numerical', 'integerOnly'=>true),
-			array('digitals, digital_publish, digital_unpublish', 'length', 'max'=>21),
+			array('digitals, digital_all', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cat_id, digitals, digital_publish, digital_unpublish', 'safe', 'on'=>'search'),
+			array('cat_id, digitals, digital_all', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -94,8 +93,7 @@ class ViewDigitalCategory extends CActiveRecord
 		return array(
 			'cat_id' => Yii::t('attribute', 'Cat'),
 			'digitals' => Yii::t('attribute', 'Digitals'),
-			'digital_publish' => Yii::t('attribute', 'Digital Publish'),
-			'digital_unpublish' => Yii::t('attribute', 'Digital Unpublish'),
+			'digital_all' => Yii::t('attribute', 'Digital All'),
 		);
 		/*
 			'Cat' => 'Cat',
@@ -126,8 +124,7 @@ class ViewDigitalCategory extends CActiveRecord
 
 		$criteria->compare('t.cat_id',$this->cat_id);
 		$criteria->compare('t.digitals',strtolower($this->digitals),true);
-		$criteria->compare('t.digital_publish',strtolower($this->digital_publish),true);
-		$criteria->compare('t.digital_unpublish',strtolower($this->digital_unpublish),true);
+		$criteria->compare('t.digital_all',strtolower($this->digital_all),true);
 
 		if(!isset($_GET['ViewDigitalCategory_sort']))
 			$criteria->order = 't.cat_id DESC';
@@ -160,8 +157,7 @@ class ViewDigitalCategory extends CActiveRecord
 		} else {
 			$this->defaultColumns[] = 'cat_id';
 			$this->defaultColumns[] = 'digitals';
-			$this->defaultColumns[] = 'digital_publish';
-			$this->defaultColumns[] = 'digital_unpublish';
+			$this->defaultColumns[] = 'digital_all';
 		}
 
 		return $this->defaultColumns;
@@ -178,8 +174,7 @@ class ViewDigitalCategory extends CActiveRecord
 			);
 			$this->defaultColumns[] = 'cat_id';
 			$this->defaultColumns[] = 'digitals';
-			$this->defaultColumns[] = 'digital_publish';
-			$this->defaultColumns[] = 'digital_unpublish';
+			$this->defaultColumns[] = 'digital_all';
 		}
 		parent::afterConstruct();
 	}

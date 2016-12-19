@@ -25,8 +25,7 @@
  * The followings are the available columns in table '_view_digital_tag':
  * @property string $tag_id
  * @property string $digitals
- * @property string $digital_publish
- * @property string $digital_unpublish
+ * @property string $digital_all
  */
 class ViewDigitalTag extends CActiveRecord
 {
@@ -73,10 +72,10 @@ class ViewDigitalTag extends CActiveRecord
 			array('tag_id', 'required'),
 			array('tag_id', 'length', 'max'=>11),
 			array('digitals', 'length', 'max'=>21),
-			array('digital_publish, digital_unpublish', 'length', 'max'=>23),
+			array('digital_all', 'length', 'max'=>23),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('tag_id, digitals, digital_publish, digital_unpublish,
+			array('tag_id, digitals, digital_all,
 				tag_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -101,8 +100,7 @@ class ViewDigitalTag extends CActiveRecord
 		return array(
 			'tag_id' => Yii::t('attribute', 'Tag'),
 			'digitals' => Yii::t('attribute', 'Digitals'),
-			'digital_publish' => Yii::t('attribute', 'Digital Publish'),
-			'digital_unpublish' => Yii::t('attribute', 'Digital Unpublish'),
+			'digital_all' => Yii::t('attribute', 'Digital All'),
 			'tag_search' => Yii::t('attribute', 'Tag'),
 		);
 		/*
@@ -142,8 +140,7 @@ class ViewDigitalTag extends CActiveRecord
 
 		$criteria->compare('t.tag_id',strtolower($this->tag_id),true);
 		$criteria->compare('t.digitals',strtolower($this->digitals),true);
-		$criteria->compare('t.digital_publish',strtolower($this->digital_publish),true);
-		$criteria->compare('t.digital_unpublish',strtolower($this->digital_unpublish),true);
+		$criteria->compare('t.digital_all',strtolower($this->digital_all),true);
 		
 		$criteria->compare('tag.body',strtolower($this->tag_search), true);
 
@@ -178,8 +175,7 @@ class ViewDigitalTag extends CActiveRecord
 		} else {
 			$this->defaultColumns[] = 'tag_id';
 			$this->defaultColumns[] = 'digitals';
-			$this->defaultColumns[] = 'digital_publish';
-			$this->defaultColumns[] = 'digital_unpublish';
+			$this->defaultColumns[] = 'digital_all';
 		}
 
 		return $this->defaultColumns;
@@ -207,8 +203,7 @@ class ViewDigitalTag extends CActiveRecord
 				'value' => '$data->tag->body',
 			);
 			$this->defaultColumns[] = 'digitals';
-			$this->defaultColumns[] = 'digital_publish';
-			$this->defaultColumns[] = 'digital_unpublish';
+			$this->defaultColumns[] = 'digital_all';
 		}
 		parent::afterConstruct();
 	}

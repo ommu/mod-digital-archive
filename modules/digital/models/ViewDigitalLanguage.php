@@ -25,8 +25,7 @@
  * The followings are the available columns in table '_view_digital_language':
  * @property integer $language_id
  * @property string $digitals
- * @property string $digital_publish
- * @property string $digital_unpublish
+ * @property string $digital_all
  */
 class ViewDigitalLanguage extends CActiveRecord
 {
@@ -69,10 +68,10 @@ class ViewDigitalLanguage extends CActiveRecord
 		return array(
 			array('language_id', 'numerical', 'integerOnly'=>true),
 			array('digitals', 'length', 'max'=>21),
-			array('digital_publish, digital_unpublish', 'length', 'max'=>23),
+			array('digital_all', 'length', 'max'=>23),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('language_id, digitals, digital_publish, digital_unpublish', 'safe', 'on'=>'search'),
+			array('language_id, digitals, digital_all', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -95,8 +94,7 @@ class ViewDigitalLanguage extends CActiveRecord
 		return array(
 			'language_id' => Yii::t('attribute', 'Language'),
 			'digitals' => Yii::t('attribute', 'Digitals'),
-			'digital_publish' => Yii::t('attribute', 'Digital Publish'),
-			'digital_unpublish' => Yii::t('attribute', 'Digital Unpublish'),
+			'digital_all' => Yii::t('attribute', 'Digital All'),
 		);
 		/*
 			'Language' => 'Language',
@@ -127,8 +125,7 @@ class ViewDigitalLanguage extends CActiveRecord
 
 		$criteria->compare('t.language_id',$this->language_id);
 		$criteria->compare('t.digitals',strtolower($this->digitals),true);
-		$criteria->compare('t.digital_publish',strtolower($this->digital_publish),true);
-		$criteria->compare('t.digital_unpublish',strtolower($this->digital_unpublish),true);
+		$criteria->compare('t.digital_all',strtolower($this->digital_all),true);
 
 		if(!isset($_GET['ViewDigitalLanguage_sort']))
 			$criteria->order = 't.language_id DESC';
@@ -161,8 +158,7 @@ class ViewDigitalLanguage extends CActiveRecord
 		} else {
 			$this->defaultColumns[] = 'language_id';
 			$this->defaultColumns[] = 'digitals';
-			$this->defaultColumns[] = 'digital_publish';
-			$this->defaultColumns[] = 'digital_unpublish';
+			$this->defaultColumns[] = 'digital_all';
 		}
 
 		return $this->defaultColumns;
@@ -187,8 +183,7 @@ class ViewDigitalLanguage extends CActiveRecord
 			);
 			$this->defaultColumns[] = 'language_id';
 			$this->defaultColumns[] = 'digitals';
-			$this->defaultColumns[] = 'digital_publish';
-			$this->defaultColumns[] = 'digital_unpublish';
+			$this->defaultColumns[] = 'digital_all';
 		}
 		parent::afterConstruct();
 	}
