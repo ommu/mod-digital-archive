@@ -660,4 +660,57 @@ class Digitals extends CActiveRecord
 		}
 	}
 
+	/**
+	 * Before delete attributes
+	 */
+	protected function beforeDelete() {
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'digital_path',
+		));
+		if(parent::beforeDelete()) {			
+			$pathUnique = self::getUniqueDirectory($this->digital_id, $this->salt, $this->view->md5path);
+			if($setting != null)
+				$digital_path = $setting->digital_path.'/'.$pathUnique;
+			else
+				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+			
+			//delete covers
+			$covers = $this->covers;
+			if(!empty($covers)) {
+				foreach($covers as $val) {
+					if($val->cover_filename != '' && file_exists($digital_path.'/'.$val->cover_filename))
+						rename($digital_path.'/'.$val->cover_filename, 'public/digital/verwijderen/'.$val->digital_id.'_'.$val->cover_filename);
+				}
+			}
+			
+			//delete files
+			$files = $this->files;
+			if(!empty($files)) {
+				foreach($files as $val) {
+					if($val->digital_filename != '' && file_exists($digital_path.'/'.$val->digital_filename))
+						rename($digital_path.'/'.$val->digital_filename, 'public/digital/verwijderen/'.$val->digital_id.'_'.$val->digital_filename);					
+				}				
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * After delete attributes
+	 */
+	protected function afterDelete() {
+		parent::afterDelete();
+		
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'digital_path',
+		));
+		//delete article image	
+		$pathUnique = self::getUniqueDirectory($this->digital_id, $this->salt, $this->view->md5path);
+		if($setting != null)
+			$digital_path = $setting->digital_path.'/'.$pathUnique;
+		else
+			$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+		Utility::deleteFolder($digital_path);		
+	}
+
 }
