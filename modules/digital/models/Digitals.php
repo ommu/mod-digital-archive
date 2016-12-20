@@ -674,7 +674,7 @@ class Digitals extends CActiveRecord
 			else
 				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
 			
-			//delete covers
+			//delete digital covers
 			$covers = $this->covers;
 			if(!empty($covers)) {
 				foreach($covers as $val) {
@@ -683,7 +683,7 @@ class Digitals extends CActiveRecord
 				}
 			}
 			
-			//delete files
+			//delete digital files
 			$files = $this->files;
 			if(!empty($files)) {
 				foreach($files as $val) {
@@ -704,7 +704,7 @@ class Digitals extends CActiveRecord
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'digital_path',
 		));
-		//delete article image	
+		//delete digital directory
 		$pathUnique = self::getUniqueDirectory($this->digital_id, $this->salt, $this->view->md5path);
 		if($setting != null)
 			$digital_path = $setting->digital_path.'/'.$pathUnique;
