@@ -342,6 +342,11 @@ class Digitals extends CActiveRecord
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'form_standard, form_custom_field',
+		));
+		$form_custom_field = unserialize($setting->form_custom_field);
+		
 		if(count($this->defaultColumns) == 0) {
 			/*
 			$this->defaultColumns[] = array(
@@ -356,7 +361,7 @@ class Digitals extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			//$this->defaultColumns[] = 'digital_code';
-			if(!isset($_GET['category'])) {
+			if(!isset($_GET['category']) && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field)))) {
 				$this->defaultColumns[] = array(
 					'name' => 'cat_id',
 					'value' => '$data->category->cat_title',
@@ -364,27 +369,31 @@ class Digitals extends CActiveRecord
 				);
 			}
 			$this->defaultColumns[] = 'digital_title';
-			if(!isset($_GET['publisher'])) {
+			if(!isset($_GET['publisher']) && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publisher_id', $form_custom_field)))) {
 				$this->defaultColumns[] = array(
 					'name' => 'publisher_search',
 					'value' => '$data->publisher->publisher_name',
 				);
 			}
-			if(!isset($_GET['category'])) {
+			if(!isset($_GET['language']) && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('language_id', $form_custom_field)))) {
 				$this->defaultColumns[] = array(
 					'name' => 'language_id',
 					'value' => '$data->language->language_name',
 					'filter' => DigitalLanguage::getLanguage(),
 				);
 			}
-			$this->defaultColumns[] = array(
-				'name' => 'opac_id',
-				'value' => '$data->opac_id != 0 ? $data->opac_id : \'-\'',
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'publish_year',
-				'value' => '!in_array($data->publish_year, array(\'0000\', \'1970\')) ? $data->publish_year : "-"',
-			);
+			if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('opac_id', $form_custom_field))) {
+				$this->defaultColumns[] = array(
+					'name' => 'opac_id',
+					'value' => '$data->opac_id != 0 ? $data->opac_id : \'-\'',
+				);				
+			}
+			if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publish_year', $form_custom_field))) {
+				$this->defaultColumns[] = array(
+					'name' => 'publish_year',
+					'value' => '!in_array($data->publish_year, array(\'0000\', \'1970\')) ? $data->publish_year : "-"',
+				);
+			}
 			$this->defaultColumns[] = array(
 				'name' => 'file_search',
 				'value' => '$data->view->files',
@@ -392,6 +401,12 @@ class Digitals extends CActiveRecord
 					'class' => 'center',
 				),
 			);
+			if($setting->form_standard == 0) {
+				$this->defaultColumns[] = array(
+					'name' => 'creation_search',
+					'value' => '$data->creation->displayname',
+				);				
+			}
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
