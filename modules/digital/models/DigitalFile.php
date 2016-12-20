@@ -360,14 +360,14 @@ class DigitalFile extends CActiveRecord
 	protected function beforeSave() {
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);			
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'digital_path, digital_file_type',
+			'select' => 'digital_path',
 		));
 		
 		if(parent::beforeSave()) 
 		{
 			if(!$this->isNewRecord && $currentAction == 'o/file/edit') 
 			{
-				$pathUnique = self::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
+				$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
 				if($setting != null)
 					$digital_path = $setting->digital_path.'/'.$pathUnique;
 				else
@@ -397,5 +397,25 @@ class DigitalFile extends CActiveRecord
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * After delete attributes
+	 */
+	protected function afterDelete() {
+		parent::afterDelete();
+		
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'digital_path',
+		));
+		
+		$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
+		if($setting != null)
+			$digital_path = $setting->digital_path.'/'.$pathUnique;
+		else
+			$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+		
+		if($this->digital_filename != '' && file_exists($digital_path.'/'.$this->digital_filename))
+			rename($digital_path.'/'.$this->digital_filename, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->digital_filename);
 	}
 }
