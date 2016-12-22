@@ -26,6 +26,7 @@
  * @property integer $cat_id
  * @property string $digitals
  * @property string $digital_all
+ * @property string $tags
  */
 class ViewDigitalCategory extends CActiveRecord
 {
@@ -67,10 +68,10 @@ class ViewDigitalCategory extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cat_id', 'numerical', 'integerOnly'=>true),
-			array('digitals, digital_all', 'length', 'max'=>21),
+			array('digitals, digital_all, tags', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cat_id, digitals, digital_all', 'safe', 'on'=>'search'),
+			array('cat_id, digitals, digital_all, tags', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -94,6 +95,7 @@ class ViewDigitalCategory extends CActiveRecord
 			'cat_id' => Yii::t('attribute', 'Cat'),
 			'digitals' => Yii::t('attribute', 'Digitals'),
 			'digital_all' => Yii::t('attribute', 'Digital All'),
+			'tags' => Yii::t('attribute', 'Tags'),
 		);
 		/*
 			'Cat' => 'Cat',
@@ -125,6 +127,7 @@ class ViewDigitalCategory extends CActiveRecord
 		$criteria->compare('t.cat_id',$this->cat_id);
 		$criteria->compare('t.digitals',strtolower($this->digitals),true);
 		$criteria->compare('t.digital_all',strtolower($this->digital_all),true);
+		$criteria->compare('t.tags',strtolower($this->tags),true);
 
 		if(!isset($_GET['ViewDigitalCategory_sort']))
 			$criteria->order = 't.cat_id DESC';
@@ -158,6 +161,7 @@ class ViewDigitalCategory extends CActiveRecord
 			$this->defaultColumns[] = 'cat_id';
 			$this->defaultColumns[] = 'digitals';
 			$this->defaultColumns[] = 'digital_all';
+			$this->defaultColumns[] = 'tags';
 		}
 
 		return $this->defaultColumns;
@@ -175,6 +179,7 @@ class ViewDigitalCategory extends CActiveRecord
 			$this->defaultColumns[] = 'cat_id';
 			$this->defaultColumns[] = 'digitals';
 			$this->defaultColumns[] = 'digital_all';
+			$this->defaultColumns[] = 'tags';
 		}
 		parent::afterConstruct();
 	}
