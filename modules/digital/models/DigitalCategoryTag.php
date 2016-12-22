@@ -32,6 +32,11 @@
 class DigitalCategoryTag extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $category_search;
+	public $tag_search;
+	public $creation_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -60,12 +65,13 @@ class DigitalCategoryTag extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cat_id, tag_id, creation_date', 'required'),
+			array('cat_id, tag_id', 'required'),
 			array('cat_id, creation_id', 'numerical', 'integerOnly'=>true),
 			array('tag_id', 'length', 'max'=>11),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, cat_id, tag_id, creation_date, creation_id', 'safe', 'on'=>'search'),
+			array('id, cat_id, tag_id, creation_date, creation_id,
+				category_search, tag_search, creation_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -77,6 +83,9 @@ class DigitalCategoryTag extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'category' => array(self::BELONGS_TO, 'DigitalCategory', 'digital_id'),
+			'tag' => array(self::BELONGS_TO, 'OmmuTags', 'tag_id'),
+			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 		);
 	}
 
@@ -87,10 +96,13 @@ class DigitalCategoryTag extends CActiveRecord
 	{
 		return array(
 			'id' => Yii::t('attribute', 'ID'),
-			'cat_id' => Yii::t('attribute', 'Cat'),
+			'cat_id' => Yii::t('attribute', 'Category'),
 			'tag_id' => Yii::t('attribute', 'Tag'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
+			'category_search' => Yii::t('attribute', 'Category'),
+			'tag_search' => Yii::t('attribute', 'Tag'),
+			'creation_search' => Yii::t('attribute', 'Creation'),
 		);
 		/*
 			'ID' => 'ID',
@@ -119,9 +131,28 @@ class DigitalCategoryTag extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'category' => array(
+				'alias'=>'category',
+				'select'=>'cat_title',
+			),
+			'tag' => array(
+				'alias'=>'tag',
+				'select'=>'body',
+			),
+			'creation' => array(
+				'alias'=>'creation',
+				'select'=>'displayname',
+			),
+		);
 
 		$criteria->compare('t.id',$this->id);
-		$criteria->compare('t.cat_id',$this->cat_id);
+		if(isset($_GET['category']))
+			$criteria->compare('t.cat_id',$_GET['category']);
+		else
+			$criteria->compare('t.cat_id',$this->cat_id);
 		$criteria->compare('t.tag_id',strtolower($this->tag_id),true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
@@ -129,6 +160,10 @@ class DigitalCategoryTag extends CActiveRecord
 			$criteria->compare('t.creation_id',$_GET['creation']);
 		else
 			$criteria->compare('t.creation_id',$this->creation_id);
+		
+		$criteria->compare('category.cat_title',strtolower($this->category_search), true);
+		$criteria->compare('tag.body',strtolower($this->tag_search), true);
+		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 
 		if(!isset($_GET['DigitalCategoryTag_sort']))
 			$criteria->order = 't.id DESC';
@@ -174,20 +209,26 @@ class DigitalCategoryTag extends CActiveRecord
 	 */
 	protected function afterConstruct() {
 		if(count($this->defaultColumns) == 0) {
-			/*
-			$this->defaultColumns[] = array(
-				'class' => 'CCheckBoxColumn',
-				'name' => 'id',
-				'selectableRows' => 2,
-				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-			);
-			*/
 			$this->defaultColumns[] = array(
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'cat_id';
-			$this->defaultColumns[] = 'tag_id';
+			if(!isset($_GET['category'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'category_search',
+					'value' => '$data->category->cat_title',
+				);
+			}
+			if(!isset($_GET['tag'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'tag_search',
+					'value' => '$data->tag->body',
+				);
+			}
+			$this->defaultColumns[] = array(
+				'name' => 'creation_search',
+				'value' => '$data->creation->displayname',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
@@ -214,7 +255,6 @@ class DigitalCategoryTag extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'creation_id';
 		}
 		parent::afterConstruct();
 	}
@@ -239,68 +279,12 @@ class DigitalCategoryTag extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	/*
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			// Create action
+			if($this->isNewRecord)
+				$this->creation_id = Yii::app()->user->id;
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
-	
-	/**
-	 * before save attributes
-	 */
-	/*
-	protected function beforeSave() {
-		if(parent::beforeSave()) {
-		}
-		return true;	
-	}
-	*/
-	
-	/**
-	 * After save attributes
-	 */
-	/*
-	protected function afterSave() {
-		parent::afterSave();
-		// Create action
-	}
-	*/
-
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-	*/
-
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
-	}
-	*/
 
 }
