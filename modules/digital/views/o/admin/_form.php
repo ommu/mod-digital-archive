@@ -386,6 +386,15 @@
 				<?php }?>
 
 				<div class="clearfix">
+					<?php echo $form->labelEx($model,'content_verified'); ?>
+					<div class="desc">
+						<?php echo $form->checkBox($model,'content_verified'); ?>
+						<?php echo $form->error($model,'content_verified'); ?>
+						<?php /*<div class="small-px silent"></div>*/?>
+					</div>
+				</div>
+
+				<div class="clearfix">
 					<?php echo $form->labelEx($model,'publish'); ?>
 					<div class="desc">
 						<?php echo $form->checkBox($model,'publish'); ?>

@@ -39,6 +39,7 @@
  * @property string $pages
  * @property string $series
  * @property string $salt
+ * @property string $content_verified
  * @property string $creation_date
  * @property string $creation_id
  * @property string $modified_date
@@ -98,9 +99,9 @@ class Digitals extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('publish, digital_title, digital_intro', 'required'),
+			array('publish, digital_title, digital_intro, content_verified', 'required'),
 			array('cat_id, language_id', 'required', 'on'=>'standardForm'),
-			array('publish, cat_id, language_id, opac_id', 'numerical', 'integerOnly'=>true),
+			array('publish, cat_id, language_id, opac_id, content_verified', 'numerical', 'integerOnly'=>true),
 			array('publisher_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('digital_code', 'length', 'max'=>16),
 			array('publish_year', 'length', 'max'=>4),
@@ -110,7 +111,7 @@ class Digitals extends CActiveRecord
 				digital_file_input, multiple_file_input, author_input, subject_input, tag_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, pages, series, salt, creation_date, creation_id, modified_date, modified_id,
+			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, pages, series, salt, content_verified, creation_date, creation_id, modified_date, modified_id,
 				editor_choice_input, 
 				publisher_search, cover_search, file_search, like_search, view_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
@@ -161,6 +162,7 @@ class Digitals extends CActiveRecord
 			'pages' => Yii::t('attribute', 'Pages'),
 			'series' => Yii::t('attribute', 'Series'),
 			'salt' => Yii::t('attribute', 'Salt'),
+			'content_verified' => Yii::t('attribute', 'Verified'),
 			'digital_file_input' => Yii::t('attribute', 'Digital File'),
 			'multiple_file_input' => Yii::t('attribute', 'Multiple File'),
 			'author_input' => Yii::t('attribute', 'Authors'),
@@ -275,6 +277,7 @@ class Digitals extends CActiveRecord
 		$criteria->compare('t.pages',strtolower($this->pages),true);
 		$criteria->compare('t.series',strtolower($this->series),true);
 		$criteria->compare('t.salt',strtolower($this->salt),true);
+		$criteria->compare('t.content_verified',$this->content_verified);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
 		if(isset($_GET['creation']))
@@ -342,6 +345,7 @@ class Digitals extends CActiveRecord
 			$this->defaultColumns[] = 'pages';
 			$this->defaultColumns[] = 'series';
 			$this->defaultColumns[] = 'salt';
+			$this->defaultColumns[] = 'content_verified';
 			$this->defaultColumns[] = 'creation_date';
 			$this->defaultColumns[] = 'creation_id';
 			$this->defaultColumns[] = 'modified_date';
@@ -356,7 +360,7 @@ class Digitals extends CActiveRecord
 	 */
 	protected function afterConstruct() {
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'form_standard, form_custom_field, editor_choice_status, editor_choice_userlevel',
+			'select' => 'form_standard, form_custom_field, editor_choice_status, editor_choice_userlevel, content_verified',
 		));
 		$form_custom_field = unserialize($setting->form_custom_field);
 		$editor_choice_userlevel = unserialize($setting->editor_choice_userlevel);
@@ -469,6 +473,20 @@ class Digitals extends CActiveRecord
 				), true),
 			);
 			if(!isset($_GET['type'])) {
+				if($setting->content_verified == 1) {
+					$this->defaultColumns[] = array(
+						'name' => 'content_verified',
+						'value' => '$data->content_verified == 1 ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+						'htmlOptions' => array(
+							'class' => 'center',
+						),
+						'filter'=>array(
+							1=>Yii::t('phrase', 'Yes'),
+							0=>Yii::t('phrase', 'No'),
+						),
+						'type' => 'raw',
+					);
+				}
 				if($setting->editor_choice_status == 1 && in_array(Yii::app()->user->level, $editor_choice_userlevel)) {
 					$this->defaultColumns[] = array(
 						'header' => Yii::t('phrase', 'Choice'),

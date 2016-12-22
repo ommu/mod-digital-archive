@@ -35,11 +35,12 @@
  * @property string $cover_file_type
  * @property string $digital_path
  * @property string $digital_file_type
- * @property string $form_standard
+ * @property integer $form_standard
  * @property string $form_custom_field
- * @property string $editor_choice_status
+ * @property integer $editor_choice_status
  * @property string $editor_choice_userlevel
- * @property string $editor_choice_limit
+ * @property integer $editor_choice_limit
+ * @property integer $content_verified
  * @property string $modified_date
  * @property string $modified_id
  */
@@ -77,15 +78,15 @@ class DigitalSetting extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_file_type, digital_path, digital_file_type, form_standard, editor_choice_status', 'required'),
-			array('permission, cover_limit, cover_resize, form_standard, editor_choice_status, editor_choice_limit', 'numerical', 'integerOnly'=>true),
+			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_file_type, digital_path, digital_file_type, form_standard, editor_choice_status, content_verified', 'required'),
+			array('permission, cover_limit, cover_resize, form_standard, editor_choice_status, editor_choice_limit, content_verified', 'numerical', 'integerOnly'=>true),
 			array('license', 'length', 'max'=>32),
 			array('modified_id', 'length', 'max'=>11),
 			array('cover_limit, editor_choice_limit', 'length', 'max'=>2),
 			array('cover_resize_size, cover_view_size, form_custom_field, editor_choice_userlevel', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_resize_size, cover_view_size, cover_file_type, digital_path, digital_file_type, form_standard, form_custom_field, editor_choice_status, editor_choice_userlevel, editor_choice_limit, modified_date, modified_id,
+			array('id, license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_resize_size, cover_view_size, cover_file_type, digital_path, digital_file_type, form_standard, form_custom_field, editor_choice_status, editor_choice_userlevel, editor_choice_limit, content_verified, modified_date, modified_id,
 				modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -125,6 +126,7 @@ class DigitalSetting extends CActiveRecord
 			'editor_choice_status' => Yii::t('attribute', 'Editor Choice'),
 			'editor_choice_userlevel' => Yii::t('attribute', 'Editor Choice User Level'),
 			'editor_choice_limit' => Yii::t('attribute', 'Editor Choice Limit'),
+			'content_verified' => Yii::t('attribute', 'Verified Content'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
@@ -188,6 +190,7 @@ class DigitalSetting extends CActiveRecord
 		$criteria->compare('t.editor_choice_status',$this->editor_choice_status);
 		$criteria->compare('t.editor_choice_userlevel',strtolower($this->editor_choice_userlevel),true);
 		$criteria->compare('t.editor_choice_limit',$this->editor_choice_limit);
+		$criteria->compare('t.content_verified',$this->content_verified);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
 		if(isset($_GET['modified']))
@@ -243,6 +246,7 @@ class DigitalSetting extends CActiveRecord
 			$this->defaultColumns[] = 'editor_choice_status';
 			$this->defaultColumns[] = 'editor_choice_userlevel';
 			$this->defaultColumns[] = 'editor_choice_limit';
+			$this->defaultColumns[] = 'content_verified';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = 'modified_id';
 		}
@@ -271,6 +275,7 @@ class DigitalSetting extends CActiveRecord
 			$this->defaultColumns[] = 'editor_choice_status';
 			$this->defaultColumns[] = 'editor_choice_userlevel';
 			$this->defaultColumns[] = 'editor_choice_limit';
+			$this->defaultColumns[] = 'content_verified';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = array(
 				'name' => 'modified_search',

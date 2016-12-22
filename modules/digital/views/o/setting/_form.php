@@ -190,6 +190,17 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'content_verified'); ?>
+			<div class="desc">
+				<?php echo $form->radioButtonList($model, 'content_verified', array(
+					1 => Yii::t('phrase', 'Enable'),
+					0 => Yii::t('phrase', 'Disable'),
+				)); ?>
+				<?php echo $form->error($model,'content_verified'); ?>
+			</div>
+		</div>
 		<?php }?>
 
 		<div class="clearfix">
