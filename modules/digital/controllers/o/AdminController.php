@@ -236,14 +236,16 @@ class AdminController extends Controller
 					//}
 					if($model->save()) {
 						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Digitals success created.'));
-						$this->redirect(array('edit','id'=>$model->digital_id));
+						//$this->redirect(array('edit','id'=>$model->digital_id));
+						$this->redirect(array('manage'));
 					}
 				}
 				
 			} else {
 				if($model->save()) {
 					Yii::app()->user->setFlash('success', Yii::t('phrase', 'Digitals success created.'));
-					$this->redirect(array('edit','id'=>$model->digital_id));
+					//$this->redirect(array('edit','id'=>$model->digital_id));
+					$this->redirect(array('manage'));
 				}
 			}
 		}
@@ -323,14 +325,16 @@ class AdminController extends Controller
 					
 					if($model->save()) {
 						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Digitals success updated.'));
-						$this->redirect(array('edit','id'=>$model->digital_id));
+						//$this->redirect(array('edit','id'=>$model->digital_id));
+						$this->redirect(array('manage'));
 					}
 				}
 				
 			} else {
 				if($model->save()) {
 					Yii::app()->user->setFlash('success', Yii::t('phrase', 'Digitals success updated.'));
-					$this->redirect(array('edit','id'=>$model->digital_id));
+					//$this->redirect(array('edit','id'=>$model->digital_id));
+					$this->redirect(array('manage'));
 				}
 			}
 		}

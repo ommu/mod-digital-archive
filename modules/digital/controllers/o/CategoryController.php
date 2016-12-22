@@ -152,7 +152,8 @@ class CategoryController extends Controller
 				
 			if($model->save()) {
 				Yii::app()->user->setFlash('success', Yii::t('phrase', 'DigitalCategory success created.'));
-				$this->redirect(Yii::app()->controller->createUrl('edit', array('id'=>$model->cat_id)));
+				//$this->redirect(Yii::app()->controller->createUrl('edit', array('id'=>$model->cat_id)));
+				$this->redirect(Yii::app()->controller->createUrl('manage'));
 			}
 		}
 		

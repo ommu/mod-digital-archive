@@ -446,32 +446,34 @@ class Digitals extends CActiveRecord
 					),
 				);		
 			}
-			$this->defaultColumns[] = array(
-				'name' => 'creation_date',
-				'value' => 'Utility::dateFormat($data->creation_date)',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'creation_date',
-					'language' => 'ja',
-					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
-					//'mode'=>'datetime',
+			if($setting->form_standard == 1) {
+				$this->defaultColumns[] = array(
+					'name' => 'creation_date',
+					'value' => 'Utility::dateFormat($data->creation_date)',
 					'htmlOptions' => array(
-						'id' => 'creation_date_filter',
+						'class' => 'center',
 					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
-			);
+					'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
+						'model'=>$this,
+						'attribute'=>'creation_date',
+						'language' => 'ja',
+						'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
+						//'mode'=>'datetime',
+						'htmlOptions' => array(
+							'id' => 'creation_date_filter',
+						),
+						'options'=>array(
+							'showOn' => 'focus',
+							'dateFormat' => 'dd-mm-yy',
+							'showOtherMonths' => true,
+							'selectOtherMonths' => true,
+							'changeMonth' => true,
+							'changeYear' => true,
+							'showButtonPanel' => true,
+						),
+					), true),
+				);
+			}
 			if(!isset($_GET['type'])) {
 				if($setting->content_verified == 1) {
 					$this->defaultColumns[] = array(
