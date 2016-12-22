@@ -60,10 +60,14 @@ class Digitals extends CActiveRecord
 	public $author_input;
 	public $subject_input;
 	public $tag_input;
+	public $editor_choice_input;
 	
 	// Variable Search
 	public $publisher_search;
+	public $cover_search;
 	public $file_search;
+	public $like_search;
+	public $view_search;
 	public $creation_search;
 	public $modified_search;
 
@@ -107,7 +111,8 @@ class Digitals extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, pages, series, salt, creation_date, creation_id, modified_date, modified_id,
-				publisher_search, file_search, creation_search, modified_search', 'safe', 'on'=>'search'),
+				editor_choice_input, 
+				publisher_search, cover_search, file_search, like_search, view_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -161,12 +166,16 @@ class Digitals extends CActiveRecord
 			'author_input' => Yii::t('attribute', 'Authors'),
 			'subject_input' => Yii::t('attribute', 'Subjects'),
 			'tag_input' => Yii::t('attribute', 'Tags'),
+			'editor_choice_input' => Yii::t('attribute', 'Editor Choice'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'publisher_search' => Yii::t('attribute', 'Publisher'),
+			'cover_search' => Yii::t('attribute', 'Covers'),
 			'file_search' => Yii::t('attribute', 'Files'),
+			'like_search' => Yii::t('attribute', 'Likes'),
+			'view_search' => Yii::t('attribute', 'Views'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
@@ -220,7 +229,7 @@ class Digitals extends CActiveRecord
 			),
 			'view' => array(
 				'alias'=>'view',
-				'select'=>'files, file_all',
+				'select'=>'covers, files, likes, views',
 			),
 			'creation' => array(
 				'alias'=>'creation',
@@ -277,10 +286,14 @@ class Digitals extends CActiveRecord
 		if(isset($_GET['modified']))
 			$criteria->compare('t.modified_id',$_GET['modified']);
 		else
-			$criteria->compare('t.modified_id',$this->modified_id);
+			$criteria->compare('t.modified_id',$this->modified_id);		
+		$criteria->compare('t.editor_choice_input',$this->editor_choice_input);
 		
 		$criteria->compare('publisher.publisher_name',strtolower($this->publisher_search), true);
+		$criteria->compare('view.covers',$this->cover_search);
 		$criteria->compare('view.files',$this->file_search);
+		$criteria->compare('view.likes',$this->like_search);
+		$criteria->compare('view.views',$this->view_search);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
@@ -343,9 +356,10 @@ class Digitals extends CActiveRecord
 	 */
 	protected function afterConstruct() {
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'form_standard, form_custom_field',
+			'select' => 'form_standard, form_custom_field, editor_choice_status, editor_choice_userlevel',
 		));
 		$form_custom_field = unserialize($setting->form_custom_field);
+		$editor_choice_userlevel = unserialize($setting->editor_choice_userlevel);
 		
 		if(count($this->defaultColumns) == 0) {
 			/*
@@ -394,6 +408,15 @@ class Digitals extends CActiveRecord
 					'value' => '!in_array($data->publish_year, array(\'0000\', \'1970\')) ? $data->publish_year : "-"',
 				);
 			}
+			if($setting->form_standard == 0) {
+				$this->defaultColumns[] = array(
+					'name' => 'cover_search',
+					'value' => '$data->view->covers',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+				);
+			}
 			$this->defaultColumns[] = array(
 				'name' => 'file_search',
 				'value' => '$data->view->files',
@@ -403,9 +426,21 @@ class Digitals extends CActiveRecord
 			);
 			if($setting->form_standard == 0) {
 				$this->defaultColumns[] = array(
-					'name' => 'creation_search',
-					'value' => '$data->creation->displayname',
-				);				
+					'name' => 'like_search',
+					'value' => '$data->view->likes',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+				);
+			}
+			if($setting->form_standard == 0) {
+				$this->defaultColumns[] = array(
+					'name' => 'view_search',
+					'value' => '$data->view->views != null ? $data->view->views : "0"',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+				);		
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
@@ -434,6 +469,16 @@ class Digitals extends CActiveRecord
 				), true),
 			);
 			if(!isset($_GET['type'])) {
+				if($setting->editor_choice_status == 1 && in_array(Yii::app()->user->level, $editor_choice_userlevel)) {
+					$this->defaultColumns[] = array(
+						'header' => Yii::t('phrase', 'Choice'),
+						//'name' => 'editor_choice_input',
+						'value' => '$data->editor_choice_input',
+						'htmlOptions' => array(
+							'class' => 'center',
+						),
+					);
+				}
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
 					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->digital_id)), $data->publish, 1)',
@@ -494,6 +539,12 @@ class Digitals extends CActiveRecord
 	{
 		return $salt.$id.$md5path;
 	}
+	
+	protected function afterFind() {
+		$this->editor_choice_input = 1;
+		
+		parent::afterFind();		
+	}
 
 	/**
 	 * before validate attributes
@@ -550,7 +601,7 @@ class Digitals extends CActiveRecord
 		$action = strtolower(Yii::app()->controller->action->id);
 			
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'cover_limit, cover_resize, cover_resize_size, cover_file_type, digital_path, digital_file_type',
+			'select' => 'cover_limit, cover_resize, cover_resize_size, digital_path, cover_file_type, digital_file_type',
 		));
 		$digital_file_type = unserialize($setting->digital_file_type);
 		

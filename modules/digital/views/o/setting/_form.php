@@ -79,7 +79,7 @@
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'cover_limit'); ?>
 			<div class="desc">
-				<?php echo $form->textField($model,'cover_limit', array('class'=>'span-2')); ?>
+				<?php echo $form->textField($model,'cover_limit', array('maxlength'=>2, 'class'=>'span-2')); ?>
 				<?php echo $form->error($model,'cover_limit'); ?>
 			</div>
 		</div>
@@ -121,19 +121,20 @@
 			</div>
 		</div>
 
+		<?php if(!$model->isNewRecord && $model->digital_admin == 1) {?>
 		<div class="clearfix">
-			<label><?php echo Yii::t('phrase', 'Form');?> <span class="required">*</span></label>
+			<?php echo $form->labelEx($model,'form_standard'); ?>
 			<div class="desc">
 				<?php echo $form->radioButtonList($model, 'form_standard', array(
-					1 => Yii::t('phrase', 'Standard Form.'),
-					0 => Yii::t('phrase', 'Custom Form.'),
+					1 => Yii::t('phrase', 'Standard'),
+					0 => Yii::t('phrase', 'Custom'),
 				)); ?>
 				<?php echo $form->error($model,'form_standard'); ?>
 			</div>
 		</div>
 
 		<div class="clearfix <?php echo $model->form_standard == 1 ? 'hide' : '';?>" id="custom_field">
-			<label><?php echo $model->getAttributeLabel('form_custom_field');?> <span class="required">*</span></label>
+			<label><?php echo $model->getAttributeLabel('form_custom_field');?></label>
 			<div class="desc">
 				<?php 				
 				$customField = array(
@@ -157,6 +158,39 @@
 				<?php echo $form->error($model,'form_custom_field'); ?>
 			</div>
 		</div>
+
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'editor_choice_status'); ?>
+			<div class="desc">
+				<?php echo $form->radioButtonList($model, 'editor_choice_status', array(
+					1 => Yii::t('phrase', 'Enable'),
+					0 => Yii::t('phrase', 'Disable'),
+				)); ?>
+				<?php echo $form->error($model,'editor_choice_status'); ?>
+			</div>
+		</div>
+
+		<div <?php echo $model->editor_choice_status == 0 ? 'class="hide"' : '';?> id="editor_choice">
+			<div class="clearfix">
+				<?php echo $form->labelEx($model,'editor_choice_limit'); ?>
+				<div class="desc">
+					<?php echo $form->textField($model,'editor_choice_limit', array('maxlength'=>2, 'class'=>'span-2')); ?>
+					<?php echo $form->error($model,'editor_choice_limit'); ?>
+				</div>
+			</div>
+			
+			<div class="clearfix">
+				<?php echo $form->labelEx($model,'editor_choice_userlevel'); ?>
+				<div class="desc">
+					<?php 
+					if(!$model->getErrors())
+						$model->editor_choice_userlevel = unserialize($model->editor_choice_userlevel);
+					echo $form->checkBoxList($model,'editor_choice_userlevel', UserLevel::getTypeMember('all')); ?>
+					<?php echo $form->error($model,'editor_choice_userlevel'); ?>
+				</div>
+			</div>
+		</div>
+		<?php }?>
 
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'cover_file_type'); ?>

@@ -37,6 +37,14 @@ $js=<<<EOP
 			$('div#custom_field').slideDown();
 		}
 	});
+	$('input[name="DigitalSetting[editor_choice_status]"]').live('change', function() {
+		var id = $(this).val();
+		if(id == '1') {
+			$('div#editor_choice').slideDown();
+		} else {
+			$('div#editor_choice').slideUp();
+		}
+	});
 EOP;
 	$cs->registerScript('resize', $js, CClientScript::POS_END);
 ?>
