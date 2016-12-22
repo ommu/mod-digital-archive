@@ -83,7 +83,7 @@ class DigitalCategoryTag extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'category' => array(self::BELONGS_TO, 'DigitalCategory', 'digital_id'),
+			'category' => array(self::BELONGS_TO, 'DigitalCategory', 'cat_id'),
 			'tag' => array(self::BELONGS_TO, 'OmmuTags', 'tag_id'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 		);
@@ -215,8 +215,9 @@ class DigitalCategoryTag extends CActiveRecord
 			);
 			if(!isset($_GET['category'])) {
 				$this->defaultColumns[] = array(
-					'name' => 'category_search',
+					'name' => 'cat_id',
 					'value' => '$data->category->cat_title',
+					'filter' => DigitalCategory::getCategory(),
 				);
 			}
 			if(!isset($_GET['tag'])) {

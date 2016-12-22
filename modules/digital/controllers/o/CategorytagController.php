@@ -135,7 +135,7 @@ class CategorytagController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Digital Category Tags');
 		$this->pageDescription = $setting->meta_description;
 		$this->pageMeta = $setting->meta_keyword;
-		$this->render('front_index',array(
+		$this->render('/o/category_tag/front_index',array(
 			'dataProvider'=>$dataProvider,
 		));
 		//$this->redirect(array('manage'));
@@ -161,11 +161,11 @@ class CategorytagController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'View Digital Category Tags');
 		$this->pageDescription = '';
 		$this->pageMeta = $setting->meta_keyword;
-		$this->render('front_view',array(
+		$this->render('/o/category_tag/front_view',array(
 			'model'=>$model,
 		));
 		/*
-		$this->render('admin_view',array(
+		$this->render('/o/category_tag/admin_view',array(
 			'model'=>$model,
 		));
 		*/
@@ -195,7 +195,7 @@ class CategorytagController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Digital Category Tags Manage');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('/o/category_tag/admin_manage',array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -261,7 +261,7 @@ class CategorytagController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Create Digital Category Tags');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_add',array(
+		$this->render('/o/category_tag/admin_add',array(
 			'model'=>$model,
 		));
 	}
@@ -327,7 +327,7 @@ class CategorytagController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Update Digital Category Tags');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_edit',array(
+		$this->render('/o/category_tag/admin_edit',array(
 			'model'=>$model,
 		));
 	}
@@ -398,7 +398,7 @@ class CategorytagController extends Controller
 			$this->pageTitle = Yii::t('phrase', 'DigitalCategoryTag Delete.');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
-			$this->render('admin_delete');
+			$this->render('/o/category_tag/admin_delete');
 		}
 	}
 
@@ -455,7 +455,7 @@ class CategorytagController extends Controller
 			$this->pageTitle = $title;
 			$this->pageDescription = '';
 			$this->pageMeta = '';
-			$this->render('admin_publish',array(
+			$this->render('/o/category_tag/admin_publish',array(
 				'title'=>$title,
 				'model'=>$model,
 			));
@@ -496,7 +496,7 @@ class CategorytagController extends Controller
 			$this->pageTitle = Yii::t('phrase', 'Headline');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
-			$this->render('admin_headline');
+			$this->render('/o/category_tag/admin_headline');
 		}
 	}
 

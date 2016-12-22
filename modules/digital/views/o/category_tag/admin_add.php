@@ -21,5 +21,5 @@
 ?>
 
 <div class="form">
-	<?php echo $this->renderPartial('/category_tag/_form', array('model'=>$model)); ?>
+	<?php echo $this->renderPartial('/o/category_tag/_form', array('model'=>$model)); ?>
 </div>
