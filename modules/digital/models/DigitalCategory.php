@@ -42,6 +42,7 @@
 class DigitalCategory extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $tag_input;
 	public $old_cat_icon_image_input;
 	public $old_cat_cover_input;
 	
@@ -82,7 +83,7 @@ class DigitalCategory extends CActiveRecord
 			array('creation_id, modified_id', 'length', 'max'=>11),
 			array('cat_code', 'length', 'max'=>6),
 			array('cat_desc, cat_icon, cat_icon_image, cat_cover,
-				old_cat_icon_image_input, old_cat_cover_input', 'safe'),
+				old_cat_icon_image_input, old_cat_cover_input, tag_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cat_id, publish, cat_title, cat_desc, cat_code, cat_icon, cat_icon_image, cat_cover, creation_date, creation_id, modified_date, modified_id,
@@ -100,6 +101,7 @@ class DigitalCategory extends CActiveRecord
 		return array(
 			'view' => array(self::BELONGS_TO, 'ViewDigitalCategory', 'cat_id'),
 			'digitals' => array(self::HAS_MANY, 'Digitals', 'cat_id'),
+			'tags' => array(self::HAS_MANY, 'DigitalCategoryTag', 'cat_id'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 		);
@@ -123,6 +125,8 @@ class DigitalCategory extends CActiveRecord
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
+			'tag_input' => Yii::t('attribute', 'Tags'),
+			'old_cat_icon_image_input' => Yii::t('attribute', 'Old Cover'),
 			'old_cat_cover_input' => Yii::t('attribute', 'Old Cover'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
@@ -516,6 +520,20 @@ class DigitalCategory extends CActiveRecord
 				if($this->cat_cover->saveAs($digital_path.'/'.$fileName)) {
 					self::resizeCategoryCover($digital_path.'/'.$fileName, '360,380');
 					self::model()->updateByPk($this->cat_id, array('cat_cover'=>$fileName));
+				}
+			}
+			
+			//input tag
+			if(trim($this->tag_input) != '') {
+				$tag_input = Utility::formatFileType($this->tag_input);
+				if(!empty($tag_input)) {
+					foreach($tag_input as $key => $val) {
+						$tag = new DigitalCategoryTag;
+						$tag->cat_id = $this->cat_id;
+						$tag->tag_id = 0;
+						$tag->tag_input = $val;
+						$tag->save();
+					}
 				}
 			}
 		}

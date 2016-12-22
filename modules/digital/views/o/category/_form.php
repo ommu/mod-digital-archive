@@ -61,6 +61,61 @@
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
+		
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'tag_input'); ?>
+			<div class="desc">
+				<?php 
+				if($model->isNewRecord) {
+					echo $form->textArea($model,'tag_input',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller'));
+					
+				} else {
+					//echo $form->textField($model,'tag_input',array('maxlength'=>32,'class'=>'span-6'));
+					$url = Yii::app()->controller->createUrl('o/categorytag/add', array('type'=>'digital'));
+					$category = $model->cat_id;
+					$tagId = 'DigitalCategory_tag_input';
+					$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+						'model' => $model,
+						'attribute' => 'tag_input',
+						'source' => Yii::app()->createUrl('globaltag/suggest'),
+						'options' => array(
+							//'delay '=> 50,
+							'minLength' => 1,
+							'showAnim' => 'fold',
+							'select' => "js:function(event, ui) {
+								$.ajax({
+									type: 'post',
+									url: '$url',
+									data: { cat_id: '$category', tag_id: ui.item.id, tag: ui.item.value },
+									dataType: 'json',
+									success: function(response) {
+										$('form #$tagId').val('');
+										$('form #tag-suggest').append(response.data);
+									}
+								});
+
+							}"
+						),
+						'htmlOptions' => array(
+							'class'	=> 'span-7',
+						),
+					));
+					echo $form->error($model,'tag_input');
+				}?>
+				<div id="tag-suggest" class="suggest clearfix">
+					<?php 
+					if(!$model->isNewRecord) {
+						$tags = $model->tags;
+						if(!empty($tags)) {
+							foreach($tags as $key => $val) {?>
+							<div><?php echo $val->tag->body;?><a href="<?php echo Yii::app()->controller->createUrl('o/categorytag/delete',array('id'=>$val->id,'type'=>'digital'));?>" title="<?php echo Yii::t('phrase', 'Delete');?>"><?php echo Yii::t('phrase', 'Delete');?></a></div>
+						<?php }
+						}
+					}?>				
+				</div>
+				<?php if($model->isNewRecord) {?><span class="small-px">tambahkan tanda koma (,) jika ingin menambahkan tag lebih dari satu</span><?php }?>
+			</div>
+		</div>
 
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'cat_icon'); ?>
