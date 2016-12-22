@@ -287,7 +287,13 @@ class DigitalViews extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'views_ip';
+			$this->defaultColumns[] = array(
+				'name' => 'views_ip',
+				'value' => '$data->views_ip',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'deleted_date',
 				'value' => 'Utility::dateFormat($data->deleted_date)',

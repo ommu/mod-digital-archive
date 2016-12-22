@@ -35,6 +35,10 @@
 class DigitalChoice extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $digital_search;
+	public $user_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -63,12 +67,14 @@ class DigitalChoice extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('digital_id, user_id, choice_date, choice_ip', 'required'),
+			array('digital_id, user_id', 'required'),
 			array('digital_id, user_id', 'length', 'max'=>11),
 			array('choice_ip', 'length', 'max'=>20),
+			array('', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('choice_id, digital_id, user_id, choice_date, choice_ip', 'safe', 'on'=>'search'),
+			array('choice_id, digital_id, user_id, choice_date, choice_ip,
+				digital_search, user_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,7 +86,8 @@ class DigitalChoice extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'digital_relation' => array(self::BELONGS_TO, 'OmmuDigitals', 'digital_id'),
+			'digital' => array(self::BELONGS_TO, 'Digitals', 'digital_id'),
+			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 		);
 	}
 
@@ -95,6 +102,8 @@ class DigitalChoice extends CActiveRecord
 			'user_id' => Yii::t('attribute', 'User'),
 			'choice_date' => Yii::t('attribute', 'Choice Date'),
 			'choice_ip' => Yii::t('attribute', 'Choice Ip'),
+			'digital_search' => Yii::t('attribute', 'Digital'),
+			'user_search' => Yii::t('attribute', 'User'),
 		);
 		/*
 			'Choice' => 'Choice',
@@ -123,6 +132,18 @@ class DigitalChoice extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'digital' => array(
+				'alias'=>'digital',
+				'select'=>'digital_title',
+			),
+			'user' => array(
+				'alias'=>'user',
+				'select'=>'displayname',
+			),
+		);
 
 		$criteria->compare('t.choice_id',strtolower($this->choice_id),true);
 		if(isset($_GET['digital']))
@@ -136,6 +157,9 @@ class DigitalChoice extends CActiveRecord
 		if($this->choice_date != null && !in_array($this->choice_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.choice_date)',date('Y-m-d', strtotime($this->choice_date)));
 		$criteria->compare('t.choice_ip',strtolower($this->choice_ip),true);
+		
+		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
+		$criteria->compare('user.displayname',strtolower($this->user_search), true);
 
 		if(!isset($_GET['DigitalChoice_sort']))
 			$criteria->order = 't.choice_id DESC';
@@ -181,20 +205,22 @@ class DigitalChoice extends CActiveRecord
 	 */
 	protected function afterConstruct() {
 		if(count($this->defaultColumns) == 0) {
-			/*
-			$this->defaultColumns[] = array(
-				'class' => 'CCheckBoxColumn',
-				'name' => 'id',
-				'selectableRows' => 2,
-				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-			);
-			*/
 			$this->defaultColumns[] = array(
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'digital_id';
-			$this->defaultColumns[] = 'user_id';
+			if(!isset($_GET['digital'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'digital_search',
+					'value' => '$data->digital->digital_title',
+				);
+			}
+			if(!isset($_GET['user'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'user_search',
+					'value' => '$data->user->displayname',
+				);
+			}
 			$this->defaultColumns[] = array(
 				'name' => 'choice_date',
 				'value' => 'Utility::dateFormat($data->choice_date)',
@@ -221,7 +247,13 @@ class DigitalChoice extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'choice_ip';
+			$this->defaultColumns[] = array(
+				'name' => 'choice_ip',
+				'value' => '$data->choice_ip',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
 		}
 		parent::afterConstruct();
 	}
@@ -246,68 +278,13 @@ class DigitalChoice extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	/*
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			// Create action
+			if($this->isNewRecord) {
+				$this->user_id = Yii::app()->user->id;
+				$this->views_ip = $_SERVER['REMOTE_ADDR'];
+			}
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
-	
-	/**
-	 * before save attributes
-	 */
-	/*
-	protected function beforeSave() {
-		if(parent::beforeSave()) {
-		}
-		return true;	
-	}
-	*/
-	
-	/**
-	 * After save attributes
-	 */
-	/*
-	protected function afterSave() {
-		parent::afterSave();
-		// Create action
-	}
-	*/
-
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-	*/
-
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
-	}
-	*/
-
 }
