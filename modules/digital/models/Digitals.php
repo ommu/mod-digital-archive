@@ -473,10 +473,11 @@ class Digitals extends CActiveRecord
 					$this->defaultColumns[] = array(
 						'header' => Yii::t('phrase', 'Choice'),
 						//'name' => 'editor_choice_input',
-						'value' => '$data->editor_choice_input',
+						'value' => '$data->editor_choice_input != 2 ? Utility::getPublish(Yii::app()->controller->createUrl("choice",array("id"=>$data->digital_id)), $data->editor_choice_input, Yii::t(\'phrase\', \'Choice\').\',\'.Yii::t(\'phrase\', \'Unchoice\')) : "-"',
 						'htmlOptions' => array(
 							'class' => 'center',
 						),
+						'type' => 'raw',
 					);
 				}
 				$this->defaultColumns[] = array(
@@ -541,7 +542,7 @@ class Digitals extends CActiveRecord
 	}
 	
 	protected function afterFind() {
-		$this->editor_choice_input = 1;
+		$this->editor_choice_input = DigitalChoice::getChoiceUser($this->digital_id);
 		
 		parent::afterFind();		
 	}

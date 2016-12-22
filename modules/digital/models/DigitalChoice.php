@@ -276,13 +276,56 @@ class DigitalChoice extends CActiveRecord
 	}
 
 	/**
+	 * User get information
+	 * 0=choice up
+	 * 1=choice down
+	 * 2=permission error
+	 */
+	public static function getChoiceUser($id)
+	{
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'editor_choice_status, editor_choice_userlevel, editor_choice_limit',
+		));
+		$editor_choice_userlevel = unserialize($setting->editor_choice_userlevel);
+			
+		$choiceLimit = ViewDigitalChoiceUser::model()->find(array(
+			'select'    => 'user_id, choices',
+			'condition' => 'user_id = :user',
+			'params'    => array(
+				':user' => Yii::app()->user->id,
+			),
+		));
+		
+		$return = 2;
+		if($setting->editor_choice_status == 1 && in_array(Yii::app()->user->level, $editor_choice_userlevel)) {
+			$choice = DigitalChoice::model()->find(array(
+				'select'    => 'choice_id',
+				'condition' => 'digital_id = :digital AND user_id = :user',
+				'params'    => array(
+					':digital' => $id,
+					':user' => Yii::app()->user->id,
+				),
+			));
+			if($choice == null)
+				$return = 0;
+			else
+				$return = 1;
+			if($choice == null && ($choiceLimit != null && $choiceLimit->choices >= $setting->editor_choice_limit))
+				$return = 2;
+		} else
+			$return = 2;
+		
+		return $return;
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
 				$this->user_id = Yii::app()->user->id;
-				$this->views_ip = $_SERVER['REMOTE_ADDR'];
+				$this->choice_ip = $_SERVER['REMOTE_ADDR'];
 			}
 		}
 		return true;

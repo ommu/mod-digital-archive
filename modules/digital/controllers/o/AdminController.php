@@ -17,6 +17,7 @@
  *	RunAction
  *	Delete
  *	Publish
+ *	Choice
  *
  *	LoadModel
  *	performAjaxValidation
@@ -476,6 +477,81 @@ class AdminController extends Controller
 				'model'=>$model,
 			));
 		}
+	}
+
+	/**
+	 * Deletes a particular model.
+	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param integer $id the ID of the model to be deleted
+	 */
+	public function actionChoice($id) 
+	{
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'editor_choice_status, editor_choice_userlevel, editor_choice_limit',
+		));
+		$editor_choice_userlevel = unserialize($setting->editor_choice_userlevel);
+			
+		$choiceLimit = ViewDigitalChoiceUser::model()->find(array(
+			'select'    => 'user_id, choices',
+			'condition' => 'user_id = :user',
+			'params'    => array(
+				':user' => Yii::app()->user->id,
+			),
+		));
+		
+		if($setting->editor_choice_status == 1 && in_array(Yii::app()->user->level, $editor_choice_userlevel) && ($choiceLimit == null || $choiceLimit != null && $choiceLimit->choices <= $setting->editor_choice_limit)) {
+			$model=$this->loadModel($id);
+			if($model->editor_choice_input == 1) {
+				$title = Yii::t('phrase', 'Unchoice');
+				$replace = 0;
+			} else {
+				$title = Yii::t('phrase', 'Choice');
+				$replace = 1;
+			}
+
+			if(Yii::app()->request->isPostRequest) {
+				// we only allow deletion via POST request
+				if(isset($id)) {
+					$redirect = false;
+					
+					//change value active or publish
+					if($replace == 1) {
+						$choice = new DigitalChoice;
+						$choice->digital_id = $model->digital_id;
+						if($choice->save())
+							$redirect = true;
+						
+					} else if($replace == 0) {
+						if(DigitalChoice::model()->deleteAll('digital_id = :digital AND user_id = :user', array(':digital' => $id,':user' => Yii::app()->user->id,)))
+							$redirect = true;
+					}
+
+					if($redirect == true) {
+						echo CJSON::encode(array(
+							'type' => 5,
+							'get' => Yii::app()->controller->createUrl('manage'),
+							'id' => 'partial-digitals',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Digitals success updated.').'</strong></div>',
+						));
+					}
+				}
+
+			} else {
+				$this->dialogDetail = true;
+				$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+				$this->dialogWidth = 350;
+
+				$this->pageTitle = $title;
+				$this->pageDescription = '';
+				$this->pageMeta = '';
+				$this->render('admin_choice',array(
+					'title'=>$title,
+					'model'=>$model,
+				));
+			}
+			
+		} else 
+			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 	}
 
 	/**
