@@ -142,7 +142,7 @@ class DigitalAuthors extends CActiveRecord
 		$criteria->with = array(
 			'digital' => array(
 				'alias'=>'digital',
-				'select'=>'digital_title',
+				'select'=>'publish, digital_title',
 			),
 			'author' => array(
 				'alias'=>'author',
@@ -171,6 +171,8 @@ class DigitalAuthors extends CActiveRecord
 			$criteria->compare('t.creation_id',$this->creation_id);
 		
 		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
+		if(isset($_GET['author']) && isset($_GET['publish']))
+			$criteria->compare('digital.publish',$_GET['publish']);
 		$criteria->compare('author.author_name',strtolower($this->author_search), true);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 

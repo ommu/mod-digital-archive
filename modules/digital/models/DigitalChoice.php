@@ -137,7 +137,7 @@ class DigitalChoice extends CActiveRecord
 		$criteria->with = array(
 			'digital' => array(
 				'alias'=>'digital',
-				'select'=>'digital_title',
+				'select'=>'publish, digital_title',
 			),
 			'user' => array(
 				'alias'=>'user',
@@ -159,6 +159,8 @@ class DigitalChoice extends CActiveRecord
 		$criteria->compare('t.choice_ip',strtolower($this->choice_ip),true);
 		
 		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
+		if(isset($_GET['digital']) && isset($_GET['publish']))
+			$criteria->compare('digital.publish',$_GET['publish']);
 		$criteria->compare('user.displayname',strtolower($this->user_search), true);
 
 		if(!isset($_GET['DigitalChoice_sort']))

@@ -149,7 +149,7 @@ class DigitalFile extends CActiveRecord
 		$criteria->with = array(
 			'digital' => array(
 				'alias'=>'digital',
-				'select'=>'digital_title',
+				'select'=>'publish, digital_title',
 			),
 			'creation' => array(
 				'alias'=>'creation',
@@ -191,6 +191,8 @@ class DigitalFile extends CActiveRecord
 			$criteria->compare('t.modified_id',$this->modified_id);
 		
 		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
+		if(isset($_GET['digital']) && isset($_GET['publish']))
+			$criteria->compare('digital.publish',$_GET['publish']);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 

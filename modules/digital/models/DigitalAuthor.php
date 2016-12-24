@@ -143,6 +143,9 @@ class DigitalAuthor extends CActiveRecord
 		
 		// Custom Search
 		$criteria->with = array(
+			'view' => array(
+				'alias'=>'view',
+			),
 			'creation' => array(
 				'alias'=>'creation',
 				'select'=>'displayname',
@@ -240,6 +243,16 @@ class DigitalAuthor extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			$this->defaultColumns[] = 'author_name';
+			$this->defaultColumns[] = array(
+				'header' => Yii::t('phrase', 'Digitals'),
+				'value' => 'CHtml::link($data->view->digitals, Yii::app()->controller->createUrl("o/authors/manage",array(\'author\'=>$data->author_id,\'publish\'=>1)))',
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
+				'header' => Yii::t('phrase', 'All Digital'),
+				'value' => 'CHtml::link($data->view->digital_all, Yii::app()->controller->createUrl("o/authors/manage",array(\'author\'=>$data->author_id)))',
+				'type' => 'raw',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_search',
 				'value' => '$data->creation->displayname',

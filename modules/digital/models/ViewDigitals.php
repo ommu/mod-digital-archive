@@ -37,6 +37,7 @@
  * @property string $like_all
  * @property string $views
  * @property string $view_all
+ * @property string $choices
  */
 class ViewDigitals extends CActiveRecord
 {
@@ -78,10 +79,10 @@ class ViewDigitals extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('digital_id', 'length', 'max'=>11),
-			array('md5path, uniquepath, covers, cover_all, files, file_all, authors, subjects, tags, likes, like_all, views, view_all', 'length', 'max'=>21),
+			array('md5path, uniquepath, covers, cover_all, files, file_all, authors, subjects, tags, likes, like_all, views, view_all, choices', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('digital_id, md5path, uniquepath, covers, cover_all, files, file_all, authors, subjects, tags, likes, like_all, views, view_all', 'safe', 'on'=>'search'),
+			array('digital_id, md5path, uniquepath, covers, cover_all, files, file_all, authors, subjects, tags, likes, like_all, views, view_all, choices', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -116,6 +117,7 @@ class ViewDigitals extends CActiveRecord
 			'like_all' => Yii::t('attribute', 'Like All'),
 			'views' => Yii::t('attribute', 'Views'),
 			'view_all' => Yii::t('attribute', 'View All'),
+			'choices' => Yii::t('attribute', 'Choices'),
 		);
 		/*
 			'Digital' => 'Digital',
@@ -159,6 +161,7 @@ class ViewDigitals extends CActiveRecord
 		$criteria->compare('t.like_all',strtolower($this->like_all),true);
 		$criteria->compare('t.views',strtolower($this->views),true);
 		$criteria->compare('t.view_all',strtolower($this->view_all),true);
+		$criteria->compare('t.choices',strtolower($this->choices),true);
 
 		if(!isset($_GET['ViewDigitals_sort']))
 			$criteria->order = 't.digital_id DESC';
@@ -203,6 +206,7 @@ class ViewDigitals extends CActiveRecord
 			$this->defaultColumns[] = 'like_all';
 			$this->defaultColumns[] = 'views';
 			$this->defaultColumns[] = 'view_all';
+			$this->defaultColumns[] = 'choices';
 		}
 
 		return $this->defaultColumns;
@@ -231,6 +235,7 @@ class ViewDigitals extends CActiveRecord
 			$this->defaultColumns[] = 'like_all';
 			$this->defaultColumns[] = 'views';
 			$this->defaultColumns[] = 'view_all';
+			$this->defaultColumns[] = 'choices';
 		}
 		parent::afterConstruct();
 	}

@@ -69,6 +69,7 @@ class Digitals extends CActiveRecord
 	public $file_search;
 	public $like_search;
 	public $view_search;
+	public $choice_search;
 	public $creation_search;
 	public $modified_search;
 
@@ -113,7 +114,7 @@ class Digitals extends CActiveRecord
 			// @todo Please remove those attributes that should not be searched.
 			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, pages, series, salt, content_verified, creation_date, creation_id, modified_date, modified_id,
 				editor_choice_input, 
-				publisher_search, cover_search, file_search, like_search, view_search, creation_search, modified_search', 'safe', 'on'=>'search'),
+				publisher_search, cover_search, file_search, like_search, view_search, choice_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -178,6 +179,7 @@ class Digitals extends CActiveRecord
 			'file_search' => Yii::t('attribute', 'Files'),
 			'like_search' => Yii::t('attribute', 'Likes'),
 			'view_search' => Yii::t('attribute', 'Views'),
+			'choice_search' => Yii::t('attribute', 'Choices'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
@@ -231,7 +233,7 @@ class Digitals extends CActiveRecord
 			),
 			'view' => array(
 				'alias'=>'view',
-				'select'=>'covers, files, likes, views',
+				'select'=>'covers, files, likes, views, choices',
 			),
 			'creation' => array(
 				'alias'=>'creation',
@@ -297,6 +299,7 @@ class Digitals extends CActiveRecord
 		$criteria->compare('view.files',$this->file_search);
 		$criteria->compare('view.likes',$this->like_search);
 		$criteria->compare('view.views',$this->view_search);
+		$criteria->compare('view.choices',$this->choice_search);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
@@ -415,36 +418,50 @@ class Digitals extends CActiveRecord
 			if($setting->form_standard == 0) {
 				$this->defaultColumns[] = array(
 					'name' => 'cover_search',
-					'value' => '$data->view->covers',
+					'value' => 'CHtml::link($data->view->covers, Yii::app()->controller->createUrl("o/cover/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
+					'type' => 'raw',
 				);
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'file_search',
-				'value' => '$data->view->files',
+				'value' => 'CHtml::link($data->view->files, Yii::app()->controller->createUrl("o/file/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'type' => 'raw',
 			);
 			if($setting->form_standard == 0) {
 				$this->defaultColumns[] = array(
 					'name' => 'like_search',
-					'value' => '$data->view->likes',
+					'value' => 'CHtml::link($data->view->likes, Yii::app()->controller->createUrl("o/likes/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
+					'type' => 'raw',
 				);
 			}
 			if($setting->form_standard == 0) {
 				$this->defaultColumns[] = array(
 					'name' => 'view_search',
-					'value' => '$data->view->views != null ? $data->view->views : "0"',
+					'value' => 'CHtml::link($data->view->views != null ? $data->view->views : "0", Yii::app()->controller->createUrl("o/views/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
-				);		
+					'type' => 'raw',
+				);
+			}
+			if($setting->form_standard == 0) {
+				$this->defaultColumns[] = array(
+					'name' => 'choice_search',
+					'value' => 'CHtml::link($data->view->choices, Yii::app()->controller->createUrl("o/choice/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+					'type' => 'raw',
+				);
 			}
 			if($setting->form_standard == 1) {
 				$this->defaultColumns[] = array(

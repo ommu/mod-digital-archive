@@ -186,14 +186,6 @@ class ViewDigitalSubject extends CActiveRecord
 	 */
 	protected function afterConstruct() {
 		if(count($this->defaultColumns) == 0) {
-			/*
-			$this->defaultColumns[] = array(
-				'class' => 'CCheckBoxColumn',
-				'name' => 'id',
-				'selectableRows' => 2,
-				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-			);
-			*/
 			$this->defaultColumns[] = array(
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
@@ -202,8 +194,16 @@ class ViewDigitalSubject extends CActiveRecord
 				'name' => 'tag_search',
 				'value' => '$data->tag->body',
 			);
-			$this->defaultColumns[] = 'digitals';
-			$this->defaultColumns[] = 'digital_all';
+			$this->defaultColumns[] = array(
+				'name' => 'digitals',
+				'value' => 'CHtml::link($data->digitals, Yii::app()->controller->createUrl("o/subjects/manage",array(\'tag\'=>$data->tag_id,\'publish\'=>1)))',
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'digital_all',
+				'value' => 'CHtml::link($data->digital_all, Yii::app()->controller->createUrl("o/subjects/manage",array(\'tag\'=>$data->tag_id)))',
+				'type' => 'raw',
+			);
 		}
 		parent::afterConstruct();
 	}

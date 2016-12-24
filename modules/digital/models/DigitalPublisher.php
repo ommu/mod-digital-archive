@@ -254,9 +254,19 @@ class DigitalPublisher extends CActiveRecord
 			$this->defaultColumns[] = 'publisher_location';
 			$this->defaultColumns[] = 'publisher_address';
 			$this->defaultColumns[] = array(
+				'header' => Yii::t('phrase', 'Digitals'),
+				'value' => 'CHtml::link($data->view->digitals, Yii::app()->controller->createUrl("o/admin/manage",array(\'publisher\'=>$data->publisher_id, \'type\'=>\'publish\')))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			/*
+			$this->defaultColumns[] = array(
 				'name' => 'creation_search',
 				'value' => '$data->creation->displayname',
 			);
+			*/
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',

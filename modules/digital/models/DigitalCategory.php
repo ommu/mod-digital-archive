@@ -282,15 +282,26 @@ class DigitalCategory extends CActiveRecord
 			$this->defaultColumns[] = 'cat_desc';
 			$this->defaultColumns[] = array(
 				'name' => 'tag_input',
-				'value' => '$data->view->tags',
+				'value' => 'CHtml::link($data->view->tags, Yii::app()->controller->createUrl("o/categorytag/manage",array(\'category\'=>$data->cat_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'type' => 'raw',
 			);
+			$this->defaultColumns[] = array(
+				'header' => Yii::t('phrase', 'Digitals'),
+				'value' => 'CHtml::link($data->view->digitals, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id, \'type\'=>\'publish\')))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			/*
 			$this->defaultColumns[] = array(
 				'name' => 'creation_search',
 				'value' => '$data->creation->displayname',
 			);
+			*/
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',

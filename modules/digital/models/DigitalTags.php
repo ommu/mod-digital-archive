@@ -141,7 +141,7 @@ class DigitalTags extends CActiveRecord
 		$criteria->with = array(
 			'digital' => array(
 				'alias'=>'digital',
-				'select'=>'digital_title',
+				'select'=>'publish, digital_title',
 			),
 			'tag' => array(
 				'alias'=>'tag',
@@ -158,7 +158,10 @@ class DigitalTags extends CActiveRecord
 			$criteria->compare('t.digital_id',$_GET['digital']);
 		else
 			$criteria->compare('t.digital_id',$this->digital_id);
-		$criteria->compare('t.tag_id',strtolower($this->tag_id),true);
+		if(isset($_GET['tag']))
+			$criteria->compare('t.tag_id',$_GET['tag']);
+		else
+			$criteria->compare('t.tag_id',$this->tag_id);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
 		if(isset($_GET['creation']))
@@ -167,6 +170,8 @@ class DigitalTags extends CActiveRecord
 			$criteria->compare('t.creation_id',$this->creation_id);
 		
 		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
+		if(isset($_GET['tag']) && isset($_GET['publish']))
+			$criteria->compare('digital.publish',$_GET['publish']);
 		$criteria->compare('tag.body',strtolower($this->tag_search), true);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 

@@ -254,9 +254,19 @@ class DigitalLanguage extends CActiveRecord
 			$this->defaultColumns[] = 'language_name';
 			$this->defaultColumns[] = 'language_desc';
 			$this->defaultColumns[] = array(
+				'header' => Yii::t('phrase', 'Digitals'),
+				'value' => 'CHtml::link($data->view->digitals, Yii::app()->controller->createUrl("o/admin/manage",array(\'language\'=>$data->language_id, \'type\'=>\'publish\')))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			/*
+			$this->defaultColumns[] = array(
 				'name' => 'creation_search',
 				'value' => '$data->creation->displayname',
 			);
+			*/
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
