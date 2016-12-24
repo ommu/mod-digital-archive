@@ -87,7 +87,7 @@ class DigitalCategory extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cat_id, publish, cat_title, cat_desc, cat_code, cat_icon, cat_icon_image, cat_cover, creation_date, creation_id, modified_date, modified_id,
-				creation_search, modified_search', 'safe', 'on'=>'search'),
+				tag_input, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -164,6 +164,9 @@ class DigitalCategory extends CActiveRecord
 		
 		// Custom Search
 		$criteria->with = array(
+			'view' => array(
+				'alias'=>'view',
+			),
 			'creation' => array(
 				'alias'=>'creation',
 				'select'=>'displayname',
@@ -204,6 +207,7 @@ class DigitalCategory extends CActiveRecord
 		else
 			$criteria->compare('t.modified_id',$this->modified_id);
 		
+		$criteria->compare('view.tags',strtolower($this->tag_input), true);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
@@ -276,6 +280,13 @@ class DigitalCategory extends CActiveRecord
 			);
 			$this->defaultColumns[] = 'cat_title';
 			$this->defaultColumns[] = 'cat_desc';
+			$this->defaultColumns[] = array(
+				'name' => 'tag_input',
+				'value' => '$data->view->tags',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_search',
 				'value' => '$data->creation->displayname',
