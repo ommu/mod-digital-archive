@@ -219,6 +219,21 @@
 		</div>
 
 		<div class="clearfix">
+			<?php echo $form->labelEx($model,'digital_file_type'); ?>
+			<div class="desc">
+				<?php				
+				if(!$model->getErrors()) {
+					$digital_file_type = unserialize($model->digital_file_type);
+					if(!empty($digital_file_type))
+						$model->digital_file_type = Utility::formatFileType($digital_file_type, false);
+				}
+				echo $form->textField($model,'digital_file_type', array('class'=>'span-6')); ?>
+				<?php echo $form->error($model,'digital_file_type'); ?>
+				<span class="small-px">pisahkan type file dengan koma (,). example: "mp3, mp4, pdf, doc, docx"</span>
+			</div>
+		</div>
+
+		<div class="clearfix">
 			<?php echo $form->labelEx($model,'digital_path'); ?>
 			<div class="desc">
 				<?php 
@@ -231,17 +246,14 @@
 		</div>
 
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'digital_file_type'); ?>
+			<?php echo $form->labelEx($model,'digital_sync_path'); ?>
 			<div class="desc">
-				<?php				
-				if(!$model->getErrors()) {
-					$digital_file_type = unserialize($model->digital_file_type);
-					if(!empty($digital_file_type))
-						$model->digital_file_type = Utility::formatFileType($digital_file_type, false);
-				}
-				echo $form->textField($model,'digital_file_type', array('class'=>'span-6')); ?>
-				<?php echo $form->error($model,'digital_file_type'); ?>
-				<span class="small-px">pisahkan type file dengan koma (,). example: "mp3, mp4, pdf, doc, docx"</span>
+				<?php 
+				if($model->isNewRecord || (!$model->isNewRecord && $model->digital_sync_path == ''))
+					$model->digital_sync_path = YiiBase::getPathOfAlias('webroot.public.digital.__');
+				echo $form->textField($model,'digital_sync_path', array('class'=>'span-9')); ?>
+				<?php echo $form->error($model,'digital_sync_path'); ?>
+				<span class="small-px">example: "<?php echo YiiBase::getPathOfAlias('webroot.public.digital.__')?>"</span>
 			</div>
 		</div>
 

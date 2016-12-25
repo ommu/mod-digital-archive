@@ -34,6 +34,7 @@
  * @property string $cover_view_size
  * @property string $cover_file_type
  * @property string $digital_path
+ * @property string $digital_sync_path
  * @property string $digital_file_type
  * @property integer $form_standard
  * @property string $form_custom_field
@@ -78,7 +79,7 @@ class DigitalSetting extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_file_type, digital_path, digital_file_type, form_standard, editor_choice_status, content_verified', 'required'),
+			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_file_type, digital_path, digital_sync_path, digital_file_type, form_standard, editor_choice_status, content_verified', 'required'),
 			array('permission, cover_limit, cover_resize, form_standard, editor_choice_status, editor_choice_limit, content_verified', 'numerical', 'integerOnly'=>true),
 			array('license', 'length', 'max'=>32),
 			array('modified_id', 'length', 'max'=>11),
@@ -86,7 +87,7 @@ class DigitalSetting extends CActiveRecord
 			array('cover_resize_size, cover_view_size, form_custom_field, editor_choice_userlevel', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_resize_size, cover_view_size, cover_file_type, digital_path, digital_file_type, form_standard, form_custom_field, editor_choice_status, editor_choice_userlevel, editor_choice_limit, content_verified, modified_date, modified_id,
+			array('id, license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_resize_size, cover_view_size, cover_file_type, digital_path, digital_sync_path, digital_file_type, form_standard, form_custom_field, editor_choice_status, editor_choice_userlevel, editor_choice_limit, content_verified, modified_date, modified_id,
 				modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -120,6 +121,7 @@ class DigitalSetting extends CActiveRecord
 			'cover_view_size' => Yii::t('attribute', 'Cover View Size'),
 			'cover_file_type' => Yii::t('attribute', 'Cover File Type'),
 			'digital_path' => Yii::t('attribute', 'Digital Directory'),
+			'digital_sync_path' => Yii::t('attribute', 'Digital Sync Directory'),
 			'digital_file_type' => Yii::t('attribute', 'Digital File Type'),
 			'form_standard' => Yii::t('attribute', 'Form Field'),
 			'form_custom_field' => Yii::t('attribute', 'Custom Field Form'),
@@ -184,6 +186,7 @@ class DigitalSetting extends CActiveRecord
 		$criteria->compare('t.cover_view_size',strtolower($this->cover_view_size),true);
 		$criteria->compare('t.cover_file_type',strtolower($this->cover_file_type),true);
 		$criteria->compare('t.digital_path',strtolower($this->digital_path),true);
+		$criteria->compare('t.digital_sync_path',strtolower($this->digital_sync_path),true);
 		$criteria->compare('t.digital_file_type',strtolower($this->digital_file_type),true);
 		$criteria->compare('t.form_standard',$this->form_standard);
 		$criteria->compare('t.form_custom_field',strtolower($this->form_custom_field),true);
@@ -240,6 +243,7 @@ class DigitalSetting extends CActiveRecord
 			$this->defaultColumns[] = 'cover_view_size';
 			$this->defaultColumns[] = 'cover_file_type';
 			$this->defaultColumns[] = 'digital_path';
+			$this->defaultColumns[] = 'digital_sync_path';
 			$this->defaultColumns[] = 'digital_file_type';
 			$this->defaultColumns[] = 'form_standard';
 			$this->defaultColumns[] = 'form_custom_field';
@@ -269,6 +273,7 @@ class DigitalSetting extends CActiveRecord
 			$this->defaultColumns[] = 'cover_view_size';
 			$this->defaultColumns[] = 'cover_file_type';
 			$this->defaultColumns[] = 'digital_path';
+			$this->defaultColumns[] = 'digital_sync_path';
 			$this->defaultColumns[] = 'digital_file_type';
 			$this->defaultColumns[] = 'form_standard';
 			$this->defaultColumns[] = 'form_custom_field';
