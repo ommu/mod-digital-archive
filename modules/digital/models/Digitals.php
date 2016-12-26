@@ -639,7 +639,7 @@ class Digitals extends CActiveRecord
 		$action = strtolower(Yii::app()->controller->action->id);
 			
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'cover_limit, cover_resize, cover_resize_size, digital_path, cover_file_type, digital_file_type',
+			'select' => 'cover_limit, cover_resize, cover_resize_size, cover_file_type, digital_file_type, digital_path',
 		));
 		$digital_file_type = unserialize($setting->digital_file_type);
 		

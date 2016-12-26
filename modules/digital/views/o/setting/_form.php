@@ -212,7 +212,7 @@
 					if(!empty($cover_file_type))
 						$model->cover_file_type = Utility::formatFileType($cover_file_type, false);
 				}
-				echo $form->textField($model,'cover_file_type', array('class'=>'span-6')); ?>
+				echo $form->textField($model,'cover_file_type', array('class'=>'span-8')); ?>
 				<?php echo $form->error($model,'cover_file_type'); ?>
 				<span class="small-px">pisahkan jenis file dengan koma (,). example: "jpg, png, bmp"</span>
 			</div>
@@ -227,7 +227,7 @@
 					if(!empty($digital_file_type))
 						$model->digital_file_type = Utility::formatFileType($digital_file_type, false);
 				}
-				echo $form->textField($model,'digital_file_type', array('class'=>'span-6')); ?>
+				echo $form->textField($model,'digital_file_type', array('class'=>'span-8')); ?>
 				<?php echo $form->error($model,'digital_file_type'); ?>
 				<span class="small-px">pisahkan type file dengan koma (,). example: "mp3, mp4, pdf, doc, docx"</span>
 			</div>

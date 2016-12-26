@@ -127,6 +127,21 @@
 		</div>
 
 		<div class="clearfix">
+			<?php echo $form->labelEx($model,'cat_file_type'); ?>
+			<div class="desc">
+				<?php				
+				if(!$model->getErrors()) {
+					$cat_file_type = unserialize($model->cat_file_type);
+					if(!empty($cat_file_type))
+						$model->cat_file_type = Utility::formatFileType($cat_file_type, false);
+				}
+				echo $form->textField($model,'cat_file_type', array('class'=>'span-8')); ?>
+				<?php echo $form->error($model,'cat_file_type'); ?>
+				<span class="small-px">pisahkan type file dengan koma (,). example: "mp3, mp4, pdf, doc, docx"</span>
+			</div>
+		</div>
+
+		<div class="clearfix">
 			<?php echo $form->labelEx($model,'cat_icon_image'); ?>
 			<div class="desc">
 				<?php 

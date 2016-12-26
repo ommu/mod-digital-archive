@@ -31,6 +31,7 @@
  * @property string $cat_icon
  * @property string $cat_icon_image
  * @property string $cat_cover
+ * @property string $cat_file_type
  * @property string $creation_date
  * @property string $creation_id
  * @property string $modified_date
@@ -77,7 +78,7 @@ class DigitalCategory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('publish, cat_title, cat_code', 'required'),
+			array('publish, cat_title, cat_code, cat_file_type', 'required'),
 			array('publish', 'numerical', 'integerOnly'=>true),
 			array('cat_title, cat_icon', 'length', 'max'=>32),
 			array('creation_id, modified_id', 'length', 'max'=>11),
@@ -86,7 +87,7 @@ class DigitalCategory extends CActiveRecord
 				old_cat_icon_image_input, old_cat_cover_input, tag_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cat_id, publish, cat_title, cat_desc, cat_code, cat_icon, cat_icon_image, cat_cover, creation_date, creation_id, modified_date, modified_id,
+			array('cat_id, publish, cat_title, cat_desc, cat_code, cat_file_type, cat_icon, cat_icon_image, cat_cover, creation_date, creation_id, modified_date, modified_id,
 				tag_input, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -121,6 +122,7 @@ class DigitalCategory extends CActiveRecord
 			'cat_icon' => Yii::t('attribute', 'Icon'),
 			'cat_icon_image' => Yii::t('attribute', 'Icon Image'),
 			'cat_cover' => Yii::t('attribute', 'Cover'),
+			'cat_file_type' => Yii::t('attribute', 'File Type'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
@@ -194,6 +196,7 @@ class DigitalCategory extends CActiveRecord
 		$criteria->compare('t.cat_icon',strtolower($this->cat_icon),true);
 		$criteria->compare('t.cat_icon_image',strtolower($this->cat_icon_image),true);
 		$criteria->compare('t.cat_cover',strtolower($this->cat_cover),true);
+		$criteria->compare('t.cat_file_type',strtolower($this->cat_file_type),true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
 		if(isset($_GET['creation']))
@@ -248,6 +251,7 @@ class DigitalCategory extends CActiveRecord
 			$this->defaultColumns[] = 'cat_icon';
 			$this->defaultColumns[] = 'cat_icon_image';
 			$this->defaultColumns[] = 'cat_cover';
+			$this->defaultColumns[] = 'cat_file_type';
 			$this->defaultColumns[] = 'creation_date';
 			$this->defaultColumns[] = 'creation_id';
 			$this->defaultColumns[] = 'modified_date';
@@ -339,6 +343,14 @@ class DigitalCategory extends CActiveRecord
 			$this->defaultColumns[] = array(
 				'name' => 'cat_cover',
 				'value' => '$data->cat_cover != \'\' ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'cat_file_type',
+				'value' => '$data->cat_file_type != \'\' ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -503,6 +515,7 @@ class DigitalCategory extends CActiveRecord
 				if($this->cat_cover == '')
 					$this->cat_cover = $this->old_cat_cover_input;
 			}
+			$this->cat_file_type = serialize(Utility::formatFileType($this->cat_file_type));
 		}
 		return true;
 	}
