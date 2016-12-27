@@ -154,6 +154,7 @@
 				);
 				if(!$model->getErrors())
 					$model->form_custom_field = unserialize($model->form_custom_field);
+				
 				echo $form->checkBoxList($model, 'form_custom_field', $customField); ?>
 				<?php echo $form->error($model,'form_custom_field'); ?>
 			</div>
@@ -218,6 +219,9 @@
 			</div>
 		</div>
 
+		<?php 
+		$form_custom_field = $model->form_custom_field;
+		if($model->digital_global_file_type == 1 || ($model->digital_global_file_type == 0 && ($model->form_standard == 1 || ($model->form_standard == 0 && !in_array('cat_id', $form_custom_field))))) {?>
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'digital_file_type'); ?>
 			<div class="desc">
@@ -232,6 +236,7 @@
 				<span class="small-px">pisahkan type file dengan koma (,). example: "mp3, mp4, pdf, doc, docx"</span>
 			</div>
 		</div>
+		<?php }?>
 
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'digital_path'); ?>

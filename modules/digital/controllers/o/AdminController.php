@@ -145,14 +145,21 @@ class AdminController extends Controller
 	public function actionUpload($id) 
 	{		
 		$setting = DigitalSetting::model()->findByPk(1,array(
-			'select' => 'digital_file_type',
+			'select' => 'digital_global_file_type, digital_file_type, form_standard, form_custom_field',
 		));
+		$digital_file_type = unserialize($setting->digital_file_type);
+		$form_custom_field = unserialize($setting->form_custom_field);
+		if(empty($form_custom_field))
+			$form_custom_field = array();
 		
 		ini_set('max_execution_time', 0);
 		ob_start();
 		
 		$model=$this->loadModel($id);
 		if($model != null) {
+			if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
+				$digital_file_type = unserialize($model->category->cat_file_type);
+			
 			// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation($model);
 
@@ -174,7 +181,7 @@ class AdminController extends Controller
 			$this->pageMeta = '';
 			$this->render('admin_upload',array(
 				'model'=>$model,
-				'setting'=>$setting,
+				'digital_file_type'=>$digital_file_type,
 			));
 			
 		} else
@@ -190,11 +197,14 @@ class AdminController extends Controller
 	public function actionAdd() 
 	{
 		$setting = DigitalSetting::model()->findByPk(1,array(
-			'select' => 'cover_file_type, digital_file_type, form_standard, form_custom_field',
+			'select' => 'digital_global_file_type, cover_file_type, digital_file_type, form_standard, form_custom_field',
 		));
+		$digital_file_type = unserialize($setting->digital_file_type);
 		$form_custom_field = unserialize($setting->form_custom_field);
 		if(empty($form_custom_field))
 			$form_custom_field = array();
+		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
+			$digital_file_type = unserialize($setting->digital_file_type);
 		
 		ini_set('max_execution_time', 0);
 		ob_start();
@@ -259,6 +269,7 @@ class AdminController extends Controller
 			'model'=>$model,
 			'publisher'=>$publisher,
 			'setting'=>$setting,
+			'digital_file_type'=>$digital_file_type,
 		));
 	}
 

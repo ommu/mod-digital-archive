@@ -25,5 +25,6 @@
 		'model'=>$model,
 		'publisher'=>$publisher,
 		'setting'=>$setting,
+		'digital_file_type'=>$digital_file_type,
 	)); ?>
 </div>

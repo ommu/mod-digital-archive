@@ -69,10 +69,10 @@ class DigitalFile extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('digital_id, digital_filename', 'required'),
+			array('digital_id', 'required'),
 			array('publish', 'numerical', 'integerOnly'=>true),
 			array('digital_id, creation_id, modified_id', 'length', 'max'=>11),
-			array('
+			array('digital_filename, 
 				old_digital_filename_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -333,9 +333,14 @@ class DigitalFile extends CActiveRecord
 	protected function beforeValidate() {
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'digital_file_type',
+			'select' => 'digital_global_file_type, digital_file_type, form_standard, form_custom_field',
 		));
-		$digital_file_type = unserialize($setting->digital_file_type);
+		$digital_file_type = unserialize($setting->digital_file_type);	
+		$form_custom_field = unserialize($setting->form_custom_field);
+		if(empty($form_custom_field))
+			$form_custom_field = array();	
+		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
+			$digital_file_type = unserialize($this->digital->category->cat_file_type);
 		
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
@@ -344,7 +349,7 @@ class DigitalFile extends CActiveRecord
 				$this->modified_id = Yii::app()->user->id;
 			
 			$digital_filename = CUploadedFile::getInstance($this, 'digital_filename');
-			if($currentAction != 'o/file/edit' && $digital_filename->name != '') {
+			if($currentAction == 'o/file/edit' && $digital_filename->name != '') {
 				$extension = pathinfo($digital_filename->name, PATHINFO_EXTENSION);
 				if(!in_array(strtolower($extension), $digital_file_type))
 					$this->addError('digital_filename', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(

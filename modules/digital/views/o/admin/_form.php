@@ -317,7 +317,7 @@
 					<div class="desc">
 						<?php echo $form->fileField($model,'digital_file_input'); ?>
 						<?php echo $form->error($model,'digital_file_input'); ?>
-						<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType(unserialize($setting->digital_file_type), false);?></span>
+						<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($digital_file_type, false);?></span>
 					</div>
 				</div>
 

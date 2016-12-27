@@ -44,6 +44,7 @@
 				<?php }
 				echo $form->fileField($model,'cover_filename',array('rows'=>6, 'cols'=>50)); ?>
 				<?php echo $form->error($model,'cover_filename'); ?>
+				<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($cover_file_type, false);?></span>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>

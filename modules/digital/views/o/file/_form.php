@@ -26,12 +26,6 @@
 <div class="dialog-content">
 	<fieldset>
 
-		<?php //begin.Messages ?>
-		<div id="ajax-message">
-			<?php echo $form->errorSummary($model); ?>
-		</div>
-		<?php //begin.Messages ?>
-
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'digital_filename'); ?>
 			<div class="desc">
@@ -44,7 +38,7 @@
 				<?php }
 				echo $form->fileField($model,'digital_filename',array('rows'=>6, 'cols'=>50)); ?>
 				<?php echo $form->error($model,'digital_filename'); ?>
-				<?php /*<div class="small-px silent"></div>*/?>
+				<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($digital_file_type, false);?></span>
 			</div>
 		</div>
 

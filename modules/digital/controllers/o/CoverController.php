@@ -142,10 +142,12 @@ class CoverController extends Controller
 	 */
 	public function actionEdit($id) 
 	{
-		$model=$this->loadModel($id);	
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'digital_path',
+			'select' => 'cover_file_type, digital_path',
 		));
+		$cover_file_type = unserialize($setting->cover_file_type);
+		
+		$model=$this->loadModel($id);	
 		$pathUnique = Digitals::getUniqueDirectory($model->digital_id, $model->digital->salt, $model->digital->view->md5path);
 		if($setting != null)
 			$digital_path = $setting->digital_path.'/'.$pathUnique;
@@ -175,6 +177,7 @@ class CoverController extends Controller
 		$this->render('admin_edit',array(
 			'model'=>$model,
 			'digital_path'=>$digital_path,
+			'cover_file_type'=>$cover_file_type,
 		));
 	}
 	

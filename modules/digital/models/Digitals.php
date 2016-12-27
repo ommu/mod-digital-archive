@@ -365,7 +365,9 @@ class Digitals extends CActiveRecord
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'form_standard, form_custom_field, editor_choice_status, editor_choice_userlevel, content_verified',
 		));
-		$form_custom_field = unserialize($setting->form_custom_field);
+		$form_custom_field = unserialize($setting->form_custom_field);		
+		if(empty($form_custom_field))
+			$form_custom_field = array();
 		$editor_choice_userlevel = unserialize($setting->editor_choice_userlevel);
 		
 		if(count($this->defaultColumns) == 0) {
@@ -590,10 +592,15 @@ class Digitals extends CActiveRecord
 	protected function beforeValidate() {
 		$controller = strtolower(Yii::app()->controller->id);			
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'cover_file_type, digital_file_type',
+			'select' => 'digital_global_file_type, cover_file_type, digital_file_type, form_standard, form_custom_field',
 		));
 		$cover_file_type = unserialize($setting->cover_file_type);
 		$digital_file_type = unserialize($setting->digital_file_type);
+		$form_custom_field = unserialize($setting->form_custom_field);
+		if(empty($form_custom_field))
+			$form_custom_field = array();
+		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
+			$digital_file_type = unserialize($this->category->cat_file_type);
 		
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
@@ -639,9 +646,14 @@ class Digitals extends CActiveRecord
 		$action = strtolower(Yii::app()->controller->action->id);
 			
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'cover_limit, cover_resize, cover_resize_size, cover_file_type, digital_file_type, digital_path',
+			'select' => 'digital_global_file_type, cover_limit, cover_resize, cover_resize_size, cover_file_type, digital_file_type, digital_path, form_standard, form_custom_field',
 		));
 		$digital_file_type = unserialize($setting->digital_file_type);
+		$form_custom_field = unserialize($setting->form_custom_field);
+		if(empty($form_custom_field))
+			$form_custom_field = array();
+		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
+			$digital_file_type = unserialize($this->category->cat_file_type);
 		
 		if($this->isNewRecord) {
 			// Add directory

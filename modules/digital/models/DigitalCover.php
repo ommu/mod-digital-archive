@@ -361,7 +361,7 @@ class DigitalCover extends CActiveRecord
 				$this->modified_id = Yii::app()->user->id;
 			
 			$cover_filename = CUploadedFile::getInstance($this, 'cover_filename');
-			if($currentAction != 'o/cover/edit' && $cover_filename->name != '') {
+			if($currentAction == 'o/cover/edit' && $cover_filename->name != '') {
 				$extension = pathinfo($cover_filename->name, PATHINFO_EXTENSION);
 				if(!in_array(strtolower($extension), $cover_file_type))
 					$this->addError('cover_filename', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(

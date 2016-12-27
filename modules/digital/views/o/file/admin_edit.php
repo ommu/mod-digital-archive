@@ -24,4 +24,5 @@
 <?php echo $this->renderPartial('_form', array(
 	'model'=>$model, 
 	'digital_path'=>$digital_path,
+	'digital_file_type'=>$digital_file_type,
 )); ?>
