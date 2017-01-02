@@ -70,10 +70,10 @@ class DigitalCover extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('digital_id, cover_filename', 'required'),
+			array('digital_id', 'required'),
 			array('publish, status', 'numerical', 'integerOnly'=>true),
 			array('digital_id, creation_id, modified_id', 'length', 'max'=>11),
-			array('
+			array('cover_filename,
 				old_cover_filename_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

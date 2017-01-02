@@ -702,24 +702,26 @@ class Digitals extends CActiveRecord
 				}
 			}
 			
-			//input tag
-			if(trim($this->tag_input) != '') {
+			//input tag			
+			if(trim($this->tag_input) != '')
 				$tag_input = Utility::formatFileType($this->tag_input);
-				$category_tag = $this->category->tags;
-				if(!empty($category_tag)) {
-					foreach($category_tag as $key => $val) {
-						$tag_input[] = $val->tag->body;
-					}
+			else
+				$tag_input = array();
+			
+			$category_tag = $this->category->tags;
+			if(!empty($category_tag)) {
+				foreach($category_tag as $key => $val) {
+					$tag_input[] = $val->tag->body;
 				}
-				if(!empty($tag_input)) {
-					$tag_input = array_unique($tag_input);
-					foreach($tag_input as $key => $val) {
-						$tag = new DigitalTags;
-						$tag->digital_id = $this->digital_id;
-						$tag->tag_id = 0;
-						$tag->tag_input = $val;
-						$tag->save();
-					}
+			}
+			if(!empty($tag_input)) {
+				$tag_input = array_unique($tag_input);
+				foreach($tag_input as $key => $val) {
+					$tag = new DigitalTags;
+					$tag->digital_id = $this->digital_id;
+					$tag->tag_id = 0;
+					$tag->tag_input = $val;
+					$tag->save();
 				}
 			}
 			

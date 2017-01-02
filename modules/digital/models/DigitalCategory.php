@@ -515,6 +515,7 @@ class DigitalCategory extends CActiveRecord
 				if($this->cat_cover == '')
 					$this->cat_cover = $this->old_cat_cover_input;
 			}
+			$this->cat_code = strtoupper($this->cat_code);	
 			$this->cat_file_type = serialize(Utility::formatFileType($this->cat_file_type));
 		}
 		return true;

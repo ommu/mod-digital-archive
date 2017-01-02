@@ -366,6 +366,16 @@ class DigitalLanguage extends CActiveRecord
 				$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
+	}	
+	/**
+	 * before save attributes
+	 */
+	protected function beforeSave() {
+		if(parent::beforeSave()) {
+			$this->language_code = strtoupper($this->language_code);
+		}
+		return true;
 	}
+	
 
 }
