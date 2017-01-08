@@ -80,7 +80,7 @@ class DigitalDownloadDetail extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'download_relation' => array(self::BELONGS_TO, 'OmmuDigitalDownloads', 'download_id'),
+			'download' => array(self::BELONGS_TO, 'DigitalDownloads', 'download_id'),
 		);
 	}
 
@@ -174,24 +174,17 @@ class DigitalDownloadDetail extends CActiveRecord
 	 */
 	protected function afterConstruct() {
 		if(count($this->defaultColumns) == 0) {
-			/*
-			$this->defaultColumns[] = array(
-				'class' => 'CCheckBoxColumn',
-				'name' => 'id',
-				'selectableRows' => 2,
-				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-			);
-			*/
 			$this->defaultColumns[] = array(
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'download_id';
+			if(!isset($_GET['download']))
+				$this->defaultColumns[] = 'download_id';
 			$this->defaultColumns[] = array(
 				'name' => 'download_date',
 				'value' => 'Utility::dateFormat($data->download_date)',
 				'htmlOptions' => array(
-					'class' => 'center',
+					//'class' => 'center',
 				),
 				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
 					'model'=>$this,
@@ -213,7 +206,13 @@ class DigitalDownloadDetail extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'download_ip';
+			$this->defaultColumns[] = array(
+				'name' => 'download_ip',
+				'value' => '$data->download_ip',
+				'htmlOptions' => array(
+					//'class' => 'center',
+				),
+			);
 		}
 		parent::afterConstruct();
 	}
@@ -234,73 +233,5 @@ class DigitalDownloadDetail extends CActiveRecord
 			return $model;			
 		}
 	}
-
-	/**
-	 * before validate attributes
-	 */
-	/*
-	protected function beforeValidate() {
-		if(parent::beforeValidate()) {
-			// Create action
-		}
-		return true;
-	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
-	
-	/**
-	 * before save attributes
-	 */
-	/*
-	protected function beforeSave() {
-		if(parent::beforeSave()) {
-			//$this->download_date = date('Y-m-d', strtotime($this->download_date));
-		}
-		return true;	
-	}
-	*/
-	
-	/**
-	 * After save attributes
-	 */
-	/*
-	protected function afterSave() {
-		parent::afterSave();
-		// Create action
-	}
-	*/
-
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-	*/
-
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
-	}
-	*/
 
 }
