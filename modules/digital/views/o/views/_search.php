@@ -41,13 +41,13 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('views_date'); ?><br/>
-			<?php echo $form->textField($model,'views_date'); ?>
+			<?php echo $model->getAttributeLabel('view_date'); ?><br/>
+			<?php echo $form->textField($model,'view_date'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('views_ip'); ?><br/>
-			<?php echo $form->textField($model,'views_ip',array('size'=>20,'maxlength'=>20)); ?>
+			<?php echo $model->getAttributeLabel('view_ip'); ?><br/>
+			<?php echo $form->textField($model,'view_ip',array('size'=>20,'maxlength'=>20)); ?>
 		</li>
 
 		<li>
