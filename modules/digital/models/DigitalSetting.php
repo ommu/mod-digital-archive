@@ -48,6 +48,7 @@
 class DigitalSetting extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $cover_unlimit_input;
 	
 	// Variable Search
 	public $modified_search;
@@ -79,8 +80,10 @@ class DigitalSetting extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_file_type, digital_path, digital_sync_path, form_standard, editor_choice_status, content_verified', 'required'),
-			array('permission, cover_limit, cover_resize, form_standard, editor_choice_status, editor_choice_limit, content_verified', 'numerical', 'integerOnly'=>true),
+			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_file_type, digital_path, digital_sync_path, form_standard, editor_choice_status, content_verified,
+				cover_unlimit_input', 'required'),
+			array('permission, cover_limit, cover_resize, form_standard, editor_choice_status, editor_choice_limit, content_verified,
+				cover_unlimit_input', 'numerical', 'integerOnly'=>true),
 			array('license', 'length', 'max'=>32),
 			array('modified_id', 'length', 'max'=>11),
 			array('cover_limit, editor_choice_limit', 'length', 'max'=>2),
@@ -132,6 +135,7 @@ class DigitalSetting extends CActiveRecord
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
+			'cover_unlimit_input' => Yii::t('attribute', 'Unlimited Cover'),
 		);
 		/*
 			'ID' => 'ID',
@@ -339,7 +343,10 @@ class DigitalSetting extends CActiveRecord
 	 */
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			if($this->cover_limit != '' && $this->cover_limit <= 0)
+			if($this->cover_unlimit_input == 1)
+				$this->cover_limit = 0;
+			
+			if($this->cover_unlimit_input == 0 && $this->cover_limit != '' && $this->cover_limit <= 0)
 				$this->addError('cover_limit', Yii::t('phrase', 'Photo Limit lebih besar dari 0'));
 			
 			if($this->cover_resize == 1 && ($this->cover_resize_size['width'] == '' || $this->cover_resize_size['height'] == ''))

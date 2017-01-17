@@ -77,6 +77,17 @@
 		</div>
 
 		<div class="clearfix">
+			<?php echo $form->labelEx($model,'cover_unlimit_input'); ?>
+			<div class="desc">
+				<?php 
+				if(!$model->getErrors())
+					$model->cover_unlimit_input = $model->cover_limit == 0 ? 1 : 0;
+				echo $form->checkBox($model,'cover_unlimit_input'); ?>
+				<?php echo $form->error($model,'cover_unlimit_input'); ?>
+			</div>
+		</div>
+
+		<div id="cover-limit" class="clearfix <?php echo $model->cover_limit == 0 ? 'hide' : '';?>">
 			<?php echo $form->labelEx($model,'cover_limit'); ?>
 			<div class="desc">
 				<?php echo $form->textField($model,'cover_limit', array('maxlength'=>2, 'class'=>'span-2')); ?>

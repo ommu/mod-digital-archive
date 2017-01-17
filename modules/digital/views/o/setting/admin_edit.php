@@ -45,6 +45,14 @@ $js=<<<EOP
 			$('div#editor_choice').slideUp();
 		}
 	});
+	$('#DigitalSetting_cover_unlimit_input').live('change', function() {
+		var id = $(this).prop('checked');		
+		if(id == true) {
+			$('div#cover-limit').slideUp();
+		} else {
+			$('div#cover-limit').slideDown();
+		}
+	});
 EOP;
 	$cs->registerScript('resize', $js, CClientScript::POS_END);
 ?>
