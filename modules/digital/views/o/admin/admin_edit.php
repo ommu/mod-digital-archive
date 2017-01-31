@@ -32,7 +32,7 @@
 
 <?php if($setting->cover_limit != 1) {?>
 <div class="boxed mt-15">
-	<h3><?php echo Yii::t('phrase', 'Digital Photo and Cover'); ?></h3>
+	<h3><?php echo Yii::t('phrase', 'Digital Cover'); ?></h3>
 	<div class="clearfix horizontal-data" name="four">
 		<ul id="media-render">
 			<?php 
