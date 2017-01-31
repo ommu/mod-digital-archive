@@ -395,9 +395,8 @@ class DigitalCover extends CActiveRecord
 	protected function beforeSave() {
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'cover_resize, cover_resize_size, digital_path',
+			'select' => 'digital_path',
 		));
-		$cover_resize_size = unserialize($setting->cover_resize_size);
 		
 		if(parent::beforeSave()) {
 			$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
@@ -419,10 +418,7 @@ class DigitalCover extends CActiveRecord
 				$this->cover_filename = CUploadedFile::getInstance($this, 'cover_filename');
 				if($this->cover_filename instanceOf CUploadedFile) {
 					$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital->digital_title).'.'.strtolower($this->cover_filename->extensionName);
-					if($this->cover_filename->saveAs($digital_path.'/'.$fileName)) {
-						if($setting->cover_resize == 1)
-							self::resizeCover($digital_path.'/'.$fileName, $cover_resize_size);
-						
+					if($this->cover_filename->saveAs($digital_path.'/'.$fileName)) {						
 						if($this->old_cover_filename_input != '' && file_exists($digital_path.'/'.$this->old_cover_filename_input))
 							rename($digital_path.'/'.$this->old_cover_filename_input, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->old_cover_filename_input);
 						$this->cover_filename = $fileName;
@@ -462,10 +458,9 @@ class DigitalCover extends CActiveRecord
 		} else 
 			@chmod($digital_path, 0755, true);
 		
-		if($this->isNewRecord) {
-			if($setting->cover_resize == 1)
-				self::resizeCover($digital_path.'/'.$this->cover_filename, $cover_resize_size);
-		}
+		//resize cover after upload
+		if($setting->cover_resize == 1)
+			self::resizeCover($digital_path.'/'.$this->cover_filename, $cover_resize_size);
 			
 		//delete other cover (if cover_limit = 1)
 		if($setting->cover_limit == 1) {
@@ -473,7 +468,7 @@ class DigitalCover extends CActiveRecord
 				'condition'=> 'digital_id = :id AND status = :status',
 				'params'=>array(
 					':id'=>$this->digital_id,
-					':cover'=>0,
+					':status'=>0,
 				),
 			));
 		}

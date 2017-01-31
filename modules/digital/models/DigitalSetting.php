@@ -374,7 +374,8 @@ class DigitalSetting extends CActiveRecord
 			$this->cover_resize_size = serialize($this->cover_resize_size);
 			$this->cover_view_size = serialize($this->cover_view_size);
 			$this->cover_file_type = serialize(Utility::formatFileType($this->cover_file_type));
-			$this->digital_file_type = serialize(Utility::formatFileType($this->digital_file_type));
+			if($this->digital_global_file_type == 1)
+				$this->digital_file_type = serialize(Utility::formatFileType($this->digital_file_type));
 			$this->form_custom_field = serialize($this->form_custom_field);
 			$this->editor_choice_userlevel = serialize($this->editor_choice_userlevel);
 		}

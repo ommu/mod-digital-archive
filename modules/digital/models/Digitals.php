@@ -56,6 +56,8 @@
 class Digitals extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $cover_input;
+	public $cover_old_input;
 	public $digital_file_input;
 	public $multiple_file_input;
 	public $author_input;
@@ -109,7 +111,7 @@ class Digitals extends CActiveRecord
 			array('isbn, salt', 'length', 'max'=>32),
 			array('pages', 'length', 'max'=>5),
 			array('publisher_id, opac_id, digital_code, digital_path, publish_year, publish_location, isbn, pages, series, salt,
-				digital_file_input, multiple_file_input, author_input, subject_input, tag_input', 'safe'),
+				cover_input, cover_old_input, digital_file_input, multiple_file_input, author_input, subject_input, tag_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, pages, series, salt, content_verified, creation_date, creation_id, modified_date, modified_id,
@@ -164,16 +166,18 @@ class Digitals extends CActiveRecord
 			'series' => Yii::t('attribute', 'Series'),
 			'salt' => Yii::t('attribute', 'Salt'),
 			'content_verified' => Yii::t('attribute', 'Verified'),
+			'creation_date' => Yii::t('attribute', 'Creation Date'),
+			'creation_id' => Yii::t('attribute', 'Creation'),
+			'modified_date' => Yii::t('attribute', 'Modified Date'),
+			'modified_id' => Yii::t('attribute', 'Modified'),
+			'cover_input' => Yii::t('attribute', 'Cover (Photo)'),
+			'cover_old_input' => Yii::t('attribute', 'Old Cover (Photo)'),
 			'digital_file_input' => Yii::t('attribute', 'Digital File'),
 			'multiple_file_input' => Yii::t('attribute', 'Multiple File'),
 			'author_input' => Yii::t('attribute', 'Authors'),
 			'subject_input' => Yii::t('attribute', 'Subjects'),
 			'tag_input' => Yii::t('attribute', 'Tags'),
 			'editor_choice_input' => Yii::t('attribute', 'Editor Choice'),
-			'creation_date' => Yii::t('attribute', 'Creation Date'),
-			'creation_id' => Yii::t('attribute', 'Creation'),
-			'modified_date' => Yii::t('attribute', 'Modified Date'),
-			'modified_id' => Yii::t('attribute', 'Modified'),
 			'publisher_search' => Yii::t('attribute', 'Publisher'),
 			'cover_search' => Yii::t('attribute', 'Covers'),
 			'file_search' => Yii::t('attribute', 'Files'),
@@ -608,6 +612,16 @@ class Digitals extends CActiveRecord
 			else
 				$this->modified_id = Yii::app()->user->id;
 			
+			$cover_input = CUploadedFile::getInstance($this, 'cover_input');
+			if($cover_input->name != '') {
+				$extension = pathinfo($cover_input->name, PATHINFO_EXTENSION);
+				if(!in_array(strtolower($extension), $cover_file_type))
+					$this->addError('cover_input', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
+						'{name}'=>$cover_input->name,
+						'{extensions}'=>Utility::formatFileType($cover_file_type, false),
+					)));
+			}
+			
 			$digital_file_input = CUploadedFile::getInstance($this, 'digital_file_input');
 			if($digital_file_input->name != '') {
 				$extension = pathinfo($digital_file_input->name, PATHINFO_EXTENSION);
@@ -648,6 +662,7 @@ class Digitals extends CActiveRecord
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'digital_global_file_type, cover_limit, cover_resize, cover_resize_size, cover_file_type, digital_file_type, digital_path, form_standard, form_custom_field',
 		));
+		$cover_resize_size = unserialize($setting->cover_resize_size);
 		$digital_file_type = unserialize($setting->digital_file_type);
 		$form_custom_field = unserialize($setting->form_custom_field);
 		if(empty($form_custom_field))
@@ -727,6 +742,30 @@ class Digitals extends CActiveRecord
 			
 		} else
 			$digital_path = $this->digital_path;
+		
+		if($this->isNewRecord || (!$this->isNewRecord && $setting->cover_limit == 1)) {
+			$this->cover_input = CUploadedFile::getInstance($this, 'cover_input');
+			if($this->cover_input instanceOf CUploadedFile) {
+				$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital_title).'.'.strtolower($this->cover_input->extensionName);
+				if($this->cover_input->saveAs($digital_path.'/'.$fileName)) {
+					if($this->isNewRecord || (!$this->isNewRecord && $this->covers == null)) {
+						$cover = new DigitalCover;
+						$cover->digital_id = $this->digital_id;
+						$cover->status = 1;
+						$cover->cover_filename = $fileName;
+						$cover->save();
+					} else {
+						if($this->cover_old_input != '' && file_exists($digital_path.'/'.$this->cover_old_input))
+							rename($digital_path.'/'.$this->cover_old_input, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->cover_old_input);
+						$covers = $this->covers;
+						if(DigitalCover::model()->updateByPk($covers[0]->cover_id, array('cover_filename'=>$fileName))) {
+							if($setting->cover_resize == 1)
+								DigitalCover::resizeCover($digital_path.'/'.$fileName, $cover_resize_size);
+						}
+					}
+				}
+			}			
+		}
 		
 		if($this->isNewRecord || (!$this->isNewRecord && $action == 'upload')) {
 			$this->digital_file_input = CUploadedFile::getInstance($this, 'digital_file_input');

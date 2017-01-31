@@ -231,7 +231,7 @@ class AdminController extends Controller
 	public function actionEdit($id) 
 	{
 		$setting = DigitalSetting::model()->findByPk(1,array(
-			'select' => 'cover_limit, form_standard, form_custom_field',
+			'select' => 'cover_limit, cover_file_type, form_standard, form_custom_field',
 		));
 		$form_custom_field = unserialize($setting->form_custom_field);
 		if(empty($form_custom_field))

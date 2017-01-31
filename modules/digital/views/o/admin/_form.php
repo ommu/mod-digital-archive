@@ -14,6 +14,7 @@
  *
  */
 
+	$cover_file_type = unserialize($setting->cover_file_type);
 	$form_custom_field = unserialize($setting->form_custom_field);
 	if(empty($form_custom_field))
 		$form_custom_field = array();
@@ -49,6 +50,28 @@
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>
+
+				<?php if($model->isNewRecord || (!$model->isNewRecord && $setting->cover_limit == 1)) {?>
+				<div id="media" class="clearfix filter">
+					<?php echo $form->labelEx($model,'cover_input'); ?>
+					<div class="desc">
+						<?php if(!$model->isNewRecord) {
+							$covers = $model->covers;
+							if($covers != null) {
+								$model->cover_old_input = $covers[0]->cover_filename;
+								echo $form->hiddenField($model,'cover_old_input');
+								$cover = Yii::app()->request->baseUrl.'/public/digital/'.$model->view->uniquepath.'/'.$model->cover_old_input;?>
+								<div class="mb-10">
+									<img src="<?php echo Utility::getTimThumb($cover, 320, 150, 1);?>" alt="">
+								</div>
+						<?php }
+						}?>
+						<?php echo $form->fileField($model,'cover_input'); ?>
+						<?php echo $form->error($model,'cover_input'); ?>
+						<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($cover_file_type, false);?></span>
+					</div>
+				</div>
+				<?php }?>
 
 				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publisher_id', $form_custom_field))) {?>
 				<div class="clearfix">
