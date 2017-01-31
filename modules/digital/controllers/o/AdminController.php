@@ -10,14 +10,16 @@
  * TOC :
  *	Index
  *	Manage
- *	Upload
  *	Add
  *	Edit
  *	View
+ *	Upload
  *	RunAction
  *	Delete
  *	Publish
  *	Choice
+ *	Getcover
+ *	Insertcover
  *
  *	LoadModel
  *	performAjaxValidation
@@ -86,7 +88,7 @@ class AdminController extends Controller
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','upload','add','edit','view','runaction','delete','publish'),
+				'actions'=>array('manage','add','edit','view','upload','runaction','delete','publish','choice','getcover','insertcover'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -142,62 +144,10 @@ class AdminController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionUpload($id) 
-	{		
-		$setting = DigitalSetting::model()->findByPk(1,array(
-			'select' => 'digital_global_file_type, digital_file_type, form_standard, form_custom_field',
-		));
-		$digital_file_type = unserialize($setting->digital_file_type);
-		$form_custom_field = unserialize($setting->form_custom_field);
-		if(empty($form_custom_field))
-			$form_custom_field = array();
-		
-		ini_set('max_execution_time', 0);
-		ob_start();
-		
-		$model=$this->loadModel($id);
-		if($model != null) {
-			if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
-				$digital_file_type = unserialize($model->category->cat_file_type);
-			
-			// Uncomment the following line if AJAX validation is needed
-			$this->performAjaxValidation($model);
-
-			if(isset($_POST['Digitals'])) {
-				$model->attributes=$_POST['Digitals'];
-				
-				if($model->save()) {
-					Yii::app()->user->setFlash('success', Yii::t('phrase', 'Digitals success uploaded.'));
-					$this->redirect(array('edit','id'=>$model->digital_id));
-				}
-			}
-			
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('edit', array('id'=>$model->digital_id));
-			$this->dialogWidth = 600;
-
-			$this->pageTitle = Yii::t('phrase', 'Create Digital Categories');
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_upload',array(
-				'model'=>$model,
-				'digital_file_type'=>$digital_file_type,
-			));
-			
-		} else
-			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
-
-		ob_end_flush();
-	}
-	
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
 	public function actionAdd() 
 	{
 		$setting = DigitalSetting::model()->findByPk(1,array(
-			'select' => 'digital_global_file_type, cover_file_type, digital_file_type, form_standard, form_custom_field',
+			'select' => 'digital_global_file_type, cover_limit, cover_file_type, digital_file_type, form_standard, form_custom_field',
 		));
 		$digital_file_type = unserialize($setting->digital_file_type);
 		$form_custom_field = unserialize($setting->form_custom_field);
@@ -281,7 +231,7 @@ class AdminController extends Controller
 	public function actionEdit($id) 
 	{
 		$setting = DigitalSetting::model()->findByPk(1,array(
-			'select' => 'form_standard, form_custom_field',
+			'select' => 'cover_limit, form_standard, form_custom_field',
 		));
 		$form_custom_field = unserialize($setting->form_custom_field);
 		if(empty($form_custom_field))
@@ -375,6 +325,58 @@ class AdminController extends Controller
 			'model'=>$model,
 		));
 	}	
+	
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
+	public function actionUpload($id) 
+	{		
+		$setting = DigitalSetting::model()->findByPk(1,array(
+			'select' => 'digital_global_file_type, digital_file_type, form_standard, form_custom_field',
+		));
+		$digital_file_type = unserialize($setting->digital_file_type);
+		$form_custom_field = unserialize($setting->form_custom_field);
+		if(empty($form_custom_field))
+			$form_custom_field = array();
+		
+		ini_set('max_execution_time', 0);
+		ob_start();
+		
+		$model=$this->loadModel($id);
+		if($model != null) {
+			if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
+				$digital_file_type = unserialize($model->category->cat_file_type);
+			
+			// Uncomment the following line if AJAX validation is needed
+			$this->performAjaxValidation($model);
+
+			if(isset($_POST['Digitals'])) {
+				$model->attributes=$_POST['Digitals'];
+				
+				if($model->save()) {
+					Yii::app()->user->setFlash('success', Yii::t('phrase', 'Digitals success uploaded.'));
+					$this->redirect(array('edit','id'=>$model->digital_id));
+				}
+			}
+			
+			$this->dialogDetail = true;
+			$this->dialogGroundUrl = Yii::app()->controller->createUrl('edit', array('id'=>$model->digital_id));
+			$this->dialogWidth = 600;
+
+			$this->pageTitle = Yii::t('phrase', 'Create Digital Categories');
+			$this->pageDescription = '';
+			$this->pageMeta = '';
+			$this->render('admin_upload',array(
+				'model'=>$model,
+				'digital_file_type'=>$digital_file_type,
+			));
+			
+		} else
+			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
+
+		ob_end_flush();
+	}
 
 	/**
 	 * Displays a particular model.
@@ -567,6 +569,71 @@ class AdminController extends Controller
 			
 		} else 
 			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
+	}
+	
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
+	public function actionGetcover($id) 
+	{
+		$model=$this->loadModel($id);
+		$setting = DigitalSetting::model()->findByPk(1,array(
+			'select' => 'cover_limit',
+		));		
+		$covers = $model->covers;
+
+		$data = '';
+		if(isset($_GET['replace']))
+			$data .= $this->renderPartial('_view_cover_add', array('covers'=>$covers, 'setting'=>$setting), true, false);
+		
+		if($covers != null) {			
+			foreach($covers as $key => $val) {
+				$data .= $this->renderPartial('_view_covers', array('data'=>$val), true, false);
+			}
+		}
+		
+		$data .= '';
+		$result['data'] = $data;
+		echo CJSON::encode($result);
+	}
+
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
+	public function actionInsertcover($id) 
+	{
+		$setting = DigitalSetting::model()->findByPk(1,array(
+			'select' => 'cover_limit, cover_file_type, digital_path',
+		));
+		$cover_file_type = unserialize($setting->cover_file_type);
+			
+		//if(Yii::app()->request->isAjaxRequest) {
+			$model = $this->loadModel($id);
+			$pathUnique = Digitals::getUniqueDirectory($model->digital_id, $model->salt, $model->view->md5path);
+			if($setting != null)
+				$digital_path = $setting->digital_path.'/'.$pathUnique;
+			else
+				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+			
+			$uploadCover = CUploadedFile::getInstanceByName('namaFile');
+			$fileName = time().'_'.$model->digital_id.'_'.Utility::getUrlTitle($model->digital_title).'.'.strtolower($uploadCover->extensionName);
+			if($uploadCover->saveAs($digital_path.'/'.$fileName)) {
+				$cover = new DigitalCover;
+				$cover->digital_id = $model->digital_id;
+				$cover->cover_filename = $fileName;
+				if($cover->save()) {
+					$url = Yii::app()->controller->createUrl('getcover', array('id'=>$model->digital_id,'replace'=>'true'));
+					echo CJSON::encode(array(
+						'id' => 'media-render',
+						'get' => $url,
+					));
+				}
+			}
+			
+		//} else
+		//	throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 	}
 
 	/**

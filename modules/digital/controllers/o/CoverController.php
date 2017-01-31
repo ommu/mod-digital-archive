@@ -15,6 +15,7 @@
  *	RunAction
  *	Delete
  *	Publish
+ *	Setcover
  *
  *	LoadModel
  *	performAjaxValidation
@@ -83,7 +84,7 @@ class CoverController extends Controller
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','edit','view','runaction','delete','publish'),
+				'actions'=>array('manage','edit','view','runaction','delete','publish','setcover'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -249,19 +250,32 @@ class CoverController extends Controller
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
 			if(isset($id)) {
-				if($model->delete()) {
+				$model->delete();
+				
+				if(isset($_GET['hook']) && $_GET['hook'] == 'admin') {
+					$url = Yii::app()->controller->createUrl('getcover', array('id'=>$model->digital_id,'replace'=>'true'));
+					echo CJSON::encode(array(
+						'type' => 2,
+						'id' => 'media-render',
+						'get' => $url,
+					));					
+				} else {
 					echo CJSON::encode(array(
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
 						'id' => 'partial-digital-cover',
 						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'DigitalCover success deleted.').'</strong></div>',
-					));
+					));					
 				}
 			}
 
 		} else {
+			if(isset($_GET['hook']) && $_GET['hook'] == 'admin')
+				$dialogGroundUrl = Yii::app()->controller->createUrl('o/admin/edit', array('id'=>$model->digital_id));
+			else 
+				$dialogGroundUrl = Yii::app()->controller->createUrl('manage');				
 			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+			$this->dialogGroundUrl = $dialogGroundUrl;
 			$this->dialogWidth = 350;
 
 			$this->pageTitle = Yii::t('phrase', 'DigitalCover Delete.');
@@ -316,6 +330,55 @@ class CoverController extends Controller
 				'title'=>$title,
 				'model'=>$model,
 			));
+		}
+	}
+
+	/**
+	 * Deletes a particular model.
+	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param integer $id the ID of the model to be deleted
+	 */
+	public function actionSetcover($id) 
+	{
+		$model = $this->loadModel($id);
+		
+		if(Yii::app()->request->isPostRequest) {
+			// we only allow deletion via POST request
+			if(isset($id)) {				
+				$model->status = 1;
+				
+				if($model->update()) {
+					if(isset($_GET['hook']) && $_GET['hook'] == 'admin') {
+						$url = Yii::app()->controller->createUrl('o/admin/getcover', array('id'=>$model->digital_id,'replace'=>'true'));
+						echo CJSON::encode(array(
+							'type' => 2,
+							'id' => 'media-render',
+							'get' => $url,
+						));						
+					} else {
+						echo CJSON::encode(array(
+							'type' => 5,
+							'get' => Yii::app()->controller->createUrl('manage'),
+							'id' => 'partial-digital-cover',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'DigitalCover success updated.').'</strong></div>',
+						));							
+					}
+				}
+			}
+
+		} else {
+			if(isset($_GET['hook']) && $_GET['hook'] == 'admin')
+				$dialogGroundUrl = Yii::app()->controller->createUrl('o/admin/edit', array('id'=>$model->digital_id));
+			else 
+				$dialogGroundUrl = Yii::app()->controller->createUrl('manage');		
+			$this->dialogDetail = true;
+			$this->dialogGroundUrl = $dialogGroundUrl;
+			$this->dialogWidth = 350;
+
+			$this->pageTitle = Yii::t('phrase', 'Cover Photo');
+			$this->pageDescription = '';
+			$this->pageMeta = '';
+			$this->render('admin_cover');
 		}
 	}
 

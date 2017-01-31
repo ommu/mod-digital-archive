@@ -19,6 +19,7 @@
 		$model->digital_id=>array('view','id'=>$model->digital_id),
 		'Update',
 	);
+	$covers = $model->covers;
 ?>
 
 <div class="form">
@@ -28,3 +29,20 @@
 		'setting'=>$setting,
 	)); ?>
 </div>
+
+<?php if($setting->cover_limit != 1) {?>
+<div class="boxed mt-15">
+	<h3><?php echo Yii::t('phrase', 'Digital Photo and Cover'); ?></h3>
+	<div class="clearfix horizontal-data" name="four">
+		<ul id="media-render">
+			<?php 
+			$this->renderPartial('_view_cover_add', array('covers'=>$covers, 'setting'=>$setting));
+			if($covers != null) {
+				foreach($covers as $key => $val) {
+					$this->renderPartial('_view_covers', array('data'=>$val));
+				}
+			}?>
+		</ul>
+	</div>
+</div>
+<?php }?>

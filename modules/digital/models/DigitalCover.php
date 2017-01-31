@@ -345,6 +345,22 @@ class DigitalCover extends CActiveRecord
 	}
 
 	/**
+	 * Resize Cover
+	 */
+	public static function resizeCover($cover, $size) {
+		Yii::import('ext.phpthumb.PhpThumbFactory');
+		$resizeCover = PhpThumbFactory::create($cover, array('jpegQuality' => 90, 'correctPermissions' => true));
+		if($size['height'] == 0)
+			$resizeCover->resize($size['width']);
+		else			
+			$resizeCover->adaptiveResize($size['width'], $size['height']);
+		
+		$resizeCover->save($cover);
+		
+		return true;
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
@@ -377,34 +393,36 @@ class DigitalCover extends CActiveRecord
 	 * before save attributes
 	 */
 	protected function beforeSave() {
-		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);			
+		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'digital_path',
+			'select' => 'cover_resize, cover_resize_size, digital_path',
 		));
+		$cover_resize_size = unserialize($setting->cover_resize_size);
 		
-		if(parent::beforeSave()) 
-		{
-			if(!$this->isNewRecord && $currentAction == 'o/cover/edit') 
-			{
-				$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
-				if($setting != null)
-					$digital_path = $setting->digital_path.'/'.$pathUnique;
-				else
-					$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
-		
-				if(!file_exists($digital_path)) {
-					@mkdir($digital_path, 0755, true);
+		if(parent::beforeSave()) {
+			$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
+			if($setting != null)
+				$digital_path = $setting->digital_path.'/'.$pathUnique;
+			else
+				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+	
+			if(!file_exists($digital_path)) {
+				@mkdir($digital_path, 0755, true);
 
-					// Add file in directory (index.php)
-					$newFile = $digital_path.'/index.php';
-					$FileHandle = fopen($newFile, 'w');
-				} else 
-					@chmod($digital_path, 0755, true);
-				
+				// Add file in directory (index.php)
+				$newFile = $digital_path.'/index.php';
+				$FileHandle = fopen($newFile, 'w');
+			} else 
+				@chmod($digital_path, 0755, true);
+			
+			if(!$this->isNewRecord && $currentAction == 'o/cover/edit') {
 				$this->cover_filename = CUploadedFile::getInstance($this, 'cover_filename');
 				if($this->cover_filename instanceOf CUploadedFile) {
 					$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital->digital_title).'.'.strtolower($this->cover_filename->extensionName);
 					if($this->cover_filename->saveAs($digital_path.'/'.$fileName)) {
+						if($setting->cover_resize == 1)
+							self::resizeCover($digital_path.'/'.$fileName, $cover_resize_size);
+						
 						if($this->old_cover_filename_input != '' && file_exists($digital_path.'/'.$this->old_cover_filename_input))
 							rename($digital_path.'/'.$this->old_cover_filename_input, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->old_cover_filename_input);
 						$this->cover_filename = $fileName;
@@ -416,6 +434,53 @@ class DigitalCover extends CActiveRecord
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * After save attributes
+	 */
+	protected function afterSave() {
+		parent::afterSave();
+		
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'cover_limit, cover_resize, cover_resize_size, digital_path',
+		));
+		$cover_resize_size = unserialize($setting->cover_resize_size);
+		
+		$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
+		if($setting != null)
+			$digital_path = $setting->digital_path.'/'.$pathUnique;
+		else
+			$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+
+		if(!file_exists($digital_path)) {
+			@mkdir($digital_path, 0755, true);
+
+			// Add file in directory (index.php)
+			$newFile = $digital_path.'/index.php';
+			$FileHandle = fopen($newFile, 'w');
+		} else 
+			@chmod($digital_path, 0755, true);
+		
+		if($this->isNewRecord) {
+			if($setting->cover_resize == 1)
+				self::resizeCover($digital_path.'/'.$this->cover_filename, $cover_resize_size);
+		}
+			
+		//delete other cover (if cover_limit = 1)
+		if($setting->cover_limit == 1) {
+			self::model()->deleteAll(array(
+				'condition'=> 'digital_id = :id AND status = :status',
+				'params'=>array(
+					':id'=>$this->digital_id,
+					':cover'=>0,
+				),
+			));
+		}
+		
+		//update if new cover (status = 1)
+		if($this->status == 1)
+			self::model()->updateAll(array('status'=>0), 'cover_id <> :cover AND digital_id = :digital', array(':cover'=>$this->cover_id,':digital'=>$this->digital_id));
 	}
 
 	/**
@@ -436,6 +501,11 @@ class DigitalCover extends CActiveRecord
 		
 		if($this->cover_filename != '' && file_exists($digital_path.'/'.$this->cover_filename))
 			rename($digital_path.'/'.$this->cover_filename, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->cover_filename);
+
+		//reset cover in article
+		$covers = $this->digital->covers;
+		if($covers != null && $this->status == 1)
+			self::model()->updateByPk($covers[0]->cover_id, array('status'=>1));
 	}
 
 }
