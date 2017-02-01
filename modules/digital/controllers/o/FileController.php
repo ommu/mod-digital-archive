@@ -111,6 +111,14 @@ class FileController extends Controller
 	 */
 	public function actionManage() 
 	{
+		$id = $_GET['digital'];
+		$digital_title = '';
+		if(isset($id) && $id != '') {
+			$digital = Digitals::model()->findByPk($id);
+			if($digital != null)
+				$digital_title = ': '.$digital->digital_title;
+		}
+		
 		$model=new DigitalFile('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['DigitalFile'])) {
@@ -127,7 +135,7 @@ class FileController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Digital Files Manage');
+		$this->pageTitle = Yii::t('phrase', 'Digital Files Manage').$digital_title;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(

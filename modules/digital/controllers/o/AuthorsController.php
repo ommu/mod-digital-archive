@@ -107,6 +107,14 @@ class AuthorsController extends Controller
 	 */
 	public function actionManage() 
 	{
+		$id = $_GET['digital'];
+		$digital_title = '';
+		if(isset($id) && $id != '') {
+			$digital = Digitals::model()->findByPk($id);
+			if($digital != null)
+				$digital_title = ': '.$digital->digital_title;
+		}
+		
 		$model=new DigitalAuthors('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['DigitalAuthors'])) {
@@ -123,7 +131,7 @@ class AuthorsController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Digital Authors Manage');
+		$this->pageTitle = Yii::t('phrase', 'Digital Authors Manage').$digital_title;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(

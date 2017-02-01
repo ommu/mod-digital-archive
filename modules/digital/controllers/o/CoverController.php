@@ -112,6 +112,14 @@ class CoverController extends Controller
 	 */
 	public function actionManage() 
 	{
+		$id = $_GET['digital'];
+		$digital_title = '';
+		if(isset($id) && $id != '') {
+			$digital = Digitals::model()->findByPk($id);
+			if($digital != null)
+				$digital_title = ': '.$digital->digital_title;
+		}
+		
 		$model=new DigitalCover('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['DigitalCover'])) {
@@ -128,7 +136,7 @@ class CoverController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Digital Covers Manage');
+		$this->pageTitle = Yii::t('phrase', 'Digital Covers Manage').$digital_title;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(

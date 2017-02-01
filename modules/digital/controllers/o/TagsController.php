@@ -107,6 +107,14 @@ class TagsController extends Controller
 	 */
 	public function actionManage() 
 	{
+		$id = $_GET['digital'];
+		$digital_title = '';
+		if(isset($id) && $id != '') {
+			$digital = Digitals::model()->findByPk($id);
+			if($digital != null)
+				$digital_title = ': '.$digital->digital_title;
+		}
+		
 		$model=new DigitalTags('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['DigitalTags'])) {
@@ -123,7 +131,7 @@ class TagsController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Digital Tags Manage');
+		$this->pageTitle = Yii::t('phrase', 'Digital Tags Manage').$digital_title;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(

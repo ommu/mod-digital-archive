@@ -107,6 +107,14 @@ class SubjectsController extends Controller
 	 */
 	public function actionManage() 
 	{
+		$id = $_GET['digital'];
+		$digital_title = '';
+		if(isset($id) && $id != '') {
+			$digital = Digitals::model()->findByPk($id);
+			if($digital != null)
+				$digital_title = ': '.$digital->digital_title;
+		}
+		
 		$model=new DigitalSubjects('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['DigitalSubjects'])) {
@@ -123,7 +131,7 @@ class SubjectsController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Digital Subjects Manage');
+		$this->pageTitle = Yii::t('phrase', 'Digital Subjects Manage').$digital_title;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
