@@ -36,6 +36,7 @@
 class DigitalCover extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $digital_title_input;
 	public $old_cover_filename_input;
 	
 	// Variable Search
@@ -71,10 +72,12 @@ class DigitalCover extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('digital_id', 'required'),
+			array('
+				digital_title_input', 'required', 'on'=>'formCoverInsert'),
 			array('publish, status', 'numerical', 'integerOnly'=>true),
 			array('digital_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('cover_filename,
-				old_cover_filename_input', 'safe'),
+				digital_title_input, old_cover_filename_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cover_id, publish, status, digital_id, cover_filename, creation_date, creation_id, modified_date, modified_id,
@@ -104,14 +107,15 @@ class DigitalCover extends CActiveRecord
 		return array(
 			'cover_id' => Yii::t('attribute', 'Cover'),
 			'publish' => Yii::t('attribute', 'Publish'),
-			'status' => Yii::t('attribute', 'Status'),
+			'status' => Yii::t('attribute', 'Cover'),
 			'digital_id' => Yii::t('attribute', 'Digital'),
-			'cover_filename' => Yii::t('attribute', 'Cover'),
+			'cover_filename' => Yii::t('attribute', 'Cover (File)'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
-			'old_cover_filename_input' => Yii::t('attribute', 'Old Cover'),
+			'digital_title_input' => Yii::t('attribute', 'Digital Title'),
+			'old_cover_filename_input' => Yii::t('attribute', 'Old Cover (File)'),
 			'digital_search' => Yii::t('attribute', 'Digital'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
@@ -376,14 +380,20 @@ class DigitalCover extends CActiveRecord
 			else
 				$this->modified_id = Yii::app()->user->id;
 			
-			$cover_filename = CUploadedFile::getInstance($this, 'cover_filename');
-			if($currentAction == 'o/cover/edit' && $cover_filename->name != '') {
-				$extension = pathinfo($cover_filename->name, PATHINFO_EXTENSION);
-				if(!in_array(strtolower($extension), $cover_file_type))
-					$this->addError('cover_filename', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
-						'{name}'=>$cover_filename->name,
-						'{extensions}'=>Utility::formatFileType($cover_file_type, false),
-					)));
+			if($currentAction != 'o/admin/insertcover') {
+				$cover_filename = CUploadedFile::getInstance($this, 'cover_filename');
+				if($cover_filename != null) {
+					$extension = pathinfo($cover_filename->name, PATHINFO_EXTENSION);
+					if(!in_array(strtolower($extension), $cover_file_type))
+						$this->addError('cover_filename', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
+							'{name}'=>$cover_filename->name,
+							'{extensions}'=>Utility::formatFileType($cover_file_type, false),
+						)));
+						
+				} else {
+					if($this->isNewRecord)
+						$this->addError('cover_filename', 'Cover (File) cannot be blank.');
+				}
 			}
 		}
 		return true;
@@ -414,18 +424,22 @@ class DigitalCover extends CActiveRecord
 			} else 
 				@chmod($digital_path, 0755, true);
 			
-			if(!$this->isNewRecord && $currentAction == 'o/cover/edit') {
+			if($currentAction != 'o/admin/insertcover') {
 				$this->cover_filename = CUploadedFile::getInstance($this, 'cover_filename');
-				if($this->cover_filename instanceOf CUploadedFile) {
-					$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital->digital_title).'.'.strtolower($this->cover_filename->extensionName);
-					if($this->cover_filename->saveAs($digital_path.'/'.$fileName)) {						
-						if($this->old_cover_filename_input != '' && file_exists($digital_path.'/'.$this->old_cover_filename_input))
-							rename($digital_path.'/'.$this->old_cover_filename_input, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->old_cover_filename_input);
-						$this->cover_filename = $fileName;
+				if($this->cover_filename != null) {
+					if($this->cover_filename instanceOf CUploadedFile) {
+						$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital->digital_title).'.'.strtolower($this->cover_filename->extensionName);
+						if($this->cover_filename->saveAs($digital_path.'/'.$fileName)) {						
+							if(!$this->isNewRecord) {
+								if($this->old_cover_filename_input != '' && file_exists($digital_path.'/'.$this->old_cover_filename_input))
+									rename($digital_path.'/'.$this->old_cover_filename_input, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->old_cover_filename_input);
+							}
+							$this->cover_filename = $fileName;
+						}
 					}
-				}					
-				if($this->cover_filename == '') {
-					$this->cover_filename = $this->old_cover_filename_input;
+				} else {
+					if(!$this->isNewRecord && $this->cover_filename == '')
+						$this->cover_filename = $this->old_cover_filename_input;
 				}
 			}
 		}
@@ -459,18 +473,22 @@ class DigitalCover extends CActiveRecord
 			@chmod($digital_path, 0755, true);
 		
 		//resize cover after upload
-		if($setting->cover_resize == 1)
+		if($setting->cover_resize == 1 && $this->cover_filename != '')
 			self::resizeCover($digital_path.'/'.$this->cover_filename, $cover_resize_size);
 			
 		//delete other cover (if cover_limit = 1)
 		if($setting->cover_limit == 1) {
-			self::model()->deleteAll(array(
-				'condition'=> 'digital_id = :id AND status = :status',
+			$covers = self::model()->findAll(array(
+				'condition'=> 'cover_id <> :cover_id AND digital_id = :digital_id',
 				'params'=>array(
-					':id'=>$this->digital_id,
-					':status'=>0,
+					':cover_id'=>$this->cover_id,
+					':digital_id'=>$this->digital_id,
 				),
 			));
+			if($covers != null) {
+				foreach($covers as $key => $val)
+					DigitalCover::model()->findByPk($val->cover_id)->delete();
+			}
 		}
 		
 		//update if new cover (status = 1)

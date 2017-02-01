@@ -9,6 +9,7 @@
  *
  * TOC :
  *	Index
+ *	Suggest
  *	Manage
  *	Add
  *	Edit
@@ -82,7 +83,7 @@ class AdminController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array(),
+				'actions'=>array('suggest'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level)',
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
@@ -108,6 +109,35 @@ class AdminController extends Controller
 	public function actionIndex() 
 	{
 		$this->redirect(array('manage'));
+	}
+	
+	/**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
+	public function actionSuggest($limit=10) 
+	{
+		if(Yii::app()->request->isAjaxRequest) {
+			if(isset($_GET['term'])) {
+				$criteria = new CDbCriteria;
+				$criteria->condition = 'digital_title LIKE :digital_title';
+				$criteria->select	= "digital_id, digital_title";
+				$criteria->limit = $limit;
+				$criteria->order = "digital_id ASC";
+				$criteria->params = array(':digital_title' => '%' . strtolower($_GET['term']) . '%');
+				$model = Digitals::model()->findAll($criteria);
+
+				if($model) {
+					foreach($model as $items)
+						$result[] = array('id' => $items->digital_id, 'value' => $items->digital_title);
+				}
+			}
+			echo CJSON::encode($result);
+			Yii::app()->end();
+			
+		} else
+			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 	}
 
 	/**

@@ -28,36 +28,72 @@
 
 		<?php //begin.Messages ?>
 		<div id="ajax-message">
-			<?php echo $form->errorSummary($model); ?>
+			<?php //echo $form->errorSummary($model); ?>
 		</div>
 		<?php //begin.Messages ?>
+		
+		<?php if($model->isNewRecord && $digital == null) {?>
+			<div class="clearfix publish">
+				<?php echo $form->labelEx($model,'digital_title_input'); ?>
+				<div class="desc">
+					<?php 
+					//echo $form->textField($model,'digital_title_input', array('class'=>'span-8'));		
+					$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+						'model' => $model,
+						'attribute' => 'digital_title_input',
+						'source' => Yii::app()->controller->createUrl('o/admin/suggest'),
+						'options' => array(
+							//'delay '=> 50,
+							'minLength' => 1,
+							'showAnim' => 'fold',
+							'select' => "js:function(event, ui) {
+								$('form #DigitalCover_digital_title_input').val(ui.item.value);
+								$('form #DigitalCover_digital_id').val(ui.item.id);
+							}"
+						),
+						'htmlOptions' => array(
+							'class'	=> 'span-8',
+						),
+					));
+					echo $form->hiddenField($model,'digital_id'); ?>
+					<?php echo $form->error($model,'digital_title_input'); ?>
+					<?php /*<div class="small-px silent"></div>*/?>
+				</div>
+			</div>
+		<?php }?>
 
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'cover_filename'); ?>
 			<div class="desc">
 				<?php 
-				if(!$model->isNewRecord && $model->cover_filename != '') {
+				if(!$model->getErrors())
 					$model->old_cover_filename_input = $model->cover_filename;
+				if(!$model->isNewRecord && $model->old_cover_filename_input != '') {
 					echo $form->hiddenField($model,'old_cover_filename_input');
-					$media = $digital_path.'/'.$model->old_cover_filename_input;?>
-						<img class="mb-10" src="<?php echo Utility::getTimThumb($media, 400, 400, 3);?>" alt="">
+					$media = Yii::app()->request->baseUrl.'/public/digital/'.$model->digital->view->uniquepath.'/'.$model->old_cover_filename_input;?>
+						<img class="mb-10" src="<?php echo Utility::getTimThumb($media, 300, 400, 3);?>" alt="">
 				<?php }
-				echo $form->fileField($model,'cover_filename',array('rows'=>6, 'cols'=>50)); ?>
+				echo $form->fileField($model,'cover_filename'); ?>
 				<?php echo $form->error($model,'cover_filename'); ?>
 				<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($cover_file_type, false);?></span>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 
-		<div class="clearfix publish">
-			<?php echo $form->labelEx($model,'status'); ?>
-			<div class="desc">
-				<?php echo $form->checkBox($model,'status'); ?>
+		<?php if($setting->cover_limit == 1) {
+			$model->status = 1;
+			echo $form->hiddenField($model,'status');?>
+		<?php } else {?>
+			<div class="clearfix publish">
 				<?php echo $form->labelEx($model,'status'); ?>
-				<?php echo $form->error($model,'status'); ?>
-				<?php /*<div class="small-px silent"></div>*/?>
+				<div class="desc">
+					<?php echo $form->checkBox($model,'status'); ?>
+					<?php echo $form->labelEx($model,'status'); ?>
+					<?php echo $form->error($model,'status'); ?>
+					<?php /*<div class="small-px silent"></div>*/?>
+				</div>
 			</div>
-		</div>
+		<?php }?>
 
 		<div class="clearfix publish">
 			<?php echo $form->labelEx($model,'publish'); ?>

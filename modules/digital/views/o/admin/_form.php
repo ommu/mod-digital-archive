@@ -62,7 +62,7 @@
 								echo $form->hiddenField($model,'cover_old_input');
 								$cover = Yii::app()->request->baseUrl.'/public/digital/'.$model->view->uniquepath.'/'.$model->cover_old_input;?>
 								<div class="mb-10">
-									<img src="<?php echo Utility::getTimThumb($cover, 320, 150, 1);?>" alt="">
+									<img src="<?php echo Utility::getTimThumb($cover, 300, 400, 3);?>" alt="">
 								</div>
 						<?php }
 						}?>

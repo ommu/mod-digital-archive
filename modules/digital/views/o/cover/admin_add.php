@@ -16,13 +16,13 @@
 
 	$this->breadcrumbs=array(
 		'Digital Covers'=>array('manage'),
-		$model->cover_id=>array('view','id'=>$model->cover_id),
-		'Update',
+		'Create',
 	);
 ?>
 
 <?php echo $this->renderPartial('_form', array(
 	'model'=>$model, 
+	'digital'=>$digital,
 	'setting'=>$setting,
 	'cover_file_type'=>$cover_file_type,
 )); ?>

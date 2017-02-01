@@ -10,6 +10,7 @@
  * TOC :
  *	Index
  *	Manage
+ *	Add
  *	Edit
  *	View
  *	RunAction
@@ -84,7 +85,7 @@ class CoverController extends Controller
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','edit','view','runaction','delete','publish','setcover'),
+				'actions'=>array('manage','add','edit','view','runaction','delete','publish','setcover'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -141,19 +142,69 @@ class CoverController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
+	public function actionAdd() 
+	{
+		$id = $_GET['id'];
+		$digital_title = '';
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'cover_limit, cover_file_type',
+		));
+		$cover_file_type = unserialize($setting->cover_file_type);	
+		
+		if(isset($id) && $id != '') {
+			$digital = Digitals::model()->findByPk($id);
+			if($digital != null)
+				$digital_title = ': '.$digital->digital_title;
+		}
+		
+		$model=new DigitalCover;
+
+		// Uncomment the following line if AJAX validation is needed
+		$this->performAjaxValidation($model);
+
+		if(isset($_POST['DigitalCover'])) {
+			$model->attributes=$_POST['DigitalCover'];
+			if($digital == null)
+				$model->scenario = 'formCoverInsert';
+			
+			if($digital != null)
+				$model->digital_id = $digital->digital_id;
+			
+			if($model->save()) {
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'DigitalCover success updated.'));
+				//$this->redirect(array('view','id'=>$model->cover_id));
+				$this->redirect(array('manage'));
+			}
+		}
+		
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+		
+		$this->pageTitle = Yii::t('phrase', 'Create Digital Covers').$digital_title;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_add',array(
+			'model'=>$model,
+			'digital'=>$digital,
+			'setting'=>$setting,
+			'cover_file_type'=>$cover_file_type,
+		));
+	}
+
+	/**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
 	public function actionEdit($id) 
 	{
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'cover_file_type, digital_path',
+			'select' => 'cover_limit, cover_file_type',
 		));
 		$cover_file_type = unserialize($setting->cover_file_type);
 		
-		$model=$this->loadModel($id);	
-		$pathUnique = Digitals::getUniqueDirectory($model->digital_id, $model->digital->salt, $model->digital->view->md5path);
-		if($setting != null)
-			$digital_path = $setting->digital_path.'/'.$pathUnique;
-		else
-			$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
@@ -177,7 +228,7 @@ class CoverController extends Controller
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
 			'model'=>$model,
-			'digital_path'=>$digital_path,
+			'setting'=>$setting,
 			'cover_file_type'=>$cover_file_type,
 		));
 	}
