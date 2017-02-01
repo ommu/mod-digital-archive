@@ -16,13 +16,13 @@
 
 	$this->breadcrumbs=array(
 		'Digital Files'=>array('manage'),
-		$model->file_id=>array('view','id'=>$model->file_id),
-		'Update',
+		'Create',
 	);
 ?>
 
 <?php echo $this->renderPartial('_form', array(
 	'model'=>$model, 
+	'digital'=>$digital,
 	'setting'=>$setting,
 	'digital_file_type'=>$digital_file_type,
 )); ?>

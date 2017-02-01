@@ -35,6 +35,7 @@
 class DigitalFile extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $digital_title_input;
 	public $old_digital_filename_input;
 	
 	// Variable Search
@@ -70,10 +71,12 @@ class DigitalFile extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('digital_id', 'required'),
+			array('
+				digital_title_input', 'required', 'on'=>'formFileInsert'),
 			array('publish', 'numerical', 'integerOnly'=>true),
 			array('digital_id, creation_id, modified_id', 'length', 'max'=>11),
-			array('digital_filename, 
-				old_digital_filename_input', 'safe'),
+			array('digital_filename, 				
+				digital_title_input, old_digital_filename_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('file_id, publish, digital_id, digital_filename, creation_date, creation_id, modified_date, modified_id,
@@ -109,6 +112,7 @@ class DigitalFile extends CActiveRecord
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
+			'digital_title_input' => Yii::t('attribute', 'Digital Title'),
 			'old_digital_filename_input' => Yii::t('attribute', 'Old File'),
 			'digital_search' => Yii::t('attribute', 'Digital'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
@@ -349,13 +353,16 @@ class DigitalFile extends CActiveRecord
 				$this->modified_id = Yii::app()->user->id;
 			
 			$digital_filename = CUploadedFile::getInstance($this, 'digital_filename');
-			if($currentAction == 'o/file/edit' && $digital_filename->name != '') {
+			if($digital_filename != null) {
 				$extension = pathinfo($digital_filename->name, PATHINFO_EXTENSION);
 				if(!in_array(strtolower($extension), $digital_file_type))
 					$this->addError('digital_filename', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
 						'{name}'=>$digital_filename->name,
 						'{extensions}'=>Utility::formatFileType($digital_file_type, false),
 					)));
+			} else {
+				if($this->isNewRecord)
+					$this->addError('digital_filename', 'File cannot be blank.');				
 			}
 		}
 		return true;
@@ -370,37 +377,38 @@ class DigitalFile extends CActiveRecord
 			'select' => 'digital_path',
 		));
 		
-		if(parent::beforeSave()) 
-		{
-			if(!$this->isNewRecord && $currentAction == 'o/file/edit') 
-			{
-				$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
-				if($setting != null)
-					$digital_path = $setting->digital_path.'/'.$pathUnique;
-				else
-					$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
-		
-				if(!file_exists($digital_path)) {
-					@mkdir($digital_path, 0755, true);
+		if(parent::beforeSave()) {
+			$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
+			if($setting != null)
+				$digital_path = $setting->digital_path.'/'.$pathUnique;
+			else
+				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+	
+			if(!file_exists($digital_path)) {
+				@mkdir($digital_path, 0755, true);
 
-					// Add file in directory (index.php)
-					$newFile = $digital_path.'/index.php';
-					$FileHandle = fopen($newFile, 'w');
-				} else 
-					@chmod($digital_path, 0755, true);
-				
-				$this->digital_filename = CUploadedFile::getInstance($this, 'digital_filename');
+				// Add file in directory (index.php)
+				$newFile = $digital_path.'/index.php';
+				$FileHandle = fopen($newFile, 'w');
+			} else 
+				@chmod($digital_path, 0755, true);
+			
+			$this->digital_filename = CUploadedFile::getInstance($this, 'digital_filename');
+			if($this->digital_filename != null) {
 				if($this->digital_filename instanceOf CUploadedFile) {
 					$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital->digital_title).'.'.strtolower($this->digital_filename->extensionName);
 					if($this->digital_filename->saveAs($digital_path.'/'.$fileName)) {
-						if($this->old_digital_filename_input != '' && file_exists($digital_path.'/'.$this->old_digital_filename_input))
-							rename($digital_path.'/'.$this->old_digital_filename_input, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->old_digital_filename_input);
+						if(!$this->isNewRecord) {
+							if($this->old_digital_filename_input != '' && file_exists($digital_path.'/'.$this->old_digital_filename_input))
+								rename($digital_path.'/'.$this->old_digital_filename_input, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->old_digital_filename_input);
+						}
 						$this->digital_filename = $fileName;
 					}
-				}					
-				if($this->digital_filename == '') {
-					$this->digital_filename = $this->old_digital_filename_input;
 				}
+			} else {
+				if(!$this->isNewRecord && $this->digital_filename == '') {
+					$this->digital_filename = $this->old_digital_filename_input;
+				}					
 			}
 		}
 		return true;

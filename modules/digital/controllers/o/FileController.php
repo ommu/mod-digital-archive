@@ -10,6 +10,7 @@
  * TOC :
  *	Index
  *	Manage
+ *	Add
  *	Edit
  *	View
  *	RunAction
@@ -83,7 +84,7 @@ class FileController extends Controller
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','edit','view','runaction','delete','publish'),
+				'actions'=>array('manage','add','edit','view','runaction','delete','publish'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -133,7 +134,68 @@ class FileController extends Controller
 			'model'=>$model,
 			'columns' => $columns,
 		));
-	}	
+	}
+	
+	/**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
+	public function actionAdd() 
+	{
+		$id = $_GET['id'];
+		$digital_title = '';
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'digital_global_file_type, digital_file_type, form_standard, form_custom_field',
+		));
+		$digital_file_type = unserialize($setting->digital_file_type);
+		$form_custom_field = unserialize($setting->form_custom_field);
+		if(empty($form_custom_field))
+			$form_custom_field = array();
+		
+		if(isset($id) && $id != '') {
+			$digital = Digitals::model()->findByPk($id);
+			if($digital != null)
+				$digital_title = ': '.$digital->digital_title;
+		}
+		
+		$model=new DigitalFile;
+
+		if($digital != null && $setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
+			$digital_file_type = unserialize($digital->category->cat_file_type);
+
+		// Uncomment the following line if AJAX validation is needed
+		$this->performAjaxValidation($model);
+
+		if(isset($_POST['DigitalFile'])) {
+			$model->attributes=$_POST['DigitalFile'];
+			if($digital == null)
+				$model->scenario = 'formFileInsert';
+			
+			if($digital != null)
+				$model->digital_id = $digital->digital_id;
+			
+			if($model->save()) {
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'DigitalFile success updated.'));
+				//$this->redirect(array('view','id'=>$model->file_id));
+				$this->redirect(array('manage'));
+			}
+		}
+		
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+
+		$this->pageTitle = Yii::t('phrase', 'Update Digital Files').$digital_title;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_add',array(
+			'model'=>$model,
+			'digital'=>$digital,
+			'setting'=>$setting,
+			'digital_file_type'=>$digital_file_type,
+		));
+	}
 	
 	/**
 	 * Updates a particular model.
@@ -143,7 +205,7 @@ class FileController extends Controller
 	public function actionEdit($id) 
 	{
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'digital_global_file_type, digital_file_type, digital_path, form_standard, form_custom_field',
+			'select' => 'digital_global_file_type, digital_file_type, form_standard, form_custom_field',
 		));
 		$digital_file_type = unserialize($setting->digital_file_type);
 		$form_custom_field = unserialize($setting->form_custom_field);
@@ -151,12 +213,6 @@ class FileController extends Controller
 			$form_custom_field = array();
 		
 		$model=$this->loadModel($id);
-		
-		$pathUnique = Digitals::getUniqueDirectory($model->digital_id, $model->digital->salt, $model->digital->view->md5path);
-		if($setting != null)
-			$digital_path = $setting->digital_path.'/'.$pathUnique;
-		else
-			$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
 
 		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
 			$digital_file_type = unserialize($model->digital->category->cat_file_type);		
@@ -183,7 +239,7 @@ class FileController extends Controller
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
 			'model'=>$model,
-			'digital_path'=>$digital_path,
+			'setting'=>$setting,
 			'digital_file_type'=>$digital_file_type,
 		));
 	}

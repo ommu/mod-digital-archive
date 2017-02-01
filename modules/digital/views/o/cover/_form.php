@@ -33,7 +33,7 @@
 		<?php //begin.Messages ?>
 		
 		<?php if($model->isNewRecord && $digital == null) {?>
-			<div class="clearfix publish">
+			<div class="clearfix">
 				<?php echo $form->labelEx($model,'digital_title_input'); ?>
 				<div class="desc">
 					<?php 
