@@ -615,12 +615,11 @@ class AdminController extends Controller
 
 		$data = '';
 		if(isset($_GET['replace']))
-			$data .= $this->renderPartial('_view_cover_add', array('covers'=>$covers, 'setting'=>$setting), true, false);
+			$data .= $this->renderPartial('_form_cover', array('covers'=>$covers, 'setting'=>$setting), true, false);
 		
 		if($covers != null) {			
-			foreach($covers as $key => $val) {
-				$data .= $this->renderPartial('_view_covers', array('data'=>$val), true, false);
-			}
+			foreach($covers as $key => $val)
+				$data .= $this->renderPartial('_form_view_covers', array('data'=>$val), true, false);
 		}
 		
 		$data .= '';

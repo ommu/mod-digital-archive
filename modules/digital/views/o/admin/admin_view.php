@@ -25,82 +25,116 @@
 		array(
 			'name'=>'digital_id',
 			'value'=>$model->digital_id,
-			//'value'=>$model->digital_id != '' ? $model->digital_id : '-',
 		),
 		array(
 			'name'=>'publish',
-			'value'=>$model->publish == '1' ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
-			//'value'=>$model->publish,
+			'value'=>$model->publish == 1 ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
+			'type'=>'raw',
+		),
+		array(
+			'name'=>'content_verified',
+			'value'=>$model->content_verified == 1 ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
+			'type'=>'raw',
 		),
 		array(
 			'name'=>'cat_id',
-			'value'=>$model->cat_id,
-			//'value'=>$model->cat_id != '' ? $model->cat_id : '-',
-		),
-		array(
-			'name'=>'publisher_id',
-			'value'=>$model->publisher_id,
-			//'value'=>$model->publisher_id != '' ? $model->publisher_id : '-',
-		),
-		array(
-			'name'=>'language_id',
-			'value'=>$model->language_id,
-			//'value'=>$model->language_id != '' ? $model->language_id : '-',
-		),
-		array(
-			'name'=>'opac_id',
-			'value'=>$model->opac_id,
-			//'value'=>$model->opac_id != '' ? $model->opac_id : '-',
+			'value'=>$model->cat_id != null ? CHtml::link($model->category->cat_title, Yii::app()->controller->createUrl('o/admin/manage',array('category'=>$model->cat_id))) : '-',
+			'type'=>'raw',
 		),
 		array(
 			'name'=>'digital_code',
-			'value'=>$model->digital_code,
-			//'value'=>$model->digital_code != '' ? $model->digital_code : '-',
+			'value'=>$model->digital_code != '' ? $model->digital_code : '-',
 		),
 		array(
 			'name'=>'digital_title',
 			'value'=>$model->digital_title != '' ? $model->digital_title : '-',
-			//'value'=>$model->digital_title != '' ? CHtml::link($model->digital_title, Yii::app()->request->baseUrl.'/public/visit/'.$model->digital_title, array('target' => '_blank')) : '-',
-			'type'=>'raw',
 		),
 		array(
 			'name'=>'digital_intro',
 			'value'=>$model->digital_intro != '' ? $model->digital_intro : '-',
-			//'value'=>$model->digital_intro != '' ? CHtml::link($model->digital_intro, Yii::app()->request->baseUrl.'/public/visit/'.$model->digital_intro, array('target' => '_blank')) : '-',
 			'type'=>'raw',
+		),
+		array(
+			'name'=>'publisher_id',
+			'value'=>$model->publisher_id != null ? $model->publisher->publisher_name : '-',
 		),
 		array(
 			'name'=>'publish_year',
 			'value'=>$model->publish_year,
-			//'value'=>$model->publish_year != '' ? $model->publish_year : '-',
+			'value'=>!in_array($model->publish_year, array('0000','1970')) ? $model->publish_year : '-',
 		),
 		array(
 			'name'=>'publish_location',
 			'value'=>$model->publish_location != '' ? $model->publish_location : '-',
-			//'value'=>$model->publish_location != '' ? CHtml::link($model->publish_location, Yii::app()->request->baseUrl.'/public/visit/'.$model->publish_location, array('target' => '_blank')) : '-',
+		),
+		array(
+			'name'=>'language_id',
+			'value'=>$model->language_id != null ? $model->language->language_name : '-',
+		),
+		array(
+			'name'=>'authors',
+			'value'=>$model->authors != null ? $this->renderPartial('_view_authors', array('authors'=>$model->authors), true, false) : '-',
+			'type'=>'raw',
+		),
+		array(
+			'name'=>'covers',
+			'value'=>$model->covers != null ? $this->renderPartial('_view_covers', array('covers'=>$model->covers), true, false) : '-',
+			'type'=>'raw',
+		),
+		array(
+			'name'=>'files',
+			'value'=>$model->files != null ? $this->renderPartial('_view_files', array('files'=>$model->files), true, false) : '-',
+			'type'=>'raw',
+		),
+		array(
+			'name'=>'subjects',
+			'value'=>$model->subjects != null ? $this->renderPartial('_view_subjects', array('subjects'=>$model->subjects), true, false) : '-',
+			'type'=>'raw',
+		),
+		array(
+			'name'=>'tags',
+			'value'=>$model->tags != null ? $this->renderPartial('_view_tags', array('tags'=>$model->tags), true, false) : '-',
 			'type'=>'raw',
 		),
 		array(
 			'name'=>'isbn',
-			'value'=>$model->isbn,
-			//'value'=>$model->isbn != '' ? $model->isbn : '-',
-		),
-		array(
-			'name'=>'subjects',
-			'value'=>$model->subjects != '' ? $model->subjects : '-',
-			//'value'=>$model->subjects != '' ? CHtml::link($model->subjects, Yii::app()->request->baseUrl.'/public/visit/'.$model->subjects, array('target' => '_blank')) : '-',
-			'type'=>'raw',
+			'value'=>$model->isbn != '' ? $model->isbn : '-',
 		),
 		array(
 			'name'=>'pages',
-			'value'=>$model->pages,
-			//'value'=>$model->pages != '' ? $model->pages : '-',
+			'value'=>$model->pages != '' ? $model->pages : '-',
 		),
 		array(
 			'name'=>'series',
 			'value'=>$model->series != '' ? $model->series : '-',
-			//'value'=>$model->series != '' ? CHtml::link($model->series, Yii::app()->request->baseUrl.'/public/visit/'.$model->series, array('target' => '_blank')) : '-',
-			'type'=>'raw',
+		),
+		array(
+			'name'=>'opac_id',
+			'value'=>$model->opac_id != 0 ? $model->opac_id : '-',
+		),
+		array(
+			'name'=>'choices',
+			'value'=>$model->choices != null ? $model->view->choices : '-',
+		),
+		array(
+			'name'=>'views',
+			'value'=>$model->views != null ? $model->view->views : '-',
+		),
+		array(
+			'name'=>'likes',
+			'value'=>$model->likes != null ? $model->view->likes : '-',
+		),
+		array(
+			'name'=>'downloads',
+			'value'=>$model->view->downloads != null ? $model->view->downloads : '-',
+		),
+		array(
+			'name'=>'digital_path',
+			'value'=>$model->digital_path != '' ? $model->digital_path : '-',
+		),
+		array(
+			'name'=>'salt',
+			'value'=>$model->salt != '' ? $model->salt : '-',
 		),
 		array(
 			'name'=>'creation_date',
@@ -108,8 +142,7 @@
 		),
 		array(
 			'name'=>'creation_id',
-			'value'=>$model->creation_id,
-			//'value'=>$model->creation_id != 0 ? $model->creation_id : '-',
+			'value'=>$model->creation_id != 0 ? $model->creation->displayname : '-',
 		),
 		array(
 			'name'=>'modified_date',
@@ -117,8 +150,7 @@
 		),
 		array(
 			'name'=>'modified_id',
-			'value'=>$model->modified_id,
-			//'value'=>$model->modified_id != 0 ? $model->modified_id : '-',
+			'value'=>$model->modified_id != 0 ? $model->modified->displayname : '-',
 		),
 	),
 )); ?>

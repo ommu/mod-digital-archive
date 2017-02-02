@@ -15,9 +15,9 @@
 ?>
 
 <ul>
-<?php foreach($covers as $key => $val) {?>
+<?php foreach($files as $key => $val) {?>
 	<li>
-		<a href="" title="<?php echo $val->cover_filename?>"><?php echo $val->cover_filename?></a> (<?php echo $val->publish == 1 ? Yii::t('attribute', 'Publish') : Yii::t('attribute', 'Unpublish') ?>) <?php echo $val->status == 1 ? '('.Yii::t('attribute', 'Cover').')' : '' ?>
+		<a href="" title="<?php echo $val->digital_filename?>"><?php echo $val->digital_filename?></a> (<?php echo $val->publish == 1 ? Yii::t('attribute', 'Publish') : Yii::t('attribute', 'Unpublish') ?>)
 	</li>
 <?php }?>
 </ul>

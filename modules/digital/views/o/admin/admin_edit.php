@@ -36,11 +36,10 @@
 	<div class="clearfix horizontal-data" name="four">
 		<ul id="media-render">
 			<?php 
-			$this->renderPartial('_view_cover_add', array('covers'=>$covers, 'setting'=>$setting));
+			$this->renderPartial('_form_cover', array('covers'=>$covers, 'setting'=>$setting));
 			if($covers != null) {
-				foreach($covers as $key => $val) {
-					$this->renderPartial('_view_covers', array('data'=>$val));
-				}
+				foreach($covers as $key => $val)
+					$this->renderPartial('_form_view_covers', array('data'=>$val));
 			}?>
 		</ul>
 	</div>
