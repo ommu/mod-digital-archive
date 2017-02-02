@@ -143,6 +143,7 @@ class DownloadController extends Controller
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
+		
 		$this->pageTitle = Yii::t('phrase', 'View Digital Downloads');
 		$this->pageDescription = '';
 		$this->pageMeta = '';

@@ -26,17 +26,19 @@
 			array(
 				'name'=>'author_id',
 				'value'=>$model->author_id,
-				//'value'=>$model->author_id != '' ? $model->author_id : '-',
 			),
 			array(
 				'name'=>'publish',
-				'value'=>$model->publish == '1' ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
-				//'value'=>$model->publish,
+				'value'=>$model->publish == 1 ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
+				'type'=>'raw',
 			),
 			array(
 				'name'=>'author_name',
 				'value'=>$model->author_name != '' ? $model->author_name : '-',
-				//'value'=>$model->author_name != '' ? CHtml::link($model->author_name, Yii::app()->request->baseUrl.'/public/visit/'.$model->author_name, array('target' => '_blank')) : '-',
+			),
+			array(
+				'name'=>'digitals',
+				'value'=>$model->authors != null ? CHtml::link($model->view->digitals, Yii::app()->controller->createUrl('o/authors/manage',array('author'=>$model->author_id))) : '-',
 				'type'=>'raw',
 			),
 			array(
@@ -45,8 +47,7 @@
 			),
 			array(
 				'name'=>'creation_id',
-				'value'=>$model->creation_id,
-				//'value'=>$model->creation_id != 0 ? $model->creation_id : '-',
+				'value'=>$model->creation_id != 0 ? $model->creation->displayname : '-',
 			),
 			array(
 				'name'=>'modified_date',
@@ -54,8 +55,7 @@
 			),
 			array(
 				'name'=>'modified_id',
-				'value'=>$model->modified_id,
-				//'value'=>$model->modified_id != 0 ? $model->modified_id : '-',
+				'value'=>$model->modified_id != 0 ? $model->modified->displayname : '-',
 			),
 		),
 	)); ?>

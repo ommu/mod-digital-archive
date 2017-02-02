@@ -26,22 +26,23 @@
 			array(
 				'name'=>'download_id',
 				'value'=>$model->download_id,
-				//'value'=>$model->download_id != '' ? $model->download_id : '-',
 			),
 			array(
 				'name'=>'file_id',
-				'value'=>$model->file_id,
-				//'value'=>$model->file_id != '' ? $model->file_id : '-',
+				'value'=>$model->file->digital_filename,
+			),
+			array(
+				'name'=>'digital',
+				'value'=>$model->file->digital->digital_title,
 			),
 			array(
 				'name'=>'user_id',
-				'value'=>$model->user_id,
-				//'value'=>$model->user_id != '' ? $model->user_id : '-',
+				'value'=>$model->user_id != 0 ? $model->user->displayname : '-',
 			),
 			array(
 				'name'=>'downloads',
-				'value'=>$model->downloads,
-				//'value'=>$model->downloads != '' ? $model->downloads : '-',
+				'value'=>$model->downloads != 0 ? CHtml::link($model->downloads, Yii::app()->controller->createUrl('o/downloaddetail/manage',array('download'=>$model->download_id))) : '-',
+				'type'=>'raw',
 			),
 			array(
 				'name'=>'download_date',
@@ -49,8 +50,7 @@
 			),
 			array(
 				'name'=>'download_ip',
-				'value'=>$model->download_ip,
-				//'value'=>$model->download_ip != '' ? $model->download_ip : '-',
+				'value'=>$model->download_ip != '' ? $model->download_ip : '-',
 			),
 		),
 	)); ?>

@@ -31,24 +31,23 @@
 			array(
 				'name'=>'publish',
 				'value'=>$model->publish == '1' ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
-				//'value'=>$model->publish,
+				'type'=>'raw',
 			),
 			array(
 				'name'=>'publisher_name',
 				'value'=>$model->publisher_name != '' ? $model->publisher_name : '-',
-				//'value'=>$model->publisher_name != '' ? CHtml::link($model->publisher_name, Yii::app()->request->baseUrl.'/public/visit/'.$model->publisher_name, array('target' => '_blank')) : '-',
-				'type'=>'raw',
 			),
 			array(
 				'name'=>'publisher_location',
 				'value'=>$model->publisher_location != '' ? $model->publisher_location : '-',
-				//'value'=>$model->publisher_location != '' ? CHtml::link($model->publisher_location, Yii::app()->request->baseUrl.'/public/visit/'.$model->publisher_location, array('target' => '_blank')) : '-',
-				'type'=>'raw',
 			),
 			array(
 				'name'=>'publisher_address',
 				'value'=>$model->publisher_address != '' ? $model->publisher_address : '-',
-				//'value'=>$model->publisher_address != '' ? CHtml::link($model->publisher_address, Yii::app()->request->baseUrl.'/public/visit/'.$model->publisher_address, array('target' => '_blank')) : '-',
+			),
+			array(
+				'name'=>'digitals',
+				'value'=>$model->view->digitals != null || $model->view->digitals != 0 ? CHtml::link($model->view->digitals, Yii::app()->controller->createUrl('o/admin/manage',array('publisher'=>$model->publisher_id))) : '-',
 				'type'=>'raw',
 			),
 			array(
@@ -57,8 +56,7 @@
 			),
 			array(
 				'name'=>'creation_id',
-				'value'=>$model->creation_id,
-				//'value'=>$model->creation_id != 0 ? $model->creation_id : '-',
+				'value'=>$model->creation_id != 0 ? $model->creation->displayname : '-',
 			),
 			array(
 				'name'=>'modified_date',
@@ -66,8 +64,7 @@
 			),
 			array(
 				'name'=>'modified_id',
-				'value'=>$model->modified_id,
-				//'value'=>$model->modified_id != 0 ? $model->modified_id : '-',
+				'value'=>$model->modified_id != 0 ? $model->modified->displayname : '-',
 			),
 		),
 	)); ?>

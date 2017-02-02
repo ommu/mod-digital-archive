@@ -30,18 +30,46 @@
 			),
 			array(
 				'name'=>'publish',
-				'value'=>$model->publish == '1' ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
-				//'value'=>$model->publish,
+				'value'=>$model->publish == 1 ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
+				'type'=>'raw',
 			),
 			array(
 				'name'=>'cat_title',
-				'value'=>$model->cat_title,
-				//'value'=>$model->cat_title != '' ? $model->cat_title : '-',
+				'value'=>$model->cat_title != '' ? $model->cat_title : '-',
 			),
 			array(
 				'name'=>'cat_desc',
 				'value'=>$model->cat_desc != '' ? $model->cat_desc : '-',
-				//'value'=>$model->cat_desc != '' ? CHtml::link($model->cat_desc, Yii::app()->request->baseUrl.'/public/visit/'.$model->cat_desc, array('target' => '_blank')) : '-',
+				'type'=>'raw',
+			),
+			array(
+				'name'=>'cat_code',
+				'value'=>$model->cat_code != '' ? $model->cat_code : '-',
+			),
+			array(
+				'name'=>'cat_icon',
+				'value'=>$model->cat_icon != '' ? $model->cat_icon : '-',
+			),
+			array(
+				'name'=>'cat_icon_image',
+				'value'=>$model->cat_icon_image != '' ? CHtml::link(Chtml::image(Yii::app()->request->baseUrl.'/public/digital/'.$model->cat_icon_image), '') : '-',
+			),
+			array(
+				'name'=>'cat_cover',
+				'value'=>$model->cat_cover != '' ? CHtml::link(Chtml::image(Yii::app()->request->baseUrl.'/public/digital/'.$model->cat_cover), '') : '-',
+			),
+			array(
+				'name'=>'cat_file_type',
+				'value'=>$model->cat_file_type != '' ? Utility::formatFileType(unserialize($model->cat_file_type), false) : '-',
+			),
+			array(
+				'name'=>'tags',
+				'value'=>$model->tags != null ? $this->renderPartial('_view_tags', array('tags'=>$model->tags), true, false) : '-',
+				'type'=>'raw',
+			),
+			array(
+				'name'=>'digitals',
+				'value'=>$model->view->digitals != null || $model->view->digitals != 0 ? CHtml::link($model->view->digitals, Yii::app()->controller->createUrl('o/admin/manage',array('category'=>$model->cat_id))) : '-',
 				'type'=>'raw',
 			),
 			array(
@@ -50,8 +78,7 @@
 			),
 			array(
 				'name'=>'creation_id',
-				'value'=>$model->creation_id,
-				//'value'=>$model->creation_id != 0 ? $model->creation_id : '-',
+				'value'=>$model->creation_id != 0 ? $model->creation->displayname : '-',
 			),
 			array(
 				'name'=>'modified_date',
@@ -59,8 +86,7 @@
 			),
 			array(
 				'name'=>'modified_id',
-				'value'=>$model->modified_id,
-				//'value'=>$model->modified_id != 0 ? $model->modified_id : '-',
+				'value'=>$model->modified_id != 0 ? $model->modified->displayname : '-',
 			),
 		),
 	)); ?>

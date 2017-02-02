@@ -114,15 +114,18 @@
 		),
 		array(
 			'name'=>'choices',
-			'value'=>$model->choices != null ? $model->view->choices : '-',
+			'value'=>$model->choices != null ? CHtml::link($model->view->choices, Yii::app()->controller->createUrl('o/choice/manage',array('digital'=>$model->digital_id))) : '-',
+			'type'=>'raw',
 		),
 		array(
 			'name'=>'views',
-			'value'=>$model->views != null ? $model->view->views : '-',
+			'value'=>$model->views != null ? CHtml::link($model->view->views, Yii::app()->controller->createUrl('o/views/manage',array('digital'=>$model->digital_id))) : '-',
+			'type'=>'raw',
 		),
 		array(
 			'name'=>'likes',
-			'value'=>$model->likes != null ? $model->view->likes : '-',
+			'value'=>$model->likes != null ? CHtml::link($model->view->likes, Yii::app()->controller->createUrl('o/likes/manage',array('digital'=>$model->digital_id))) : '-',
+			'type'=>'raw',
 		),
 		array(
 			'name'=>'downloads',
