@@ -214,7 +214,13 @@ class DigitalViewDetail extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'view_ip';
+			$this->defaultColumns[] = array(
+				'name' => 'view_ip',
+				'value' => '$data->view_ip',
+				'htmlOptions' => array(
+					//'class' => 'center',
+				),
+			);
 		}
 		parent::afterConstruct();
 	}
