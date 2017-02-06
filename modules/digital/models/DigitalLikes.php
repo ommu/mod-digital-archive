@@ -39,6 +39,8 @@ class DigitalLikes extends CActiveRecord
 	public $defaultColumns = array();
 	
 	// Variable Search
+	public $like_search;
+	public $unlike_search;
 	public $digital_search;
 	public $user_search;
 
@@ -77,7 +79,7 @@ class DigitalLikes extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('like_id, publish, digital_id, user_id, likes_date, likes_ip, updated_date,
-				digital_search, user_search', 'safe', 'on'=>'search'),
+				like_search, unlike_search, digital_search, user_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -89,6 +91,7 @@ class DigitalLikes extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'view' => array(self::BELONGS_TO, 'ViewDigitalLikes', 'like_id'),
 			'digital' => array(self::BELONGS_TO, 'Digitals', 'digital_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 		);
@@ -107,6 +110,8 @@ class DigitalLikes extends CActiveRecord
 			'likes_date' => Yii::t('attribute', 'Likes Date'),
 			'likes_ip' => Yii::t('attribute', 'Likes Ip'),
 			'updated_date' => Yii::t('attribute', 'Updated Date'),
+			'like_search' => Yii::t('attribute', 'Like'),
+			'unlike_search' => Yii::t('attribute', 'Unlike'),
 			'digital_search' => Yii::t('attribute', 'Digital'),
 			'user_search' => Yii::t('attribute', 'User'),
 		);
@@ -142,6 +147,9 @@ class DigitalLikes extends CActiveRecord
 		
 		// Custom Search
 		$criteria->with = array(
+			'view' => array(
+				'alias'=>'view',
+			),
 			'digital' => array(
 				'alias'=>'digital',
 				'select'=>'publish, digital_title',
@@ -177,6 +185,9 @@ class DigitalLikes extends CActiveRecord
 		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
 		
+		
+		$criteria->compare('view.likes',strtolower($this->like_search), true);
+		$criteria->compare('view.unlikes',strtolower($this->unlike_search), true);
 		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
 		if(isset($_GET['digital']) && isset($_GET['publish']))
 			$criteria->compare('digital.publish',$_GET['publish']);
@@ -252,6 +263,22 @@ class DigitalLikes extends CActiveRecord
 					'value' => '$data->user->displayname',
 				);
 			}
+			$this->defaultColumns[] = array(
+				'name' => 'like_search',
+				'value' => '$data->view->likes != 0 ? CHtml::link($data->view->likes, Yii::app()->controller->createUrl("o/likedetail/manage",array(\'like\'=>$data->like_id,\'publish\'=>1))) : \'0\'',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'unlike_search',
+				'value' => '$data->view->unlikes != 0 ? CHtml::link($data->view->unlikes, Yii::app()->controller->createUrl("o/likedetail/manage",array(\'like\'=>$data->like_id,\'publish\'=>0))) : \'0\'',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'likes_date',
 				'value' => 'Utility::dateFormat($data->likes_date)',

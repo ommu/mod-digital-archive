@@ -127,16 +127,8 @@ class DigitalLikeDetail extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.id',strtolower($this->id),true);
-		if(isset($_GET['type']) && $_GET['type'] == 'publish')
-			$criteria->compare('t.publish',1);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
-			$criteria->compare('t.publish',0);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
-			$criteria->compare('t.publish',2);
-		else {
-			$criteria->addInCondition('t.publish',array(0,1));
-			$criteria->compare('t.publish',$this->publish);
-		}
+		if(isset($_GET['publish']))
+			$criteria->compare('t.publish',$_GET['publish']);
 		if(isset($_GET['like']))
 			$criteria->compare('t.like_id',$_GET['like']);
 		else
