@@ -23,8 +23,8 @@ class DigitalModule extends CWebModule
 			// you may place customized code here
 			//list public controller in this module
 			$publicControllers = array(
-				'site',
 				'media',
+				'site',
 			);
 			
 			// pake ini untuk set theme per action di controller..
