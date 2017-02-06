@@ -51,8 +51,8 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('deleted_date'); ?><br/>
-			<?php echo $form->textField($model,'deleted_date'); ?>
+			<?php echo $model->getAttributeLabel('updated_date'); ?><br/>
+			<?php echo $form->textField($model,'updated_date'); ?>
 		</li>
 
 		<li class="submit">

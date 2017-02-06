@@ -1,11 +1,11 @@
 <?php
 /**
- * DigitalLikes
+ * DigitalLikeDetail
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2016 Ommu Platform (ommu.co)
- * @created date 7 November 2016, 06:21 WIB
+ * @created date 7 February 2017, 02:26 WIB
  * @link http://company.ommu.co
  * @contact (+62)856-299-4114
  *
@@ -20,33 +20,27 @@
  *
  * --------------------------------------------------------------------------------------
  *
- * This is the model class for table "ommu_digital_likes".
+ * This is the model class for table "ommu_digital_like_detail".
  *
- * The followings are the available columns in table 'ommu_digital_likes':
- * @property string $like_id
+ * The followings are the available columns in table 'ommu_digital_like_detail':
+ * @property string $id
  * @property integer $publish
- * @property string $digital_id
- * @property string $user_id
+ * @property string $like_id
  * @property string $likes_date
  * @property string $likes_ip
- * @property string $updated_date
  *
  * The followings are the available model relations:
- * @property OmmuDigitals $digital
+ * @property OmmuDigitalLikes $like
  */
-class DigitalLikes extends CActiveRecord
+class DigitalLikeDetail extends CActiveRecord
 {
 	public $defaultColumns = array();
-	
-	// Variable Search
-	public $digital_search;
-	public $user_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return DigitalLikes the static model class
+	 * @return DigitalLikeDetail the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -58,7 +52,7 @@ class DigitalLikes extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_digital_likes';
+		return 'ommu_digital_like_detail';
 	}
 
 	/**
@@ -69,15 +63,14 @@ class DigitalLikes extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('publish, digital_id, user_id', 'required'),
+			array('publish, like_id, likes_ip', 'required'),
 			array('publish', 'numerical', 'integerOnly'=>true),
-			array('digital_id, user_id', 'length', 'max'=>11),
+			array('like_id', 'length', 'max'=>11),
 			array('likes_ip', 'length', 'max'=>20),
-			array('', 'safe'),
+			array('likes_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('like_id, publish, digital_id, user_id, likes_date, likes_ip, updated_date,
-				digital_search, user_search', 'safe', 'on'=>'search'),
+			array('id, publish, like_id, likes_date, likes_ip', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -89,8 +82,7 @@ class DigitalLikes extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'digital' => array(self::BELONGS_TO, 'Digitals', 'digital_id'),
-			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
+			'like_relation' => array(self::BELONGS_TO, 'OmmuDigitalLikes', 'like_id'),
 		);
 	}
 
@@ -100,24 +92,18 @@ class DigitalLikes extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'like_id' => Yii::t('attribute', 'Like'),
+			'id' => Yii::t('attribute', 'ID'),
 			'publish' => Yii::t('attribute', 'Publish'),
-			'digital_id' => Yii::t('attribute', 'Digital'),
-			'user_id' => Yii::t('attribute', 'User'),
+			'like_id' => Yii::t('attribute', 'Like'),
 			'likes_date' => Yii::t('attribute', 'Likes Date'),
 			'likes_ip' => Yii::t('attribute', 'Likes Ip'),
-			'updated_date' => Yii::t('attribute', 'Updated Date'),
-			'digital_search' => Yii::t('attribute', 'Digital'),
-			'user_search' => Yii::t('attribute', 'User'),
 		);
 		/*
-			'Like' => 'Like',
+			'ID' => 'ID',
 			'Publish' => 'Publish',
-			'Digital' => 'Digital',
-			'User' => 'User',
+			'Like' => 'Like',
 			'Likes Date' => 'Likes Date',
 			'Likes Ip' => 'Likes Ip',
-			'Deleted Date' => 'Deleted Date',
 		
 		*/
 	}
@@ -139,20 +125,8 @@ class DigitalLikes extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		
-		// Custom Search
-		$criteria->with = array(
-			'digital' => array(
-				'alias'=>'digital',
-				'select'=>'publish, digital_title',
-			),
-			'user' => array(
-				'alias'=>'user',
-				'select'=>'displayname',
-			),
-		);
 
-		$criteria->compare('t.like_id',strtolower($this->like_id),true);
+		$criteria->compare('t.id',strtolower($this->id),true);
 		if(isset($_GET['type']) && $_GET['type'] == 'publish')
 			$criteria->compare('t.publish',1);
 		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
@@ -163,27 +137,16 @@ class DigitalLikes extends CActiveRecord
 			$criteria->addInCondition('t.publish',array(0,1));
 			$criteria->compare('t.publish',$this->publish);
 		}
-		if(isset($_GET['digital']))
-			$criteria->compare('t.digital_id',$_GET['digital']);
+		if(isset($_GET['like']))
+			$criteria->compare('t.like_id',$_GET['like']);
 		else
-			$criteria->compare('t.digital_id',$this->digital_id);
-		if(isset($_GET['user']))
-			$criteria->compare('t.user_id',$_GET['user']);
-		else
-			$criteria->compare('t.user_id',$this->user_id);
+			$criteria->compare('t.like_id',$this->like_id);
 		if($this->likes_date != null && !in_array($this->likes_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.likes_date)',date('Y-m-d', strtotime($this->likes_date)));
 		$criteria->compare('t.likes_ip',strtolower($this->likes_ip),true);
-		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
-		
-		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
-		if(isset($_GET['digital']) && isset($_GET['publish']))
-			$criteria->compare('digital.publish',$_GET['publish']);
-		$criteria->compare('user.displayname',strtolower($this->user_search), true);
 
-		if(!isset($_GET['DigitalLikes_sort']))
-			$criteria->order = 't.like_id DESC';
+		if(!isset($_GET['DigitalLikeDetail_sort']))
+			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -211,13 +174,11 @@ class DigitalLikes extends CActiveRecord
 				$this->defaultColumns[] = $val;
 			}
 		} else {
-			//$this->defaultColumns[] = 'like_id';
+			//$this->defaultColumns[] = 'id';
 			$this->defaultColumns[] = 'publish';
-			$this->defaultColumns[] = 'digital_id';
-			$this->defaultColumns[] = 'user_id';
+			$this->defaultColumns[] = 'like_id';
 			$this->defaultColumns[] = 'likes_date';
 			$this->defaultColumns[] = 'likes_ip';
-			$this->defaultColumns[] = 'updated_date';
 		}
 
 		return $this->defaultColumns;
@@ -240,18 +201,21 @@ class DigitalLikes extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['digital'])) {
+			if(!isset($_GET['type'])) {
 				$this->defaultColumns[] = array(
-					'name' => 'digital_search',
-					'value' => '$data->digital->digital_title',
+					'name' => 'publish',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->id)), $data->publish, 1)',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+					'filter'=>array(
+						1=>Yii::t('phrase', 'Yes'),
+						0=>Yii::t('phrase', 'No'),
+					),
+					'type' => 'raw',
 				);
 			}
-			if(!isset($_GET['user'])) {
-				$this->defaultColumns[] = array(
-					'name' => 'user_search',
-					'value' => '$data->user->displayname',
-				);
-			}
+			$this->defaultColumns[] = 'like_id';
 			$this->defaultColumns[] = array(
 				'name' => 'likes_date',
 				'value' => 'Utility::dateFormat($data->likes_date)',
@@ -278,53 +242,7 @@ class DigitalLikes extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = array(
-				'name' => 'likes_ip',
-				'value' => '$data->likes_ip',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'updated_date',
-				'value' => 'Utility::dateFormat($data->updated_date)',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'updated_date',
-					'language' => 'ja',
-					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
-					//'mode'=>'datetime',
-					'htmlOptions' => array(
-						'id' => 'updated_date_filter',
-					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
-			);
-			if(!isset($_GET['type'])) {
-				$this->defaultColumns[] = array(
-					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->like_id)), $data->publish, 1)',
-					'htmlOptions' => array(
-						'class' => 'center',
-					),
-					'filter'=>array(
-						1=>Yii::t('phrase', 'Yes'),
-						0=>Yii::t('phrase', 'No'),
-					),
-					'type' => 'raw',
-				);
-			}
+			$this->defaultColumns[] = 'likes_ip';
 		}
 		parent::afterConstruct();
 	}
@@ -349,14 +267,69 @@ class DigitalLikes extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
+	/*
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			if($this->isNewRecord) {
-				$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
-				$this->likes_ip = $_SERVER['REMOTE_ADDR'];				
-			}
+			// Create action
 		}
 		return true;
 	}
+	*/
+
+	/**
+	 * after validate attributes
+	 */
+	/*
+	protected function afterValidate()
+	{
+		parent::afterValidate();
+			// Create action
+		return true;
+	}
+	*/
+	
+	/**
+	 * before save attributes
+	 */
+	/*
+	protected function beforeSave() {
+		if(parent::beforeSave()) {
+			//$this->likes_date = date('Y-m-d', strtotime($this->likes_date));
+		}
+		return true;	
+	}
+	*/
+	
+	/**
+	 * After save attributes
+	 */
+	/*
+	protected function afterSave() {
+		parent::afterSave();
+		// Create action
+	}
+	*/
+
+	/**
+	 * Before delete attributes
+	 */
+	/*
+	protected function beforeDelete() {
+		if(parent::beforeDelete()) {
+			// Create action
+		}
+		return true;
+	}
+	*/
+
+	/**
+	 * After delete attributes
+	 */
+	/*
+	protected function afterDelete() {
+		parent::afterDelete();
+		// Create action
+	}
+	*/
 
 }
