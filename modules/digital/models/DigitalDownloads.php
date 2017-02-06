@@ -70,7 +70,7 @@ class DigitalDownloads extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('file_id, user_id, download_date, download_ip', 'required'),
+			array('file_id, user_id', 'required'),
 			array('frontend, downloads', 'numerical', 'integerOnly'=>true),
 			array('file_id, user_id', 'length', 'max'=>11),
 			array('download_ip', 'length', 'max'=>20),
@@ -304,6 +304,31 @@ class DigitalDownloads extends CActiveRecord
 		} else {
 			$model = self::model()->findByPk($id);
 			return $model;			
+		}
+	}
+
+	/**
+	 * User get information
+	 */
+	public static function insertDownload($file_id, $frontend=null)
+	{
+		$findDownload = self::model()->find(array(
+			'select' => 'download_id, frontend, file_id, user_id, downloads',
+			'condition' => 'frontend = :frontend AND file_id = :file AND user_id = :user',
+			'params' => array(
+				':frontend' => $frontend != null ? $frontend : '0',
+				':file' => $file_id,
+				':user' => !Yii::app()->user->isGuest ? Yii::app()->user->id : '0',
+			),
+		));
+		if($findDownload != null)
+			self::model()->updateByPk($findDownload->download_id, array('downloads'=>$findDownload->downloads + 1));
+		
+		else {
+			$download=new DigitalDownloads;
+			$download->frontend = $frontend != null ? $frontend : '1';
+			$download->file_id = $file_id;
+			$download->save();
 		}
 	}
 

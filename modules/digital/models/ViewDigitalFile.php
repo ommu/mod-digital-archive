@@ -26,6 +26,7 @@
  * @property string $file_id
  * @property string $digital_id
  * @property string $downloads
+ * @property string $download_backend
  * @property string $download_all
  */
 class ViewDigitalFile extends CActiveRecord
@@ -68,10 +69,10 @@ class ViewDigitalFile extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('file_id, digital_id', 'length', 'max'=>11),
-			array('downloads, download_all', 'length', 'max'=>32),
+			array('downloads, download_backend, download_all', 'length', 'max'=>32),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('file_id, digital_id, downloads, download_all', 'safe', 'on'=>'search'),
+			array('file_id, digital_id, downloads, download_backend, download_all', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -95,6 +96,7 @@ class ViewDigitalFile extends CActiveRecord
 			'file_id' => Yii::t('attribute', 'File'),
 			'digital_id' => Yii::t('attribute', 'Digital'),
 			'downloads' => Yii::t('attribute', 'Downloads'),
+			'download_backend' => Yii::t('attribute', 'Download Backend'),
 			'download_all' => Yii::t('attribute', 'Download All'),
 		);
 		/*
@@ -127,6 +129,7 @@ class ViewDigitalFile extends CActiveRecord
 		$criteria->compare('t.file_id',strtolower($this->file_id),true);
 		$criteria->compare('t.digital_id',strtolower($this->digital_id),true);
 		$criteria->compare('t.downloads',strtolower($this->downloads),true);
+		$criteria->compare('t.download_backend',strtolower($this->download_backend),true);
 		$criteria->compare('t.download_all',strtolower($this->download_all),true);
 
 		if(!isset($_GET['ViewDigitalFile_sort']))
@@ -161,6 +164,7 @@ class ViewDigitalFile extends CActiveRecord
 			$this->defaultColumns[] = 'file_id';
 			$this->defaultColumns[] = 'digital_id';
 			$this->defaultColumns[] = 'downloads';
+			$this->defaultColumns[] = 'download_backend';
 			$this->defaultColumns[] = 'download_all';
 		}
 
@@ -175,6 +179,7 @@ class ViewDigitalFile extends CActiveRecord
 			$this->defaultColumns[] = 'file_id';
 			$this->defaultColumns[] = 'digital_id';
 			$this->defaultColumns[] = 'downloads';
+			$this->defaultColumns[] = 'download_backend';
 			$this->defaultColumns[] = 'download_all';
 		}
 		parent::afterConstruct();

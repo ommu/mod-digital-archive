@@ -9,6 +9,7 @@
  *	Index
  *	Cover
  *	File
+ *	Download
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2016 Ommu Platform (ommu.co)
@@ -58,7 +59,7 @@ class MediaController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','cover','file'),
+				'actions'=>array('index','cover','file','download'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -131,9 +132,40 @@ class MediaController extends Controller
 
 		$file = $model->digital->digital_path.'/'.$model->digital_filename;
 		
-		if($model->md5filepath == $path && $model->digital_filename != '' && file_exists($file))
+		if($model->md5filepath == $path && $model->digital_filename != '' && file_exists($file)) {
+			DigitalDownloads::insertDownload($id, '0');
 			Yii::app()->getRequest()->sendFile(time().$model->digital->view->md5path.'.'.strtolower(pathinfo($model->digital_filename, PATHINFO_EXTENSION)), @file_get_contents($file));
+			
+		} else
+			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
+		
+		//echo $model->digital->digital_path.'/'.$model->digital_filename;
+	}
+	
+	/**
+	 * Lists all models.
+	 */
+	public function actionDownload($id) 
+	{
+		$path = $_GET['abc'];
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'digital_path',
+		));
+		$model = DigitalFile::model()->findByPk($id);
+		
+		$pathUnique = Digitals::getUniqueDirectory($model->digital_id, $model->digital->salt, $model->digital->view->md5path);
+		if($setting != null)
+			$digital_path = $setting->digital_path.'/'.$pathUnique;
 		else
+			$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;	
+
+		$file = $model->digital->digital_path.'/'.$model->digital_filename;
+		
+		if($model->md5filepath == $path && $model->digital_filename != '' && file_exists($file)) {
+			DigitalDownloads::insertDownload($id, '1');
+			Yii::app()->getRequest()->sendFile(time().$model->digital->view->md5path.'.'.strtolower(pathinfo($model->digital_filename, PATHINFO_EXTENSION)), @file_get_contents($file));
+			
+		} else
 			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 		
 		//echo $model->digital->digital_path.'/'.$model->digital_filename;
