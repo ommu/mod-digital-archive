@@ -150,8 +150,8 @@
 						$model->old_cat_icon_image_input = $model->cat_icon_image;
 					echo $form->hiddenField($model,'old_cat_icon_image_input');
 					if($model->cat_icon_image != '') {
-						$file = Yii::app()->request->baseUrl.'/public/digital/'.$model->old_cat_icon_image_input;?>
-						<img class="mb-15" src="<?php echo Utility::getTimThumb($file, 200, 300, 3);?>" alt="">					
+						$cat_icon_image = Yii::app()->request->baseUrl.'/public/digital/'.$model->old_cat_icon_image_input;?>
+						<img class="mb-15" src="<?php echo Utility::getTimThumb($cat_icon_image, 200, 300, 3);?>" alt="">					
 				<?php }
 				}
 				echo $form->fileField($model,'cat_icon_image'); ?>
@@ -169,8 +169,8 @@
 						$model->old_cat_cover_input = $model->cat_cover;
 					echo $form->hiddenField($model,'old_cat_cover_input');
 					if($model->cat_cover != '') {
-						$file = Yii::app()->request->baseUrl.'/public/digital/'.$model->old_cat_cover_input;?>
-						<img class="mb-15" src="<?php echo Utility::getTimThumb($file, 300, 400, 3);?>" alt="">					
+						$cat_cover = Yii::app()->request->baseUrl.'/public/digital/'.$model->old_cat_cover_input;?>
+						<img class="mb-15" src="<?php echo Utility::getTimThumb($cat_cover, 300, 400, 3);?>" alt="">					
 				<?php }
 				}
 				echo $form->fileField($model,'cat_cover'); ?>

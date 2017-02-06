@@ -70,8 +70,9 @@
 					$model->old_cover_filename_input = $model->cover_filename;
 				if(!$model->isNewRecord && $model->old_cover_filename_input != '') {
 					echo $form->hiddenField($model,'old_cover_filename_input');
-					$media = Yii::app()->request->baseUrl.'/public/digital/'.$model->digital->view->uniquepath.'/'.$model->old_cover_filename_input;?>
-						<img class="mb-10" src="<?php echo Utility::getTimThumb($media, 300, 400, 3);?>" alt="">
+					//$cover = Yii::app()->request->baseUrl.'/public/digital/'.$model->digital->view->uniquepath.'/'.$model->old_cover_filename_input;
+					$cover = Yii::app()->controller->createUrl('media/cover', array('id'=>$model->cover_id,'abc'=>$model->md5coverpath));?>
+						<img class="mb-10" src="<?php echo Utility::getTimThumb($cover, 300, 400, 3);?>" alt="">
 				<?php }
 				echo $form->fileField($model,'cover_filename'); ?>
 				<?php echo $form->error($model,'cover_filename'); ?>

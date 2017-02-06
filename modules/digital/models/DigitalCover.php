@@ -38,6 +38,7 @@ class DigitalCover extends CActiveRecord
 	public $defaultColumns = array();
 	public $digital_title_input;
 	public $old_cover_filename_input;
+	public $md5coverpath;
 	
 	// Variable Search
 	public $digital_search;
@@ -77,11 +78,11 @@ class DigitalCover extends CActiveRecord
 			array('publish, status', 'numerical', 'integerOnly'=>true),
 			array('digital_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('cover_filename,
-				digital_title_input, old_cover_filename_input', 'safe'),
+				digital_title_input, old_cover_filename_input, md5coverpath', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cover_id, publish, status, digital_id, cover_filename, creation_date, creation_id, modified_date, modified_id,
-				digital_search, creation_search, modified_search', 'safe', 'on'=>'search'),
+				md5coverpath, digital_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -116,6 +117,7 @@ class DigitalCover extends CActiveRecord
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'digital_title_input' => Yii::t('attribute', 'Digital Title'),
 			'old_cover_filename_input' => Yii::t('attribute', 'Old Cover (File)'),
+			'md5coverpath' => Yii::t('attribute', 'Cover Path'),
 			'digital_search' => Yii::t('attribute', 'Digital'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
@@ -363,6 +365,12 @@ class DigitalCover extends CActiveRecord
 		
 		return true;
 	}
+	
+	protected function afterFind() {
+		$this->md5coverpath = md5($this->digital->view->md5path.$this->creation_date);
+		
+		parent::afterFind();		
+	}	
 
 	/**
 	 * before validate attributes

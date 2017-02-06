@@ -58,9 +58,12 @@
 						<?php if(!$model->isNewRecord) {
 							$covers = $model->covers;
 							if($covers != null) {
-								$model->cover_old_input = $covers[0]->cover_filename;
+								if(!$model->getErrors())
+									$model->cover_old_input = $covers[0]->cover_filename;								
 								echo $form->hiddenField($model,'cover_old_input');
-								$cover = Yii::app()->request->baseUrl.'/public/digital/'.$model->view->uniquepath.'/'.$model->cover_old_input;?>
+								//$cover = Yii::app()->request->baseUrl.'/public/digital/'.$model->view->uniquepath.'/'.$model->cover_old_input;
+								$cover = Yii::app()->controller->createUrl('media/cover', array('id'=>$covers[0]->cover_id,'abc'=>$covers[0]->md5coverpath));
+								?>
 								<div class="mb-10">
 									<img src="<?php echo Utility::getTimThumb($cover, 300, 400, 3);?>" alt="">
 								</div>

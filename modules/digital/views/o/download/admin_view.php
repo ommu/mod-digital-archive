@@ -29,7 +29,8 @@
 			),
 			array(
 				'name'=>'file_id',
-				'value'=>$model->file->digital_filename,
+				'value'=>CHtml::link($model->file->digital_filename, Yii::app()->controller->createUrl('media/file',array('id'=>$model->file_id,'abc'=>$model->file->md5filepath))),
+				'type'=>'raw',
 			),
 			array(
 				'name'=>'digital',

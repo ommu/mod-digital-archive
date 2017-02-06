@@ -70,8 +70,9 @@
 					$model->old_digital_filename_input = $model->digital_filename;
 				if(!$model->isNewRecord && $model->old_digital_filename_input != '') {
 					echo $form->hiddenField($model,'old_digital_filename_input');
-					$media = Yii::app()->request->baseUrl.'/public/digital/'.$model->digital->view->uniquepath.'/'.$model->old_digital_filename_input;?>
-					<div class="mb-10"><?php echo $model->old_digital_filename_input;?></div>
+					//$file = Yii::app()->request->baseUrl.'/public/digital/'.$model->digital->view->uniquepath.'/'.$model->old_digital_filename_input;
+					$file = Yii::app()->controller->createUrl('media/file',array('id'=>$model->file_id,'abc'=>$model->md5filepath));?>
+					<div class="mb-10"><a href="<?php echo $file;?>"><?php echo $model->old_digital_filename_input;?></a></div>
 				<?php }
 				echo $form->fileField($model,'digital_filename'); ?>
 				<?php echo $form->error($model,'digital_filename'); ?>

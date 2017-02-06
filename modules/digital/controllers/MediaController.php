@@ -90,6 +90,7 @@ class MediaController extends Controller
 	 */
 	public function actionCover($id) 
 	{
+		$path = $_GET['abc'];
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'digital_path',
 		));
@@ -103,8 +104,8 @@ class MediaController extends Controller
 		
 		$cover = $model->digital->digital_path.'/'.$model->cover_filename;
 		
-		if($model->cover_filename != '' && file_exists($cover))
-			$this->redirect(Yii::app()->getRequest()->sendFile($model->cover_filename, @file_get_contents($cover)));
+		if($model->md5coverpath == $path && $model->cover_filename != '' && file_exists($cover))
+			Yii::app()->getRequest()->sendFile(time().$model->digital->view->md5path.'.'.strtolower(pathinfo($model->cover_filename, PATHINFO_EXTENSION)), @file_get_contents($cover));
 		else
 			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 			
@@ -116,6 +117,7 @@ class MediaController extends Controller
 	 */
 	public function actionFile($id) 
 	{
+		$path = $_GET['abc'];
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'digital_path',
 		));
@@ -129,8 +131,8 @@ class MediaController extends Controller
 
 		$file = $model->digital->digital_path.'/'.$model->digital_filename;
 		
-		if($model->digital_filename != '' && file_exists($file))
-			$this->redirect(Yii::app()->getRequest()->sendFile($model->digital_filename, @file_get_contents($file)));
+		if($model->md5filepath == $path && $model->digital_filename != '' && file_exists($file))
+			Yii::app()->getRequest()->sendFile(time().$model->digital->view->md5path.'.'.strtolower(pathinfo($model->digital_filename, PATHINFO_EXTENSION)), @file_get_contents($file));
 		else
 			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 		

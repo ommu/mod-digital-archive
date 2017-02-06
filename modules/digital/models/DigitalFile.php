@@ -37,6 +37,7 @@ class DigitalFile extends CActiveRecord
 	public $defaultColumns = array();
 	public $digital_title_input;
 	public $old_digital_filename_input;
+	public $md5filepath;
 	
 	// Variable Search
 	public $digital_search;
@@ -76,11 +77,11 @@ class DigitalFile extends CActiveRecord
 			array('publish', 'numerical', 'integerOnly'=>true),
 			array('digital_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('digital_filename, 				
-				digital_title_input, old_digital_filename_input', 'safe'),
+				digital_title_input, old_digital_filename_input, md5filepath', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('file_id, publish, digital_id, digital_filename, creation_date, creation_id, modified_date, modified_id,
-				digital_search, creation_search, modified_search', 'safe', 'on'=>'search'),
+				md5filepath, digital_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -115,6 +116,7 @@ class DigitalFile extends CActiveRecord
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'digital_title_input' => Yii::t('attribute', 'Digital Title'),
 			'old_digital_filename_input' => Yii::t('attribute', 'Old File'),
+			'md5filepath' => Yii::t('attribute', 'File Path'),
 			'digital_search' => Yii::t('attribute', 'Digital'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
@@ -331,6 +333,12 @@ class DigitalFile extends CActiveRecord
 			return $model;			
 		}
 	}
+	
+	protected function afterFind() {
+		$this->md5filepath = md5($this->digital->view->md5path.$this->creation_date);
+		
+		parent::afterFind();		
+	}	
 
 	/**
 	 * before validate attributes

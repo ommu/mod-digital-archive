@@ -38,7 +38,8 @@
 			),
 			array(
 				'name'=>'digital_filename',
-				'value'=>$model->digital_filename != '' ? CHtml::link($model->digital_filename, Yii::app()->request->baseUrl.'/public/digital/'.$model->digital->view->uniquepath.'/'.$model->digital_filename) : '-',
+				//'value'=>$model->digital_filename != '' ? CHtml::link($model->digital_filename, Yii::app()->request->baseUrl.'/public/digital/'.$model->digital->view->uniquepath.'/'.$model->digital_filename) : '-',
+				'value'=>$model->digital_filename != '' ? CHtml::link($model->digital_filename, Yii::app()->controller->createUrl('media/file',array('id'=>$model->file_id,'abc'=>$model->md5filepath))) : '-',
 				'type'=>'raw',
 			),
 			array(
