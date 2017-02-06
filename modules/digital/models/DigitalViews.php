@@ -359,6 +359,30 @@ class DigitalViews extends CActiveRecord
 	}
 
 	/**
+	 * User get information
+	 */
+	public static function insertView($digital_id)
+	{
+		$findView = self::model()->find(array(
+			'select' => 'view_id, publish, digital_id, user_id, views',
+			'condition' => 'publish = :publish AND digital_id = :digital AND user_id = :user',
+			'params' => array(
+				':publish' => 1,
+				':digital' => $digital_id,
+				':user' => !Yii::app()->user->isGuest ? Yii::app()->user->id : '0',
+			),
+		));
+		if($findView != null)
+			self::model()->updateByPk($findView->view_id, array('views'=>$findView->views + 1));
+		
+		else {
+			$view=new DigitalViews;
+			$view->digital_id = $digital_id;
+			$view->save();
+		}
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
