@@ -265,7 +265,7 @@ class DigitalLikes extends CActiveRecord
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'like_search',
-				'value' => '$data->view->likes != 0 ? CHtml::link($data->view->likes, Yii::app()->controller->createUrl("o/likedetail/manage",array(\'like\'=>$data->like_id,\'publish\'=>1))) : \'0\'',
+				'value' => 'CHtml::link($data->view->likes != 0 ? $data->view->likes : \'0\', Yii::app()->controller->createUrl("o/likedetail/manage",array(\'like\'=>$data->like_id,\'type\'=>\'publish\')))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -273,7 +273,7 @@ class DigitalLikes extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'unlike_search',
-				'value' => '$data->view->unlikes != 0 ? CHtml::link($data->view->unlikes, Yii::app()->controller->createUrl("o/likedetail/manage",array(\'like\'=>$data->like_id,\'publish\'=>0))) : \'0\'',
+				'value' => 'CHtml::link($data->view->unlikes != 0 ? $data->view->unlikes : \'0\', Yii::app()->controller->createUrl("o/likedetail/manage",array(\'like\'=>$data->like_id,\'type\'=>\'unpublish\')))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
