@@ -214,7 +214,7 @@ class DigitalViewDetail extends CActiveRecord
 				'name' => 'view_date',
 				'value' => 'Utility::dateFormat($data->view_date)',
 				'htmlOptions' => array(
-					'class' => 'center',
+					//'class' => 'center',
 				),
 				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
 					'model'=>$this,
