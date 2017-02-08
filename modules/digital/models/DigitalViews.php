@@ -106,8 +106,8 @@ class DigitalViews extends CActiveRecord
 			'digital_id' => Yii::t('attribute', 'Digital'),
 			'user_id' => Yii::t('attribute', 'User'),
 			'views' => Yii::t('attribute', 'Views'),
-			'view_date' => Yii::t('attribute', 'Views Date'),
-			'view_ip' => Yii::t('attribute', 'Views Ip'),
+			'view_date' => Yii::t('attribute', 'View Date'),
+			'view_ip' => Yii::t('attribute', 'View Ip'),
 			'deleted_date' => Yii::t('attribute', 'Deleted Date'),
 			'digital_search' => Yii::t('attribute', 'Digital'),
 			'user_search' => Yii::t('attribute', 'User'),
@@ -117,6 +117,7 @@ class DigitalViews extends CActiveRecord
 			'Publish' => 'Publish',
 			'Digital' => 'Digital',
 			'User' => 'User',
+			'Views' => 'Views',
 			'Views Date' => 'Views Date',
 			'Views Ip' => 'Views Ip',
 			'Deleted Date' => 'Deleted Date',
@@ -253,7 +254,7 @@ class DigitalViews extends CActiveRecord
 			if(!isset($_GET['user'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'user_search',
-					'value' => '$data->user->displayname',
+					'value' => '$data->user_id != 0 ? $data->user->displayname : "-"',
 				);
 			}
 			$this->defaultColumns[] = array(

@@ -34,6 +34,9 @@
 class DigitalViewDetail extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $digital_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -68,7 +71,8 @@ class DigitalViewDetail extends CActiveRecord
 			array('view_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, view_id, view_date, view_ip', 'safe', 'on'=>'search'),
+			array('id, view_id, view_date, view_ip,
+				digital_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -94,6 +98,7 @@ class DigitalViewDetail extends CActiveRecord
 			'view_id' => Yii::t('attribute', 'View'),
 			'view_date' => Yii::t('attribute', 'View Date'),
 			'view_ip' => Yii::t('attribute', 'View Ip'),
+			'digital_search' => Yii::t('attribute', 'Digital'),
 		);
 		/*
 			'ID' => 'ID',
@@ -121,6 +126,17 @@ class DigitalViewDetail extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'view' => array(
+				'alias'=>'view',
+			),
+			'view.digital' => array(
+				'alias'=>'digital',
+				'select'=>'digital_title'
+			),
+		);
 
 		$criteria->compare('t.id',strtolower($this->id),true);
 		if(isset($_GET['view']))
@@ -130,6 +146,8 @@ class DigitalViewDetail extends CActiveRecord
 		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.view_date)',date('Y-m-d', strtotime($this->view_date)));
 		$criteria->compare('t.view_ip',strtolower($this->view_ip),true);
+
+		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
 
 		if(!isset($_GET['DigitalViewDetail_sort']))
 			$criteria->order = 't.id DESC';
@@ -186,8 +204,12 @@ class DigitalViewDetail extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['view']))
-				$this->defaultColumns[] = 'view_id';
+			if(!isset($_GET['view'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'digital_search',
+					'value' => '$data->view->digital->digital_title',
+				);
+			}
 			$this->defaultColumns[] = array(
 				'name' => 'view_date',
 				'value' => 'Utility::dateFormat($data->view_date)',

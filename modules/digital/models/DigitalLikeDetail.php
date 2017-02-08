@@ -30,11 +30,14 @@
  * @property string $likes_ip
  *
  * The followings are the available model relations:
- * @property OmmuDigitalLikes $like
+ * @property DigitalLikes $like
  */
 class DigitalLikeDetail extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $digital_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -70,7 +73,8 @@ class DigitalLikeDetail extends CActiveRecord
 			array('likes_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, publish, like_id, likes_date, likes_ip', 'safe', 'on'=>'search'),
+			array('id, publish, like_id, likes_date, likes_ip,
+				digital_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -82,7 +86,7 @@ class DigitalLikeDetail extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'like_relation' => array(self::BELONGS_TO, 'OmmuDigitalLikes', 'like_id'),
+			'like' => array(self::BELONGS_TO, 'DigitalLikes', 'like_id'),
 		);
 	}
 
@@ -97,6 +101,7 @@ class DigitalLikeDetail extends CActiveRecord
 			'like_id' => Yii::t('attribute', 'Like'),
 			'likes_date' => Yii::t('attribute', 'Likes Date'),
 			'likes_ip' => Yii::t('attribute', 'Likes Ip'),
+			'digital_search' => Yii::t('attribute', 'Digital'),
 		);
 		/*
 			'ID' => 'ID',
@@ -125,6 +130,17 @@ class DigitalLikeDetail extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'like' => array(
+				'alias'=>'like',
+			),
+			'like.digital' => array(
+				'alias'=>'digital',
+				'select'=>'digital_title'
+			),
+		);
 
 		$criteria->compare('t.id',strtolower($this->id),true);
 		if(isset($_GET['type']) && $_GET['type'] == 'publish')
@@ -144,6 +160,8 @@ class DigitalLikeDetail extends CActiveRecord
 		if($this->likes_date != null && !in_array($this->likes_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.likes_date)',date('Y-m-d', strtotime($this->likes_date)));
 		$criteria->compare('t.likes_ip',strtolower($this->likes_ip),true);
+
+		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
 
 		if(!isset($_GET['DigitalLikeDetail_sort']))
 			$criteria->order = 't.id DESC';
@@ -193,8 +211,12 @@ class DigitalLikeDetail extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['like']))
-				$this->defaultColumns[] = 'like_id';
+			if(!isset($_GET['like'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'digital_search',
+					'value' => '$data->like->digital->digital_title',
+				);
+			}
 			$this->defaultColumns[] = array(
 				'name' => 'likes_date',
 				'value' => 'Utility::dateFormat($data->likes_date)',

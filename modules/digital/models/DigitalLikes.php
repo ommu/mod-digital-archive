@@ -160,7 +160,7 @@ class DigitalLikes extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.like_id',strtolower($this->like_id),true);
+		$criteria->compare('t.like_id',$this->like_id);
 		if(isset($_GET['type']) && $_GET['type'] == 'publish')
 			$criteria->compare('t.publish',1);
 		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
@@ -184,8 +184,7 @@ class DigitalLikes extends CActiveRecord
 		$criteria->compare('t.likes_ip',strtolower($this->likes_ip),true);
 		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
-		
-		
+
 		$criteria->compare('view.likes',strtolower($this->like_search), true);
 		$criteria->compare('view.unlikes',strtolower($this->unlike_search), true);
 		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
@@ -260,7 +259,7 @@ class DigitalLikes extends CActiveRecord
 			if(!isset($_GET['user'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'user_search',
-					'value' => '$data->user->displayname',
+					'value' => '$data->user_id != 0 ? $data->user->displayname : "-"',
 				);
 			}
 			$this->defaultColumns[] = array(
@@ -380,7 +379,7 @@ class DigitalLikes extends CActiveRecord
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
 				$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
-				$this->likes_ip = $_SERVER['REMOTE_ADDR'];				
+				$this->likes_ip = $_SERVER['REMOTE_ADDR'];
 			}
 		}
 		return true;

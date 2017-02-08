@@ -34,6 +34,10 @@
 class DigitalDownloadDetail extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $file_search;
+	public $digital_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -68,7 +72,8 @@ class DigitalDownloadDetail extends CActiveRecord
 			array('download_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, download_id, download_date, download_ip', 'safe', 'on'=>'search'),
+			array('id, download_id, download_date, download_ip,
+				file_search, digital_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -94,6 +99,8 @@ class DigitalDownloadDetail extends CActiveRecord
 			'download_id' => Yii::t('attribute', 'Download'),
 			'download_date' => Yii::t('attribute', 'Download Date'),
 			'download_ip' => Yii::t('attribute', 'Download Ip'),
+			'file_search' => Yii::t('attribute', 'File'),
+			'digital_search' => Yii::t('attribute', 'Digital'),
 		);
 		/*
 			'ID' => 'ID',
@@ -121,6 +128,21 @@ class DigitalDownloadDetail extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'download' => array(
+				'alias'=>'download',
+			),
+			'download.file' => array(
+				'alias'=>'file',
+				'select'=>'digital_id, digital_filename'
+			),
+			'download.file.digital' => array(
+				'alias'=>'digital',
+				'select'=>'digital_title'
+			),
+		);
 
 		$criteria->compare('t.id',strtolower($this->id),true);
 		if(isset($_GET['download']))
@@ -130,6 +152,9 @@ class DigitalDownloadDetail extends CActiveRecord
 		if($this->download_date != null && !in_array($this->download_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.download_date)',date('Y-m-d', strtotime($this->download_date)));
 		$criteria->compare('t.download_ip',strtolower($this->download_ip),true);
+
+		$criteria->compare('file.digital_filename',strtolower($this->file_search), true);
+		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
 
 		if(!isset($_GET['DigitalDownloadDetail_sort']))
 			$criteria->order = 't.id DESC';
@@ -178,8 +203,16 @@ class DigitalDownloadDetail extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['download']))
-				$this->defaultColumns[] = 'download_id';
+			if(!isset($_GET['download'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'file_search',
+					'value' => '$data->download->file->digital_filename',
+				);
+				$this->defaultColumns[] = array(
+					'name' => 'digital_search',
+					'value' => '$data->download->file->digital->digital_title',
+				);
+			}
 			$this->defaultColumns[] = array(
 				'name' => 'download_date',
 				'value' => 'Utility::dateFormat($data->download_date)',

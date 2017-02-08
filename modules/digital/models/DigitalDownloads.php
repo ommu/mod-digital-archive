@@ -230,7 +230,7 @@ class DigitalDownloads extends CActiveRecord
 			if(!isset($_GET['user'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'user_search',
-					'value' => '$data->user->displayname',
+					'value' => '$data->user_id != 0 ? $data->user->displayname : "-"',
 				);
 			}
 			$this->defaultColumns[] = array(
