@@ -616,7 +616,7 @@ class Digitals extends CActiveRecord
 				$this->modified_id = Yii::app()->user->id;
 			
 			$cover_input = CUploadedFile::getInstance($this, 'cover_input');
-			if($cover_input->name != '') {
+			if($cover_input != null) {
 				$extension = pathinfo($cover_input->name, PATHINFO_EXTENSION);
 				if(!in_array(strtolower($extension), $cover_file_type))
 					$this->addError('cover_input', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
@@ -626,7 +626,7 @@ class Digitals extends CActiveRecord
 			}
 			
 			$digital_file_input = CUploadedFile::getInstance($this, 'digital_file_input');
-			if($digital_file_input->name != '') {
+			if($digital_file_input != null) {
 				$extension = pathinfo($digital_file_input->name, PATHINFO_EXTENSION);
 				if(!in_array(strtolower($extension), $digital_file_type))
 					$this->addError('digital_file_input', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
@@ -746,8 +746,8 @@ class Digitals extends CActiveRecord
 		} else
 			$digital_path = $this->digital_path;
 		
-		if($this->isNewRecord || (!$this->isNewRecord && $setting->cover_limit == 1)) {
-			$this->cover_input = CUploadedFile::getInstance($this, 'cover_input');
+		$this->cover_input = CUploadedFile::getInstance($this, 'cover_input');
+		if($this->cover_input != null) {
 			if($this->cover_input instanceOf CUploadedFile) {
 				$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital_title).'.'.strtolower($this->cover_input->extensionName);
 				if($this->cover_input->saveAs($digital_path.'/'.$fileName)) {
@@ -767,11 +767,11 @@ class Digitals extends CActiveRecord
 						}
 					}
 				}
-			}			
+			}
 		}
 		
-		if($this->isNewRecord || (!$this->isNewRecord && $action == 'upload')) {
-			$this->digital_file_input = CUploadedFile::getInstance($this, 'digital_file_input');
+		$this->digital_file_input = CUploadedFile::getInstance($this, 'digital_file_input');
+		if($this->digital_file_input != null) {
 			if($this->digital_file_input instanceOf CUploadedFile) {
 				$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital_title).'.'.strtolower($this->digital_file_input->extensionName);
 				if($this->digital_file_input->saveAs($digital_path.'/'.$fileName)) {
@@ -808,7 +808,7 @@ class Digitals extends CActiveRecord
 						}
 					}
 				}
-			}
+			}				
 		}
 	}
 

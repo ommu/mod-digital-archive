@@ -14,6 +14,7 @@
  */
 ?>
 
+<?php if($data->cover_filename != '') {?>
 <li>
 	<?php if($data->status == 0) {?>
 		<a id="set-cover" href="<?php echo Yii::app()->controller->createUrl('o/cover/setcover', array('id'=>$data->cover_id,'hook'=>'admin'));?>" title="<?php echo Yii::t('phrase', 'Set Cover');?>"><?php echo Yii::t('phrase', 'Set Cover');?></a>
@@ -22,5 +23,6 @@
 	<?php 
 	//$cover = Yii::app()->request->baseUrl.'/public/digital/'.$data->digital->view->uniquepath.'/'.$data->cover_filename;
 	$cover = Yii::app()->controller->createUrl('media/cover', array('id'=>$data->cover_id,'abc'=>$data->md5coverpath));?>
-	<img src="<?php echo $cover Utility::getTimThumb($cover, 320, 250, 1);?>" alt="<?php echo $data->digital->digital_title;?>" />	
+	<img src="<?php echo Utility::getTimThumb($cover, 320, 250, 1);?>" alt="<?php echo $data->digital->digital_title;?>" />	
 </li>
+<?php }?>

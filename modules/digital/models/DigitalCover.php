@@ -376,6 +376,7 @@ class DigitalCover extends CActiveRecord
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
+		$controller = strtolower(Yii::app()->controller->id);
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'cover_file_type',
@@ -399,7 +400,7 @@ class DigitalCover extends CActiveRecord
 						)));
 						
 				} else {
-					if($this->isNewRecord)
+					if($this->isNewRecord && $controller == 'o/cover')
 						$this->addError('cover_filename', 'Cover (File) cannot be blank.');
 				}
 			}
@@ -432,7 +433,7 @@ class DigitalCover extends CActiveRecord
 			} else 
 				@chmod($digital_path, 0755, true);
 			
-			if($currentAction != 'o/admin/insertcover') {
+			if(!$this->isNewRecord && in_array($currentAction, array('o/cover/add','o/cover/edit'))) {
 				$this->cover_filename = CUploadedFile::getInstance($this, 'cover_filename');
 				if($this->cover_filename != null) {
 					if($this->cover_filename instanceOf CUploadedFile) {
@@ -446,7 +447,7 @@ class DigitalCover extends CActiveRecord
 						}
 					}
 				} else {
-					if(!$this->isNewRecord && $this->cover_filename == '')
+					if(!$this->isNewRecord && $this->cover_filename == '' && $currentAction == 'o/cover/edit')
 						$this->cover_filename = $this->old_cover_filename_input;
 				}
 			}
@@ -495,7 +496,7 @@ class DigitalCover extends CActiveRecord
 			));
 			if($covers != null) {
 				foreach($covers as $key => $val)
-					DigitalCover::model()->findByPk($val->cover_id)->delete();
+					self::model()->findByPk($val->cover_id)->delete();
 			}
 		}
 		

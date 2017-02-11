@@ -16,7 +16,7 @@
 
 	$this->breadcrumbs=array(
 		'Digital Covers'=>array('manage'),
-		'Publish',
+		'Cover',
 	);
 ?>
 
@@ -25,13 +25,11 @@
 	'enableAjaxValidation'=>true,
 	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
-
 	<div class="dialog-content">
 		<?php echo Yii::t('phrase', 'Are you sure made ​​cover this item?');?>
 	</div>
 	<div class="dialog-submit">
-		<?php echo CHtml::submitButton($title, array('onclick' => 'setEnableSave()')); ?>
+		<?php echo CHtml::submitButton(Yii::t('phrase', 'Set Cover'), array('onclick' => 'setEnableSave()')); ?>
 		<?php echo CHtml::button(Yii::t('phrase', 'Cancel'), array('id'=>'closed')); ?>
 	</div>
-	
 <?php $this->endWidget(); ?>

@@ -312,7 +312,7 @@ class CoverController extends Controller
 				$model->delete();
 				
 				if(isset($_GET['hook']) && $_GET['hook'] == 'admin') {
-					$url = Yii::app()->controller->createUrl('getcover', array('id'=>$model->digital_id,'replace'=>'true'));
+					$url = Yii::app()->controller->createUrl('o/admin/getcover', array('id'=>$model->digital_id,'replace'=>'true'));
 					echo CJSON::encode(array(
 						'type' => 2,
 						'id' => 'media-render',

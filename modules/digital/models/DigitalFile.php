@@ -344,7 +344,7 @@ class DigitalFile extends CActiveRecord
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
-		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
+		$controller = strtolower(Yii::app()->controller->id);
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'digital_global_file_type, digital_file_type, form_standard, form_custom_field',
 		));
@@ -370,7 +370,7 @@ class DigitalFile extends CActiveRecord
 						'{extensions}'=>Utility::formatFileType($digital_file_type, false),
 					)));
 			} else {
-				if($this->isNewRecord)
+				if($this->isNewRecord && $controller == 'o/file')
 					$this->addError('digital_filename', 'File cannot be blank.');				
 			}
 		}
@@ -381,7 +381,7 @@ class DigitalFile extends CActiveRecord
 	 * before save attributes
 	 */
 	protected function beforeSave() {
-		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);			
+		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'digital_path',
 		));
@@ -402,22 +402,24 @@ class DigitalFile extends CActiveRecord
 			} else 
 				@chmod($digital_path, 0755, true);
 			
-			$this->digital_filename = CUploadedFile::getInstance($this, 'digital_filename');
-			if($this->digital_filename != null) {
-				if($this->digital_filename instanceOf CUploadedFile) {
-					$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital->digital_title).'.'.strtolower($this->digital_filename->extensionName);
-					if($this->digital_filename->saveAs($digital_path.'/'.$fileName)) {
-						if(!$this->isNewRecord) {
-							if($this->old_digital_filename_input != '' && file_exists($digital_path.'/'.$this->old_digital_filename_input))
-								rename($digital_path.'/'.$this->old_digital_filename_input, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->old_digital_filename_input);
+			if(!$this->isNewRecord && in_array($currentAction, array('o/file/add','o/file/edit'))) {
+				$this->digital_filename = CUploadedFile::getInstance($this, 'digital_filename');
+				if($this->digital_filename != null) {
+					if($this->digital_filename instanceOf CUploadedFile) {
+						$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital->digital_title).'.'.strtolower($this->digital_filename->extensionName);
+						if($this->digital_filename->saveAs($digital_path.'/'.$fileName)) {
+							if(!$this->isNewRecord) {
+								if($this->old_digital_filename_input != '' && file_exists($digital_path.'/'.$this->old_digital_filename_input))
+									rename($digital_path.'/'.$this->old_digital_filename_input, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->old_digital_filename_input);
+							}
+							$this->digital_filename = $fileName;
 						}
-						$this->digital_filename = $fileName;
 					}
+				} else {
+					if(!$this->isNewRecord && $this->digital_filename == '') {
+						$this->digital_filename = $this->old_digital_filename_input;
+					}					
 				}
-			} else {
-				if(!$this->isNewRecord && $this->digital_filename == '') {
-					$this->digital_filename = $this->old_digital_filename_input;
-				}					
 			}
 		}
 		return true;

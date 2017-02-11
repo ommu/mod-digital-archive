@@ -650,6 +650,7 @@ class AdminController extends Controller
 			$fileName = time().'_'.$model->digital_id.'_'.Utility::getUrlTitle($model->digital_title).'.'.strtolower($uploadCover->extensionName);
 			if($uploadCover->saveAs($digital_path.'/'.$fileName)) {
 				$cover = new DigitalCover;
+				$photo->cover = $model->covers == null ? '1' : '0';
 				$cover->digital_id = $model->digital_id;
 				$cover->cover_filename = $fileName;
 				if($cover->save()) {
