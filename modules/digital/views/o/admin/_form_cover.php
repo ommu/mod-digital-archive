@@ -15,6 +15,6 @@
 ?>
 
 <li id="upload" <?php echo $setting->cover_limit != 0 && count($covers) == $setting->cover_limit ? 'class="hide"' : '' ?>>
-	<a id="upload-gallery" href="<?php echo Yii::app()->controller->createUrl('o/admin/insertcover', array('id'=>$covers[0]->digital_id,'hook'=>'admin'));?>" title="<?php echo Yii::t('phrase', 'Upload Cover'); ?>"><?php echo Yii::t('phrase', 'Upload Cover'); ?></a>
+	<a id="upload-gallery" href="<?php echo Yii::app()->controller->createUrl('o/admin/insertcover', array('id'=>$model->digital_id,'hook'=>'admin'));?>" title="<?php echo Yii::t('phrase', 'Upload Cover'); ?>"><?php echo Yii::t('phrase', 'Upload Cover'); ?></a>
 	<img src="<?php echo Utility::getTimThumb(Yii::app()->request->baseUrl.'/public/digital/digital_default.png', 320, 250, 1);?>" alt="" />
 </li>

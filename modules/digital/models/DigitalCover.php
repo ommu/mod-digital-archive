@@ -418,11 +418,14 @@ class DigitalCover extends CActiveRecord
 		));
 		
 		if(parent::beforeSave()) {
-			$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
-			if($setting != null)
-				$digital_path = $setting->digital_path.'/'.$pathUnique;
-			else
-				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+			$digital_path = $this->digital->digital_path;
+			if($this->digital->digital_path == '') {
+				$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
+				if($setting != null)
+					$digital_path = $setting->digital_path.'/'.$pathUnique;
+				else
+					$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+			}
 	
 			if(!file_exists($digital_path)) {
 				@mkdir($digital_path, 0755, true);
@@ -433,7 +436,7 @@ class DigitalCover extends CActiveRecord
 			} else 
 				@chmod($digital_path, 0755, true);
 			
-			if(!$this->isNewRecord && in_array($currentAction, array('o/cover/add','o/cover/edit'))) {
+			if(in_array($currentAction, array('o/cover/add','o/cover/edit'))) {
 				$this->cover_filename = CUploadedFile::getInstance($this, 'cover_filename');
 				if($this->cover_filename != null) {
 					if($this->cover_filename instanceOf CUploadedFile) {
@@ -447,7 +450,7 @@ class DigitalCover extends CActiveRecord
 						}
 					}
 				} else {
-					if(!$this->isNewRecord && $this->cover_filename == '' && $currentAction == 'o/cover/edit')
+					if(!$this->isNewRecord && $this->cover_filename == '')
 						$this->cover_filename = $this->old_cover_filename_input;
 				}
 			}
@@ -466,11 +469,14 @@ class DigitalCover extends CActiveRecord
 		));
 		$cover_resize_size = unserialize($setting->cover_resize_size);
 		
-		$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
-		if($setting != null)
-			$digital_path = $setting->digital_path.'/'.$pathUnique;
-		else
-			$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+		$digital_path = $this->digital->digital_path;
+		if($this->digital->digital_path == '') {
+			$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
+			if($setting != null)
+				$digital_path = $setting->digital_path.'/'.$pathUnique;
+			else
+				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+		}
 
 		if(!file_exists($digital_path)) {
 			@mkdir($digital_path, 0755, true);
@@ -515,11 +521,14 @@ class DigitalCover extends CActiveRecord
 			'select' => 'digital_path',
 		));
 		
-		$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
-		if($setting != null)
-			$digital_path = $setting->digital_path.'/'.$pathUnique;
-		else
-			$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+		$digital_path = $this->digital->digital_path;
+		if($this->digital->digital_path == '') {
+			$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
+			if($setting != null)
+				$digital_path = $setting->digital_path.'/'.$pathUnique;
+			else
+				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+		}
 		
 		if($this->cover_filename != '' && file_exists($digital_path.'/'.$this->cover_filename))
 			rename($digital_path.'/'.$this->cover_filename, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->cover_filename);
@@ -529,5 +538,4 @@ class DigitalCover extends CActiveRecord
 		if($covers != null && $this->status == 1)
 			self::model()->updateByPk($covers[0]->cover_id, array('status'=>1));
 	}
-
 }

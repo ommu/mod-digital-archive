@@ -36,7 +36,7 @@
 	<div class="clearfix horizontal-data" name="four">
 		<ul id="media-render">
 			<?php 
-			$this->renderPartial('_form_cover', array('covers'=>$covers, 'setting'=>$setting));
+			$this->renderPartial('_form_cover', array('model'=>$model, 'covers'=>$covers, 'setting'=>$setting));
 			if($covers != null) {
 				foreach($covers as $key => $val)
 					$this->renderPartial('_form_view_covers', array('data'=>$val));

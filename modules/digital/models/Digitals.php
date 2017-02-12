@@ -596,8 +596,7 @@ class Digitals extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	protected function beforeValidate() {
-		$controller = strtolower(Yii::app()->controller->id);			
+	protected function beforeValidate() {	
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'digital_global_file_type, cover_file_type, digital_file_type, form_standard, form_custom_field',
 		));
@@ -747,7 +746,7 @@ class Digitals extends CActiveRecord
 			$digital_path = $this->digital_path;
 		
 		$this->cover_input = CUploadedFile::getInstance($this, 'cover_input');
-		if($this->cover_input != null) {
+		if($this->cover_input != null && ($this->isNewRecord || (!$this->isNewRecord && $setting->cover_limit == 1))) {
 			if($this->cover_input instanceOf CUploadedFile) {
 				$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital_title).'.'.strtolower($this->cover_input->extensionName);
 				if($this->cover_input->saveAs($digital_path.'/'.$fileName)) {
@@ -771,7 +770,7 @@ class Digitals extends CActiveRecord
 		}
 		
 		$this->digital_file_input = CUploadedFile::getInstance($this, 'digital_file_input');
-		if($this->digital_file_input != null) {
+		if($this->digital_file_input != null && ($this->isNewRecord || (!$this->isNewRecord && $action == 'upload'))) {
 			if($this->digital_file_input instanceOf CUploadedFile) {
 				$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital_title).'.'.strtolower($this->digital_file_input->extensionName);
 				if($this->digital_file_input->saveAs($digital_path.'/'.$fileName)) {
@@ -819,12 +818,15 @@ class Digitals extends CActiveRecord
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'digital_path',
 		));
-		if(parent::beforeDelete()) {			
-			$pathUnique = self::getUniqueDirectory($this->digital_id, $this->salt, $this->view->md5path);
-			if($setting != null)
-				$digital_path = $setting->digital_path.'/'.$pathUnique;
-			else
-				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+		if(parent::beforeDelete()) {
+			$digital_path = $this->digital_path;
+			if($this->digital_path == '') {
+				$pathUnique = self::getUniqueDirectory($this->digital_id, $this->salt, $this->view->md5path);
+				if($setting != null)
+					$digital_path = $setting->digital_path.'/'.$pathUnique;
+				else
+					$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+			}
 			
 			//delete digital covers
 			$covers = $this->covers;
@@ -857,11 +859,14 @@ class Digitals extends CActiveRecord
 			'select' => 'digital_path',
 		));
 		//delete digital directory
-		$pathUnique = self::getUniqueDirectory($this->digital_id, $this->salt, $this->view->md5path);
-		if($setting != null)
-			$digital_path = $setting->digital_path.'/'.$pathUnique;
-		else
-			$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+		$digital_path = $this->digital_path;
+		if($this->digital_path == '') {
+			$pathUnique = self::getUniqueDirectory($this->digital_id, $this->salt, $this->view->md5path);
+			if($setting != null)
+				$digital_path = $setting->digital_path.'/'.$pathUnique;
+			else
+				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
+		}
 		Utility::deleteFolder($digital_path);		
 	}
 
