@@ -442,7 +442,7 @@ class DigitalCategory extends CActiveRecord
 		
 		if(parent::beforeValidate()) {
 			$cat_icon_image = CUploadedFile::getInstance($this, 'cat_icon_image');
-			if($cat_icon_image->name != '') {
+			if($cat_icon_image != null) {
 				$extension = pathinfo($cat_icon_image->name, PATHINFO_EXTENSION);
 				if(!in_array(strtolower($extension), $cover_file_type))
 					$this->addError('cat_icon_image', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
@@ -452,7 +452,7 @@ class DigitalCategory extends CActiveRecord
 			}
 			
 			$cat_cover = CUploadedFile::getInstance($this, 'cat_cover');
-			if($cat_cover->name != '') {
+			if($cat_cover != null) {
 				$extension = pathinfo($cat_cover->name, PATHINFO_EXTENSION);
 				if(!in_array(strtolower($extension), $cover_file_type))
 					$this->addError('cat_cover', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
@@ -472,10 +472,9 @@ class DigitalCategory extends CActiveRecord
 	/**
 	 * before save attributes
 	 */
-	protected function beforeSave() {
-		$action = strtolower(Yii::app()->controller->action->id);
+	protected function beforeSave() {		
 		if(parent::beforeSave()) {
-			if(!$this->isNewRecord && in_array($action, array('edit'))) {
+			if(!$this->isNewRecord) {
 				//digital photo location
 				$digital_path = "public/digital";
 				
@@ -490,30 +489,36 @@ class DigitalCategory extends CActiveRecord
 					@chmod($digital_path, 0755, true);
 				
 				$this->cat_icon_image = CUploadedFile::getInstance($this, 'cat_icon_image');
-				if($this->cat_icon_image instanceOf CUploadedFile) {
-					$fileName = $this->cat_id.'_'.time().'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_icon_image->extensionName);
-					if($this->cat_icon_image->saveAs($digital_path.'/'.$fileName)) {
-						self::resizeCategoryCover($digital_path.'/'.$fileName, '300,300');
-						if($this->old_cat_icon_image_input != '' && file_exists($digital_path.'/'.$this->old_cat_icon_image_input))
-							rename($digital_path.'/'.$this->old_cat_icon_image_input, 'public/digital/verwijderen/'.$this->old_cat_icon_image_input);
-						$this->cat_icon_image = $fileName;
+				if($this->cat_icon_image != null) {
+					if($this->cat_icon_image instanceOf CUploadedFile) {
+						$fileName = time().'_'.$this->cat_id.'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_icon_image->extensionName);
+						if($this->cat_icon_image->saveAs($digital_path.'/'.$fileName)) {
+							self::resizeCategoryCover($digital_path.'/'.$fileName, '300,300');
+							if($this->old_cat_icon_image_input != '' && file_exists($digital_path.'/'.$this->old_cat_icon_image_input))
+								rename($digital_path.'/'.$this->old_cat_icon_image_input, 'public/digital/verwijderen/'.$this->old_cat_icon_image_input);
+							$this->cat_icon_image = $fileName;
+						}
 					}
-				}					
-				if($this->cat_icon_image == '')
-					$this->cat_icon_image = $this->old_cat_icon_image_input;
+				} else {
+					if($this->cat_icon_image == '')
+						$this->cat_icon_image = $this->old_cat_icon_image_input;					
+				}
 				
 				$this->cat_cover = CUploadedFile::getInstance($this, 'cat_cover');
-				if($this->cat_cover instanceOf CUploadedFile) {
-					$fileName = $this->cat_id.'_'.time().'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_cover->extensionName);
-					if($this->cat_cover->saveAs($digital_path.'/'.$fileName)) {
-						self::resizeCategoryCover($digital_path.'/'.$fileName, '360,380');
-						if($this->old_cat_cover_input != '' && file_exists($digital_path.'/'.$this->old_cat_cover_input))
-							rename($digital_path.'/'.$this->old_cat_cover_input, 'public/digital/verwijderen/'.$this->old_cat_cover_input);
-						$this->cat_cover = $fileName;
+				if($this->cat_cover != null) {
+					if($this->cat_cover instanceOf CUploadedFile) {
+						$fileName = $this->cat_id.'_'.time().'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_cover->extensionName);
+						if($this->cat_cover->saveAs($digital_path.'/'.$fileName)) {
+							self::resizeCategoryCover($digital_path.'/'.$fileName, '360,380');
+							if($this->old_cat_cover_input != '' && file_exists($digital_path.'/'.$this->old_cat_cover_input))
+								rename($digital_path.'/'.$this->old_cat_cover_input, 'public/digital/verwijderen/'.$this->old_cat_cover_input);
+							$this->cat_cover = $fileName;
+						}
 					}
-				}					
-				if($this->cat_cover == '')
-					$this->cat_cover = $this->old_cat_cover_input;
+				} else {
+					if($this->cat_cover == '')
+						$this->cat_cover = $this->old_cat_cover_input;					
+				}				
 			}
 			$this->cat_code = strtoupper($this->cat_code);	
 			$this->cat_file_type = serialize(Utility::formatFileType($this->cat_file_type));
@@ -542,20 +547,24 @@ class DigitalCategory extends CActiveRecord
 				@chmod($digital_path, 0755, true);
 			
 			$this->cat_icon_image = CUploadedFile::getInstance($this, 'cat_icon_image');
-			if($this->cat_icon_image instanceOf CUploadedFile) {
-				$fileName = $this->cat_id.'_'.time().'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_icon_image->extensionName);
-				if($this->cat_icon_image->saveAs($digital_path.'/'.$fileName)) {
-					self::resizeCategoryCover($digital_path.'/'.$fileName, '300,300');
-					self::model()->updateByPk($this->cat_id, array('cat_icon_image'=>$fileName));
+			if($this->cat_icon_image != null) {
+				if($this->cat_icon_image instanceOf CUploadedFile) {
+					$fileName = time().'_'.$this->cat_id.'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_icon_image->extensionName);
+					if($this->cat_icon_image->saveAs($digital_path.'/'.$fileName)) {
+						self::resizeCategoryCover($digital_path.'/'.$fileName, '300,300');
+						self::model()->updateByPk($this->cat_id, array('cat_icon_image'=>$fileName));
+					}
 				}
 			}
 			
 			$this->cat_cover = CUploadedFile::getInstance($this, 'cat_cover');
-			if($this->cat_cover instanceOf CUploadedFile) {
-				$fileName = $this->cat_id.'_'.time().'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_cover->extensionName);
-				if($this->cat_cover->saveAs($digital_path.'/'.$fileName)) {
-					self::resizeCategoryCover($digital_path.'/'.$fileName, '360,380');
-					self::model()->updateByPk($this->cat_id, array('cat_cover'=>$fileName));
+			if($this->cat_cover != null) {
+				if($this->cat_cover instanceOf CUploadedFile) {
+					$fileName = time().'_'.$this->cat_id.'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_cover->extensionName);
+					if($this->cat_cover->saveAs($digital_path.'/'.$fileName)) {
+						self::resizeCategoryCover($digital_path.'/'.$fileName, '360,380');
+						self::model()->updateByPk($this->cat_id, array('cat_cover'=>$fileName));
+					}
 				}
 			}
 			

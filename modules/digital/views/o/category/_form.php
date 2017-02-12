@@ -149,7 +149,7 @@
 					if(!$model->getErrors())
 						$model->old_cat_icon_image_input = $model->cat_icon_image;
 					echo $form->hiddenField($model,'old_cat_icon_image_input');
-					if($model->cat_icon_image != '') {
+					if($model->old_cat_icon_image_input != '') {
 						$cat_icon_image = Yii::app()->request->baseUrl.'/public/digital/'.$model->old_cat_icon_image_input;?>
 						<img class="mb-15" src="<?php echo Utility::getTimThumb($cat_icon_image, 200, 300, 3);?>" alt="">					
 				<?php }
@@ -168,7 +168,7 @@
 					if(!$model->getErrors())
 						$model->old_cat_cover_input = $model->cat_cover;
 					echo $form->hiddenField($model,'old_cat_cover_input');
-					if($model->cat_cover != '') {
+					if($model->old_cat_cover_input != '') {
 						$cat_cover = Yii::app()->request->baseUrl.'/public/digital/'.$model->old_cat_cover_input;?>
 						<img class="mb-15" src="<?php echo Utility::getTimThumb($cat_cover, 300, 400, 3);?>" alt="">					
 				<?php }

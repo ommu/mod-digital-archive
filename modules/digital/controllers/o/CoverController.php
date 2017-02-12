@@ -272,7 +272,7 @@ class CoverController extends Controller
 
 		if(count($id) > 0) {
 			$criteria = new CDbCriteria;
-			$criteria->addInCondition('id', $id);
+			$criteria->addInCondition('cover_id', $id);
 
 			if($actions == 'publish') {
 				DigitalCover::model()->updateAll(array(

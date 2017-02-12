@@ -353,13 +353,13 @@ class DigitalCover extends CActiveRecord
 	/**
 	 * Resize Cover
 	 */
-	public static function resizeCover($cover, $size) {
+	public static function resizeCover($cover, $resize) {
 		Yii::import('ext.phpthumb.PhpThumbFactory');
 		$resizeCover = PhpThumbFactory::create($cover, array('jpegQuality' => 90, 'correctPermissions' => true));
-		if($size['height'] == 0)
-			$resizeCover->resize($size['width']);
+		if($resize['height'] == 0)
+			$resizeCover->resize($resize['width']);
 		else			
-			$resizeCover->adaptiveResize($size['width'], $size['height']);
+			$resizeCover->adaptiveResize($resize['width'], $resize['height']);
 		
 		$resizeCover->save($cover);
 		
