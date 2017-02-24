@@ -18,7 +18,7 @@
 <?php foreach($covers as $key => $val) {
 	if($val->cover_filename != '') {?>
 	<li>
-		<a href="<?php echo Yii::app()->controller->createUrl('media/cover', array('id'=>$val->cover_id,'abc'=>$val->md5coverpath));?>" title="<?php echo $val->cover_filename?>"><?php echo $val->cover_filename?></a> (<?php echo $val->publish == 1 ? Yii::t('attribute', 'Publish') : Yii::t('attribute', 'Unpublish') ?>) <?php echo $val->status == 1 ? '('.Yii::t('attribute', 'Cover').')' : '' ?>
+		<a href="<?php echo Yii::app()->controller->createUrl('media/cover', array('id'=>$val->cover_id,'abc'=>$val->md5coverpath));?>" title="<?php echo $val->cover_filename?>"><?php echo $val->cover_filename?></a> (<?php echo $val->publish == 1 ? Yii::t('phrase', 'Publish') : Yii::t('phrase', 'Unpublish') ?>) <?php echo $val->status == 1 ? '('.Yii::t('phrase', 'Cover').')' : '' ?>
 	</li>
 <?php }
 }?>

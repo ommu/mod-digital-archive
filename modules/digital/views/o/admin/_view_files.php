@@ -17,7 +17,7 @@
 <ul>
 <?php foreach($files as $key => $val) {?>
 	<li>
-		<a href="<?php echo Yii::app()->controller->createUrl('media/file', array('id'=>$val->file_id,'abc'=>$val->md5filepath));?>" title="<?php echo $val->digital_filename?>"><?php echo $val->digital_filename?></a> (<?php echo $val->publish == 1 ? Yii::t('attribute', 'Publish') : Yii::t('attribute', 'Unpublish') ?>)
+		<a href="<?php echo Yii::app()->controller->createUrl('media/file', array('id'=>$val->file_id,'abc'=>$val->md5filepath));?>" title="<?php echo $val->digital_filename?>"><?php echo $val->digital_filename?></a> (<?php echo $val->publish == 1 ? Yii::t('phrase', 'Publish') : Yii::t('phrase', 'Unpublish') ?>)
 	</li>
 <?php }?>
 </ul>
