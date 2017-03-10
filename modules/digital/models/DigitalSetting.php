@@ -347,7 +347,7 @@ class DigitalSetting extends CActiveRecord
 				$this->cover_limit = 0;
 			
 			if($this->cover_unlimit_input == 0 && $this->cover_limit != '' && $this->cover_limit <= 0)
-				$this->addError('cover_limit', Yii::t('phrase', 'Photo Limit lebih besar dari 0'));
+				$this->addError('cover_limit', Yii::t('phrase', 'Photo Limit harus lebih besar dari 0'));
 			
 			if($this->cover_resize == 1 && ($this->cover_resize_size['width'] == '' || $this->cover_resize_size['height'] == ''))
 				$this->addError('cover_resize_size', Yii::t('phrase', 'Media Resize cannot be blank.'));
