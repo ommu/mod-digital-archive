@@ -3,6 +3,13 @@
 class DigitalModule extends CWebModule
 {
 	public $defaultController = 'site'; 
+	
+	// getAssetsUrl()
+	//	return the URL for this module's assets, performing the publish operation
+	//	the first time, and caching the result for subsequent use.
+	private $_assetsUrl;
+
+	public function init() 
 
 	public function init() {
 		// this method is called when the module is being created
@@ -15,6 +22,14 @@ class DigitalModule extends CWebModule
 			'digital.model_bpad_digital.*',
 			'digital.model_bpad_sync.*',
 		));
+	}
+ 
+	public function getAssetsUrl()
+	{
+		if ($this->_assetsUrl === null)
+			$this->_assetsUrl = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias('digital.assets'));
+		
+		return $this->_assetsUrl;
 	}
 
 	public function beforeControllerAction($controller, $action) {
