@@ -173,7 +173,7 @@ class DigitalSubjects extends CActiveRecord
 		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
 		if(isset($_GET['tag']) && isset($_GET['publish']))
 			$criteria->compare('digital.publish',$_GET['publish']);
-		$criteria->compare('tag.body',strtolower($this->tag_search), true);
+		$criteria->compare('tag.body',Utility::getUrlTitle(strtolower(trim($this->tag_search))), true);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 
 		if(!isset($_GET['DigitalSubjects_sort']))
@@ -241,7 +241,7 @@ class DigitalSubjects extends CActiveRecord
 			if(!isset($_GET['tag'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'tag_search',
-					'value' => '$data->tag->body',
+					'value' => 'str_replace(\'-\', \' \', $data->tag->body)',
 				);
 			}
 			$this->defaultColumns[] = array(

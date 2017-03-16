@@ -165,7 +165,7 @@ class DigitalCategoryTag extends CActiveRecord
 			$criteria->compare('t.creation_id',$this->creation_id);
 		
 		$criteria->compare('category.cat_title',strtolower($this->category_search), true);
-		$criteria->compare('tag.body',strtolower($this->tag_search), true);
+		$criteria->compare('tag.body',Utility::getUrlTitle(strtolower(trim($this->tag_search))), true);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 
 		if(!isset($_GET['DigitalCategoryTag_sort']))
@@ -226,7 +226,7 @@ class DigitalCategoryTag extends CActiveRecord
 			if(!isset($_GET['tag'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'tag_search',
-					'value' => '$data->tag->body',
+					'value' => 'str_replace(\'-\', \' \', $data->tag->body)',
 				);
 			}
 			$this->defaultColumns[] = array(

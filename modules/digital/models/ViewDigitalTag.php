@@ -142,7 +142,7 @@ class ViewDigitalTag extends CActiveRecord
 		$criteria->compare('t.digitals',strtolower($this->digitals),true);
 		$criteria->compare('t.digital_all',strtolower($this->digital_all),true);
 		
-		$criteria->compare('tag.body',strtolower($this->tag_search), true);
+		$criteria->compare('tag.body',Utility::getUrlTitle(strtolower(trim($this->tag_search))), true);
 
 		if(!isset($_GET['ViewDigitalTag_sort']))
 			$criteria->order = 't.tag_id DESC';
@@ -192,7 +192,7 @@ class ViewDigitalTag extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'tag_search',
-				'value' => '$data->tag->body',
+				'value' => 'str_replace(\'-\', \' \', $data->tag->body)',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'digitals',
