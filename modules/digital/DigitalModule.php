@@ -9,8 +9,6 @@ class DigitalModule extends CWebModule
 	//	the first time, and caching the result for subsequent use.
 	private $_assetsUrl;
 
-	public function init() 
-
 	public function init() {
 		// this method is called when the module is being created
 		// you may place code here to customize the module or the application

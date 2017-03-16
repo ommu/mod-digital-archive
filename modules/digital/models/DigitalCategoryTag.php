@@ -302,7 +302,7 @@ class DigitalCategoryTag extends CActiveRecord
 						'select' => 'tag_id, body',
 						'condition' => 'body = :body',
 						'params' => array(
-							':body' => $this->tag_input,
+							':body' => Utility::getUrlTitle(strtolower(trim($this->tag_input))),
 						),
 					));
 					if($tag != null) {
