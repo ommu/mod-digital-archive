@@ -12,75 +12,75 @@ db_sql_filename	:
 
 plugin_menu		:
 	- urlTitle: View Digitals
-		urlRules: {siteType: 0,1, userLevel: 1,2}
+		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
 	- urlTitle: Settings
-		urlRules: {siteType: 0,1, userLevel: 1,2}
+		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/setting/edit, attr: -, icon: -}
 		submenu :
 			- urlTitle: Categories
-				urlRules: {siteType: 0,1, userLevel: 1}
+				urlRules: {siteType: "0,1", userLevel: 1}
 				urlPath: {url: o/category/manage, attr: -, icon: -}
 			- urlTitle: Languages
-				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlRules: {siteType: "0,1", userLevel: "1,2"}
 				urlPath: {url: o/language/manage, attr: -, icon: -}
 			- urlTitle: Publishers
-				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlRules: {siteType: "0,1", userLevel: "1,2"}
 				urlPath: {url: o/publisher/manage, attr: -, icon: -}
 			- urlTitle: Authors
-				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlRules: {siteType: "0,1", userLevel: "1,2"}
 				urlPath: {url: o/author/manage, attr: -, icon: -}
 			- urlTitle: Subjects
-				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlRules: {siteType: "0,1", userLevel: "1,2"}
 				urlPath: {url: o/subject/manage, attr: -, icon: -}
 			- urlTitle: Tags
-				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlRules: {siteType: "0,1", userLevel: "1,2"}
 				urlPath: {url: o/tag/manage, attr: -, icon: -}
 			- urlTitle: Likes
-				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlRules: {siteType: "0,1", userLevel: "1,2"}
 				urlPath: {url: o/likes/manage, attr: -, icon: -}
 			- urlTitle: Views
-				urlRules: {siteType: 0,1, userLevel: 1,2}
+				urlRules: {siteType: "0,1", userLevel: "1,2"}
 				urlPath: {url: o/views/manage, attr: -, icon: -}
 
 content_menu	:
 # controller o/admin
 	- urlTitle: Add Materi Digital
-		urlRules: {digital, o/admin, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {digital, o/admin, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}
 	- urlTitle: Back to manage
-		urlRules: {digital, o/admin, add,edit,view, siteType: 0,1, userLevel: 1,2}
+		urlRules: {digital, o/admin, "add,edit,view", siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: manage, attr: -, icon: -}
 	- urlTitle: Upload file digital
-		urlRules: {digital, o/admin, edit, siteType: 0,1, userLevel: 1,2}
+		urlRules: {digital, o/admin, edit, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: upload, attr: id=$_GET*id, icon: -}
         
 # controller o/category
 	- urlTitle: Add Category
-		urlRules: {digital, o/category, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {digital, o/category, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}
         
 # controller o/language
 	- urlTitle: Add Language
-		urlRules: {digital, o/language, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {digital, o/language, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}
         
 # controller o/publisher
 	- urlTitle: Add Publisher
-		urlRules: {digital, o/publisher, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {digital, o/publisher, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}        
         
 # controller o/author
 	- urlTitle: Add Author
-		urlRules: {digital, o/author, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {digital, o/author, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}
         
 # controller o/subjects
 	- urlTitle: Back to Subject Manage
-		urlRules: {digital, o/subjects, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {digital, o/subjects, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/subject/manage, attr: -, icon: -}
         
 # controller o/tags
 	- urlTitle: Back to Tag Manage
-		urlRules: {digital, o/tags, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {digital, o/tags, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/tag/manage, attr: -, icon: -}
