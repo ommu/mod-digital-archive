@@ -81,6 +81,14 @@
 			</div>
 		</div>
 
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'cover_caption'); ?>
+			<div class="desc">
+				<?php echo $form->textArea($model,'cover_caption',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller')); ?>
+				<?php echo $form->error($model,'cover_caption'); ?>
+			</div>
+		</div>
+
 		<?php if($setting->cover_limit == 1) {
 			$model->status = 1;
 			echo $form->hiddenField($model,'status');?>

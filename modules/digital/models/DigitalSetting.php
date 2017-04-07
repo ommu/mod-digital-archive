@@ -297,17 +297,17 @@ class DigitalSetting extends CActiveRecord
 	/**
 	 * User get information
 	 */
-	public static function getInfo($id, $column=null)
+	public static function getInfo($column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk(1,array(
 				'select' => $column
 			));
 			return $model->$column;
 			
 		} else {
-			$model = self::model()->findByPk($id);
-			return $model;			
+			$model = self::model()->findByPk(1);
+			return $model;
 		}
 	}
 

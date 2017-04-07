@@ -52,6 +52,21 @@ class DigitalCategory extends CActiveRecord
 	public $modified_search;
 
 	/**
+	 * Behaviors for this model
+	 */
+	public function behaviors() 
+	{
+		return array(
+			'sluggable' => array(
+				'class'=>'ext.yii-behavior-sluggable.SluggableBehavior',
+				'columns' => array('cat_title'),
+				'unique' => true,
+				'update' => true,
+			),
+		);
+	}
+
+	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.

@@ -295,6 +295,24 @@ class DigitalTags extends CActiveRecord
 	}
 
 	/**
+	 * get article tag
+	 */
+	public static function getKeyword($keyword, $tags) 
+	{
+		if(empty($tags))
+			return $keyword;
+		
+		else {
+			$tag = array();
+			foreach($tags as $val)
+				$tag[] = $val->tag->body;
+				
+			$implodeTag = Utility::formatFileType($tag, false);
+			return $keyword.', '.$implodeTag;
+		}
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {

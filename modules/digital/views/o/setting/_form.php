@@ -197,7 +197,7 @@
 					<?php 
 					if(!$model->getErrors())
 						$model->editor_choice_userlevel = unserialize($model->editor_choice_userlevel);
-					echo $form->checkBoxList($model,'editor_choice_userlevel', UserLevel::getTypeMember('all')); ?>
+					echo $form->checkBoxList($model,'editor_choice_userlevel', UserLevel::getUserLevel()); ?>
 					<?php echo $form->error($model,'editor_choice_userlevel'); ?>
 				</div>
 			</div>

@@ -76,6 +76,21 @@ class Digitals extends CActiveRecord
 	public $modified_search;
 
 	/**
+	 * Behaviors for this model
+	 */
+	public function behaviors() 
+	{
+		return array(
+			'sluggable' => array(
+				'class'=>'ext.yii-behavior-sluggable.SluggableBehavior',
+				'columns' => array('digital_title'),
+				'unique' => true,
+				'update' => true,
+			),
+		);
+	}
+
+	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
@@ -129,20 +144,20 @@ class Digitals extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'view' => array(self::BELONGS_TO, 'ViewDigitals', 'digital_id'),
-			'authors' => array(self::HAS_MANY, 'DigitalAuthors', 'digital_id'),
-			'choices' => array(self::HAS_MANY, 'DigitalChoice', 'digital_id'),
-			'covers' => array(self::HAS_MANY, 'DigitalCover', 'digital_id'),
-			'files' => array(self::HAS_MANY, 'DigitalFile', 'digital_id'),
-			'history_prints' => array(self::HAS_MANY, 'DigitalHistoryPrint', 'digital_id'),
-			'likes' => array(self::HAS_MANY, 'DigitalLikes', 'digital_id'),	
-			'subjects' => array(self::HAS_MANY, 'DigitalSubjects', 'digital_id'),
-			'tags' => array(self::HAS_MANY, 'DigitalTags', 'digital_id'),
-			'views' => array(self::HAS_MANY, 'DigitalViews', 'digital_id'),
 			'category' => array(self::BELONGS_TO, 'DigitalCategory', 'cat_id'),
 			'language' => array(self::BELONGS_TO, 'DigitalLanguage', 'language_id'),
 			'publisher' => array(self::BELONGS_TO, 'DigitalPublisher', 'publisher_id'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
+			'authors' => array(self::HAS_MANY, 'DigitalAuthors', 'digital_id'),
+			'choices' => array(self::HAS_MANY, 'DigitalChoice', 'digital_id'),
+			'covers' => array(self::HAS_MANY, 'DigitalCover', 'digital_id', 'on'=>'covers.publish=1'),
+			'files' => array(self::HAS_MANY, 'DigitalFile', 'digital_id', 'on'=>'files.publish=1'),
+			'history_prints' => array(self::HAS_MANY, 'DigitalHistoryPrint', 'digital_id'),
+			'likes' => array(self::HAS_MANY, 'DigitalLikes', 'digital_id'),	
+			'subjects' => array(self::HAS_MANY, 'DigitalSubjects', 'digital_id'),
+			'tags' => array(self::HAS_MANY, 'DigitalTags', 'digital_id'),
+			'views' => array(self::HAS_MANY, 'DigitalViews', 'digital_id'),
 		);
 	}
 
@@ -427,7 +442,7 @@ class Digitals extends CActiveRecord
 			if($setting->form_standard == 0) {
 				$this->defaultColumns[] = array(
 					'name' => 'cover_search',
-					'value' => 'CHtml::link($data->view->covers, Yii::app()->controller->createUrl("o/cover/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
+					'value' => 'CHtml::link($data->view->covers != null ? $data->view->covers : "0", Yii::app()->controller->createUrl("o/cover/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -436,7 +451,7 @@ class Digitals extends CActiveRecord
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'file_search',
-				'value' => 'CHtml::link($data->view->files, Yii::app()->controller->createUrl("o/file/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
+				'value' => 'CHtml::link($data->view->files != null ? $data->view->files : "0", Yii::app()->controller->createUrl("o/file/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -445,7 +460,7 @@ class Digitals extends CActiveRecord
 			if($setting->form_standard == 0) {
 				$this->defaultColumns[] = array(
 					'name' => 'like_search',
-					'value' => 'CHtml::link($data->view->likes, Yii::app()->controller->createUrl("o/likes/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
+					'value' => 'CHtml::link($data->view->likes != null ? $data->view->likes : "0", Yii::app()->controller->createUrl("o/likes/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -465,7 +480,7 @@ class Digitals extends CActiveRecord
 			if($setting->form_standard == 0) {
 				$this->defaultColumns[] = array(
 					'name' => 'choice_search',
-					'value' => 'CHtml::link($data->view->choices, Yii::app()->controller->createUrl("o/choice/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
+					'value' => 'CHtml::link($data->view->choices != null ? $data->view->choices : "0", Yii::app()->controller->createUrl("o/choice/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -607,6 +622,7 @@ class Digitals extends CActiveRecord
 			$form_custom_field = array();
 		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
 			$digital_file_type = unserialize($this->category->cat_file_type);
+		array_push($digital_file_type, 'zip');
 		
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)

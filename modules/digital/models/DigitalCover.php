@@ -28,6 +28,7 @@
  * @property integer $status
  * @property string $digital_id
  * @property string $cover_filename
+ * @property string $cover_caption
  * @property string $creation_date
  * @property string $creation_id
  * @property string $modified_date
@@ -77,11 +78,11 @@ class DigitalCover extends CActiveRecord
 				digital_title_input', 'required', 'on'=>'formCoverInsert'),
 			array('publish, status', 'numerical', 'integerOnly'=>true),
 			array('digital_id, creation_id, modified_id', 'length', 'max'=>11),
-			array('cover_filename,
+			array('cover_filename, cover_caption,
 				digital_title_input, old_cover_filename_input, md5coverpath', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cover_id, publish, status, digital_id, cover_filename, creation_date, creation_id, modified_date, modified_id,
+			array('cover_id, publish, status, digital_id, cover_filename, cover_caption, creation_date, creation_id, modified_date, modified_id,
 				md5coverpath, digital_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -111,6 +112,7 @@ class DigitalCover extends CActiveRecord
 			'status' => Yii::t('attribute', 'Cover'),
 			'digital_id' => Yii::t('attribute', 'Digital'),
 			'cover_filename' => Yii::t('attribute', 'Cover (File)'),
+			'cover_caption' => Yii::t('attribute', 'Caption'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
@@ -187,6 +189,7 @@ class DigitalCover extends CActiveRecord
 		else
 			$criteria->compare('t.digital_id',$this->digital_id);
 		$criteria->compare('t.cover_filename',strtolower($this->cover_filename),true);
+		$criteria->compare('t.cover_caption',strtolower($this->cover_caption),true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
 		if(isset($_GET['creation']))
@@ -240,6 +243,7 @@ class DigitalCover extends CActiveRecord
 			$this->defaultColumns[] = 'status';
 			$this->defaultColumns[] = 'digital_id';
 			$this->defaultColumns[] = 'cover_filename';
+			$this->defaultColumns[] = 'cover_caption';
 			$this->defaultColumns[] = 'creation_date';
 			$this->defaultColumns[] = 'creation_id';
 			$this->defaultColumns[] = 'modified_date';
@@ -302,6 +306,18 @@ class DigitalCover extends CActiveRecord
 						'showButtonPanel' => true,
 					),
 				), true),
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'cover_caption',
+				'value' => '$data->cover_caption != \'\' ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Yes'),
+					0=>Yii::t('phrase', 'No'),
+				),
+				'type' => 'raw',
 			);
 			if(!isset($_GET['type'])) {
 				$this->defaultColumns[] = array(
@@ -414,12 +430,13 @@ class DigitalCover extends CActiveRecord
 	protected function beforeSave() {
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'digital_path',
+			'select' => 'digital_path, cover_view_size',
 		));
+		$cover_view_size = unserialize($setting->cover_view_size);
 		
 		if(parent::beforeSave()) {
 			$digital_path = $this->digital->digital_path;
-			if($this->digital->digital_path == '') {
+			if($digital_path == '') {
 				$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
 				if($setting != null)
 					$digital_path = $setting->digital_path.'/'.$pathUnique;
@@ -443,8 +460,13 @@ class DigitalCover extends CActiveRecord
 						$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital->digital_title).'.'.strtolower($this->cover_filename->extensionName);
 						if($this->cover_filename->saveAs($digital_path.'/'.$fileName)) {						
 							if(!$this->isNewRecord) {
-								if($this->old_cover_filename_input != '' && file_exists($digital_path.'/'.$this->old_cover_filename_input))
+								if($this->old_cover_filename_input != '' && file_exists($digital_path.'/'.$this->old_cover_filename_input)) {
 									rename($digital_path.'/'.$this->old_cover_filename_input, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->old_cover_filename_input);
+									
+									foreach($cover_view_size as $key => $val) {
+										unlink($digital_path.'/'.$key.'_'.$model->old_cover_filename_input);
+									}
+								}
 							}
 							$this->cover_filename = $fileName;
 						}
@@ -470,7 +492,7 @@ class DigitalCover extends CActiveRecord
 		$cover_resize_size = unserialize($setting->cover_resize_size);
 		
 		$digital_path = $this->digital->digital_path;
-		if($this->digital->digital_path == '') {
+		if($digital_path == '') {
 			$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
 			if($setting != null)
 				$digital_path = $setting->digital_path.'/'.$pathUnique;
@@ -518,11 +540,12 @@ class DigitalCover extends CActiveRecord
 		parent::afterDelete();
 		
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'digital_path',
+			'select' => 'digital_path, cover_view_size',
 		));
+		$cover_view_size = unserialize($setting->cover_view_size);
 		
 		$digital_path = $this->digital->digital_path;
-		if($this->digital->digital_path == '') {
+		if($digital_path == '') {
 			$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
 			if($setting != null)
 				$digital_path = $setting->digital_path.'/'.$pathUnique;
@@ -530,8 +553,13 @@ class DigitalCover extends CActiveRecord
 				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
 		}
 		
-		if($this->cover_filename != '' && file_exists($digital_path.'/'.$this->cover_filename))
-			rename($digital_path.'/'.$this->cover_filename, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->cover_filename);
+		if($this->cover_filename != '' && file_exists($digital_path.'/'.$this->cover_filename)) {
+			rename($digital_path.'/'.$this->cover_filename, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->cover_filename);	
+									
+			foreach($cover_view_size as $key => $val) {
+				unlink($digital_path.'/'.$key.'_'.$model->cover_filename);
+			}		
+		}
 
 		//reset cover in article
 		$covers = $this->digital->covers;

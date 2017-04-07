@@ -383,12 +383,14 @@ class DigitalFile extends CActiveRecord
 	protected function beforeSave() {
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'digital_path',
+			'select' => 'digital_path, cover_view_size, cover_file_type',
 		));
+		$cover_view_size = unserialize($setting->cover_view_size);
+		$cover_file_type = unserialize($setting->cover_file_type);
 		
 		if(parent::beforeSave()) {
 			$digital_path = $this->digital->digital_path;
-			if($this->digital->digital_path == '') {
+			if($digital_path == '') {
 				$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
 				if($setting != null)
 					$digital_path = $setting->digital_path.'/'.$pathUnique;
@@ -412,8 +414,16 @@ class DigitalFile extends CActiveRecord
 						$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital->digital_title).'.'.strtolower($this->digital_filename->extensionName);
 						if($this->digital_filename->saveAs($digital_path.'/'.$fileName)) {
 							if(!$this->isNewRecord) {
-								if($this->old_digital_filename_input != '' && file_exists($digital_path.'/'.$this->old_digital_filename_input))
+								if($this->old_digital_filename_input != '' && file_exists($digital_path.'/'.$this->old_digital_filename_input)) {
 									rename($digital_path.'/'.$this->old_digital_filename_input, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->old_digital_filename_input);
+									
+									$extension = pathinfo($model->old_digital_filename_input, PATHINFO_EXTENSION);									
+									if(in_array(strtolower($extension), $cover_file_type)) {
+										foreach($cover_view_size as $key => $val) {
+											unlink($digital_path.'/'.$key.'_'.$model->old_digital_filename_input);
+										}
+									}	
+								}
 							}
 							$this->digital_filename = $fileName;
 						}
@@ -434,11 +444,13 @@ class DigitalFile extends CActiveRecord
 		parent::afterDelete();
 		
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'digital_path',
+			'select' => 'digital_path, cover_view_size, cover_file_type',
 		));
+		$cover_view_size = unserialize($setting->cover_view_size);
+		$cover_file_type = unserialize($setting->cover_file_type);
 		
 		$digital_path = $this->digital->digital_path;
-		if($this->digital->digital_path == '') {
+		if($digital_path == '') {
 			$pathUnique = Digitals::getUniqueDirectory($this->digital_id, $this->digital->salt, $this->digital->view->md5path);
 			if($setting != null)
 				$digital_path = $setting->digital_path.'/'.$pathUnique;
@@ -446,7 +458,15 @@ class DigitalFile extends CActiveRecord
 				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
 		}
 		
-		if($this->digital_filename != '' && file_exists($digital_path.'/'.$this->digital_filename))
-			rename($digital_path.'/'.$this->digital_filename, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->digital_filename);
+		if($this->digital_filename != '' && file_exists($digital_path.'/'.$this->digital_filename)) {
+			rename($digital_path.'/'.$this->digital_filename, 'public/digital/verwijderen/'.$this->digital_id.'_'.$this->digital_filename);	
+			
+			$extension = pathinfo($model->digital_filename, PATHINFO_EXTENSION);
+			if(in_array(strtolower($extension), $cover_file_type)) {
+				foreach($cover_view_size as $key => $val) {
+					unlink($digital_path.'/'.$key.'_'.$model->digital_filename);
+				}
+			}
+		}
 	}
 }

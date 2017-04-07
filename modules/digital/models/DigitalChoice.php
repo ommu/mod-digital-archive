@@ -285,6 +285,9 @@ class DigitalChoice extends CActiveRecord
 	 */
 	public static function getChoiceUser($id)
 	{
+		if(Yii::app()->user->isGuest) 
+			return false;
+		
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'editor_choice_status, editor_choice_userlevel, editor_choice_limit',
 		));

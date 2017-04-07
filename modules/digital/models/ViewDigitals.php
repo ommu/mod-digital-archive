@@ -26,6 +26,10 @@
  * @property string $digital_id
  * @property string $md5path
  * @property string $uniquepath
+ * @property string $cover_id
+ * @property string $md5coverpath
+ * @property string $cover_filename
+ * @property string $cover_caption
  * @property string $covers
  * @property string $cover_all
  * @property string $files
@@ -82,10 +86,10 @@ class ViewDigitals extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('digital_id', 'length', 'max'=>11),
-			array('md5path, uniquepath, covers, cover_all, files, file_all, authors, subjects, tags, likes, like_all, views, view_all, choices, downloads, download_backend, download_all', 'length', 'max'=>21),
+			array('md5path, uniquepath, cover_id, md5coverpath, cover_filename, cover_caption, covers, cover_all, files, file_all, authors, subjects, tags, likes, like_all, views, view_all, choices, downloads, download_backend, download_all', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('digital_id, md5path, uniquepath, covers, cover_all, files, file_all, authors, subjects, tags, likes, like_all, views, view_all, choices, downloads, download_backend, download_all', 'safe', 'on'=>'search'),
+			array('digital_id, md5path, uniquepath, cover_id, md5coverpath, cover_filename, cover_caption, covers, cover_all, files, file_all, authors, subjects, tags, likes, like_all, views, view_all, choices, downloads, download_backend, download_all', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -109,6 +113,10 @@ class ViewDigitals extends CActiveRecord
 			'digital_id' => Yii::t('attribute', 'Digital'),
 			'md5path' => Yii::t('attribute', 'MD5 Path'),
 			'uniquepath' => Yii::t('attribute', 'Unique Path'),
+			'cover_id' => Yii::t('attribute', 'Cover'),
+			'md5coverpath' => Yii::t('attribute', 'Cover Path'),
+			'cover_filename' => Yii::t('attribute', 'Cover Filename'),
+			'cover_caption' => Yii::t('attribute', 'Cover Caption'),
 			'covers' => Yii::t('attribute', 'Covers'),
 			'cover_all' => Yii::t('attribute', 'Cover All'),
 			'files' => Yii::t('attribute', 'Files'),
@@ -156,6 +164,10 @@ class ViewDigitals extends CActiveRecord
 		$criteria->compare('t.digital_id',strtolower($this->digital_id),true);
 		$criteria->compare('t.md5path',strtolower($this->md5path),true);
 		$criteria->compare('t.uniquepath',strtolower($this->uniquepath),true);
+		$criteria->compare('t.cover_id',strtolower($this->cover_id),true);
+		$criteria->compare('t.md5coverpath',strtolower($this->md5coverpath),true);
+		$criteria->compare('t.cover_filename',strtolower($this->cover_filename),true);
+		$criteria->compare('t.cover_caption',strtolower($this->cover_caption),true);
 		$criteria->compare('t.covers',strtolower($this->covers),true);
 		$criteria->compare('t.cover_all',strtolower($this->cover_all),true);
 		$criteria->compare('t.files',strtolower($this->files),true);
@@ -204,6 +216,10 @@ class ViewDigitals extends CActiveRecord
 			$this->defaultColumns[] = 'digital_id';
 			$this->defaultColumns[] = 'md5path';
 			$this->defaultColumns[] = 'uniquepath';
+			$this->defaultColumns[] = 'cover_id';
+			$this->defaultColumns[] = 'md5coverpath';
+			$this->defaultColumns[] = 'cover_filename';
+			$this->defaultColumns[] = 'cover_caption';
 			$this->defaultColumns[] = 'covers';
 			$this->defaultColumns[] = 'cover_all';
 			$this->defaultColumns[] = 'files';
@@ -236,6 +252,10 @@ class ViewDigitals extends CActiveRecord
 			//$this->defaultColumns[] = 'digital_id';
 			$this->defaultColumns[] = 'md5path';
 			$this->defaultColumns[] = 'uniquepath';
+			$this->defaultColumns[] = 'cover_id';
+			$this->defaultColumns[] = 'md5coverpath';
+			$this->defaultColumns[] = 'cover_filename';
+			$this->defaultColumns[] = 'cover_caption';
 			$this->defaultColumns[] = 'covers';
 			$this->defaultColumns[] = 'cover_all';
 			$this->defaultColumns[] = 'files';

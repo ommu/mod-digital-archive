@@ -364,15 +364,13 @@ class DigitalViews extends CActiveRecord
 	 */
 	public static function insertView($digital_id)
 	{
-		$findView = self::model()->find(array(
-			'select' => 'view_id, publish, digital_id, user_id, views',
-			'condition' => 'publish = :publish AND digital_id = :digital AND user_id = :user',
-			'params' => array(
-				':publish' => '1',
-				':digital' => $digital_id,
-				':user' => !Yii::app()->user->isGuest ? Yii::app()->user->id : '0',
-			),
-		));
+		$criteria=new CDbCriteria;
+		$criteria->select = 't.view_id, t.publish, t.digital_id, t.user_id, t.views';
+		$criteria->compare('t.publish', 1);
+		$criteria->compare('t.digital_id', $digital_id);
+		$criteria->compare('t.user_id', !Yii::app()->user->isGuest ? Yii::app()->user->id : '0');
+		$findView = self::model()->find($criteria);
+		
 		if($findView != null)
 			self::model()->updateByPk($findView->view_id, array('views'=>$findView->views + 1));
 		
