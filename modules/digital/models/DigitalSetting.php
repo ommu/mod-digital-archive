@@ -38,6 +38,9 @@
  * @property string $digital_sync_path
  * @property integer $form_standard
  * @property string $form_custom_field
+ * @property integer $headline
+ * @property integer $headline_limit
+ * @property string $headline_category
  * @property integer $editor_choice_status
  * @property string $editor_choice_userlevel
  * @property integer $editor_choice_limit
@@ -80,17 +83,18 @@ class DigitalSetting extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_file_type, digital_path, digital_sync_path, form_standard, editor_choice_status, content_verified,
+			array('license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_file_type, digital_path, digital_sync_path, form_standard, headline, headline_limit, editor_choice_status, content_verified,
 				cover_unlimit_input', 'required'),
-			array('permission, cover_limit, cover_resize, form_standard, editor_choice_status, editor_choice_limit, content_verified,
+			array('permission, cover_limit, cover_resize, form_standard, headline, headline_limit, editor_choice_status, editor_choice_limit, content_verified,
 				cover_unlimit_input', 'numerical', 'integerOnly'=>true),
 			array('license', 'length', 'max'=>32),
 			array('modified_id', 'length', 'max'=>11),
+			array('headline_limit', 'length', 'max'=>3),
 			array('cover_limit, editor_choice_limit', 'length', 'max'=>2),
-			array('cover_resize_size, cover_view_size, digital_file_type, form_custom_field, editor_choice_userlevel', 'safe'),
+			array('cover_resize_size, cover_view_size, digital_file_type, form_custom_field, headline_category, editor_choice_userlevel', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_resize_size, cover_view_size, cover_file_type, digital_file_type, digital_path, digital_sync_path, form_standard, form_custom_field, editor_choice_status, editor_choice_userlevel, editor_choice_limit, content_verified, modified_date, modified_id,
+			array('id, license, permission, meta_keyword, meta_description, cover_limit, cover_resize, cover_resize_size, cover_view_size, cover_file_type, digital_file_type, digital_path, digital_sync_path, form_standard, form_custom_field, headline, headline_limit, headline_category, editor_choice_status, editor_choice_userlevel, editor_choice_limit, content_verified, modified_date, modified_id,
 				modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -128,6 +132,9 @@ class DigitalSetting extends CActiveRecord
 			'digital_sync_path' => Yii::t('attribute', 'Digital Sync Directory'),
 			'form_standard' => Yii::t('attribute', 'Form Field'),
 			'form_custom_field' => Yii::t('attribute', 'Custom Field Form'),
+			'headline' => Yii::t('attribute', 'Headline'),
+			'headline_limit' => Yii::t('attribute', 'Headline Limit'),
+			'headline_category' => Yii::t('attribute', 'Headline Category'),
 			'editor_choice_status' => Yii::t('attribute', 'Editor Choice'),
 			'editor_choice_userlevel' => Yii::t('attribute', 'Editor Choice User Level'),
 			'editor_choice_limit' => Yii::t('attribute', 'Editor Choice Limit'),
@@ -194,6 +201,9 @@ class DigitalSetting extends CActiveRecord
 		$criteria->compare('t.digital_sync_path',strtolower($this->digital_sync_path),true);
 		$criteria->compare('t.form_standard',$this->form_standard);
 		$criteria->compare('t.form_custom_field',strtolower($this->form_custom_field),true);
+		$criteria->compare('t.headline',$this->headline);
+		$criteria->compare('t.headline_limit',$this->headline_limit);
+		$criteria->compare('t.headline_category',$this->headline_category,true);
 		$criteria->compare('t.editor_choice_status',$this->editor_choice_status);
 		$criteria->compare('t.editor_choice_userlevel',strtolower($this->editor_choice_userlevel),true);
 		$criteria->compare('t.editor_choice_limit',$this->editor_choice_limit);
@@ -251,6 +261,9 @@ class DigitalSetting extends CActiveRecord
 			$this->defaultColumns[] = 'digital_sync_path';
 			$this->defaultColumns[] = 'form_standard';
 			$this->defaultColumns[] = 'form_custom_field';
+			$this->defaultColumns[] = 'headline';
+			$this->defaultColumns[] = 'headline_limit';
+			$this->defaultColumns[] = 'headline_category';
 			$this->defaultColumns[] = 'editor_choice_status';
 			$this->defaultColumns[] = 'editor_choice_userlevel';
 			$this->defaultColumns[] = 'editor_choice_limit';
@@ -281,6 +294,9 @@ class DigitalSetting extends CActiveRecord
 			$this->defaultColumns[] = 'digital_sync_path';
 			$this->defaultColumns[] = 'form_standard';
 			$this->defaultColumns[] = 'form_custom_field';
+			$this->defaultColumns[] = 'headline';
+			$this->defaultColumns[] = 'headline_limit';
+			$this->defaultColumns[] = 'headline_category';
 			$this->defaultColumns[] = 'editor_choice_status';
 			$this->defaultColumns[] = 'editor_choice_userlevel';
 			$this->defaultColumns[] = 'editor_choice_limit';
@@ -309,6 +325,18 @@ class DigitalSetting extends CActiveRecord
 			$model = self::model()->findByPk(1);
 			return $model;
 		}
+	}
+
+	/**
+	 * User get information
+	 */
+	public static function getHeadlineCategory()
+	{
+		$setting = self::model()->findByPk(1, array(
+			'select' => 'headline_category',
+		));
+		
+		return unserialize($setting->headline_category);		
 	}
 
 	/**
@@ -343,6 +371,13 @@ class DigitalSetting extends CActiveRecord
 	 */
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
+			if($this->headline == 1) {
+				if($this->headline_limit != '' && $this->headline_limit <= 0)
+					$this->addError('headline_limit', Yii::t('phrase', 'Headline Limit lebih besar dari 0'));
+				if($this->headline_category == '')
+					$this->addError('headline_category', Yii::t('phrase', 'Headline Category cannot be blank.'));
+			}
+			
 			if($this->cover_unlimit_input == 1)
 				$this->cover_limit = 0;
 			
@@ -377,6 +412,7 @@ class DigitalSetting extends CActiveRecord
 			if($this->digital_global_file_type == 1)
 				$this->digital_file_type = serialize(Utility::formatFileType($this->digital_file_type));
 			$this->form_custom_field = serialize($this->form_custom_field);
+			$this->headline_category = serialize($this->headline_category);
 			$this->editor_choice_userlevel = serialize($this->editor_choice_userlevel);
 		}
 		return true;

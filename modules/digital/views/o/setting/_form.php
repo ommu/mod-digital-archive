@@ -13,6 +13,19 @@
  * @contect (+62)856-299-4114
  *
  */
+
+	$cs = Yii::app()->getClientScript();
+$js=<<<EOP
+	$('select#DigitalSetting_headline').live('change', function() {
+		var id = $(this).val();
+		if(id == '1') {
+			$('div#headline').slideDown();
+		} else {
+			$('div#headline').slideUp();
+		}
+	});
+EOP;
+	$cs->registerScript('js', $js, CClientScript::POS_END);
 ?>
 
 <?php $form=$this->beginWidget('application.components.system.OActiveForm', array(
@@ -170,6 +183,39 @@
 				<?php echo $form->error($model,'form_custom_field'); ?>
 			</div>
 		</div>
+		
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'headline'); ?>
+			<div class="desc">
+				<?php echo $form->dropDownLIst($model,'headline', array(
+					'1' => Yii::t('phrase', 'Enable'),
+					'0' => Yii::t('phrase', 'Disable'),
+				)); ?>
+				<?php echo $form->error($model,'headline'); ?>
+			</div>
+		</div>
+		
+		<div id="headline" class="<?php echo $model->headline == 0 ? 'hide' : '';?>">
+			<div class="clearfix">
+				<?php echo $form->labelEx($model,'headline_limit'); ?>
+				<div class="desc">
+					<?php echo $form->textField($model,'headline_limit', array('maxlength'=>3, 'class'=>'span-2')); ?>
+					<?php echo $form->error($model,'headline_limit'); ?>
+				</div>
+			</div>
+
+			<div class="clearfix">
+				<?php echo $form->labelEx($model,'headline_category'); ?>
+				<div class="desc">
+					<?php 
+					$category = DigitalCategory::getCategory(1);
+					if(!$model->getErrors())
+						$model->headline_category = unserialize($model->headline_category);
+					echo $form->checkBoxList($model,'headline_category', $category); ?>
+					<?php echo $form->error($model,'headline_category'); ?>
+				</div>
+			</div>
+		</div>		
 
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'editor_choice_status'); ?>

@@ -18,6 +18,7 @@
  *	RunAction
  *	Delete
  *	Publish
+ *	Headline
  *	Choice
  *	Getcover
  *	Insertcover
@@ -89,7 +90,7 @@ class AdminController extends Controller
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','add','edit','view','upload','runaction','delete','publish','choice','getcover','insertcover'),
+				'actions'=>array('manage','add','edit','view','upload','runaction','delete','publish','headline','choice','getcover','insertcover'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -177,7 +178,7 @@ class AdminController extends Controller
 	public function actionAdd() 
 	{
 		$setting = DigitalSetting::model()->findByPk(1,array(
-			'select' => 'digital_global_file_type, cover_limit, cover_file_type, digital_file_type, form_standard, form_custom_field',
+			'select' => 'digital_global_file_type, cover_limit, cover_file_type, digital_file_type, form_standard, form_custom_field, headline',
 		));
 		$digital_file_type = unserialize($setting->digital_file_type);
 		$form_custom_field = unserialize($setting->form_custom_field);
@@ -261,7 +262,7 @@ class AdminController extends Controller
 	public function actionEdit($id) 
 	{
 		$setting = DigitalSetting::model()->findByPk(1,array(
-			'select' => 'cover_limit, cover_file_type, form_standard, form_custom_field',
+			'select' => 'cover_limit, cover_file_type, form_standard, form_custom_field, headline',
 		));
 		$form_custom_field = unserialize($setting->form_custom_field);
 		if(empty($form_custom_field))
@@ -523,6 +524,44 @@ class AdminController extends Controller
 				'title'=>$title,
 				'model'=>$model,
 			));
+		}
+	}
+
+	/**
+	 * Deletes a particular model.
+	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param integer $id the ID of the model to be deleted
+	 */
+	public function actionHeadline($id) 
+	{
+		$model=$this->loadModel($id);
+
+		if(Yii::app()->request->isPostRequest) {
+			// we only allow deletion via POST request
+			if(isset($id)) {
+				//change value active or publish
+				$model->headline = 1;
+				$model->publish = 1;
+
+				if($model->update()) {
+					echo CJSON::encode(array(
+						'type' => 5,
+						'get' => Yii::app()->controller->createUrl('manage'),
+						'id' => 'partial-digitals',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Digitals success updated.').'</strong></div>',
+					));
+				}
+			}
+
+		} else {
+			$this->dialogDetail = true;
+			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+			$this->dialogWidth = 350;
+
+			$this->pageTitle = Yii::t('phrase', 'Headline');
+			$this->pageDescription = '';
+			$this->pageMeta = '';
+			$this->render('admin_headline');
 		}
 	}
 

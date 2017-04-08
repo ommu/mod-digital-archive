@@ -25,6 +25,7 @@
  * The followings are the available columns in table 'ommu_digitals':
  * @property string $digital_id
  * @property integer $publish
+ * @property integer $headline
  * @property integer $cat_id
  * @property string $publisher_id
  * @property integer $language_id
@@ -44,6 +45,7 @@
  * @property string $creation_id
  * @property string $modified_date
  * @property string $modified_id
+ * @property string $headline_date
  *
  * The followings are the available model relations:
  * @property OmmuDigitalAuthors[] $ommuDigitalAuthors
@@ -119,7 +121,7 @@ class Digitals extends CActiveRecord
 		return array(
 			array('publish, digital_title, digital_intro, content_verified', 'required'),
 			array('cat_id, language_id', 'required', 'on'=>'standardForm'),
-			array('publish, cat_id, language_id, opac_id, content_verified', 'numerical', 'integerOnly'=>true),
+			array('publish, headline, cat_id, language_id, opac_id, content_verified', 'numerical', 'integerOnly'=>true),
 			array('publisher_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('digital_code', 'length', 'max'=>16),
 			array('publish_year', 'length', 'max'=>4),
@@ -129,7 +131,7 @@ class Digitals extends CActiveRecord
 				cover_input, cover_old_input, digital_file_input, multiple_file_input, author_input, subject_input, tag_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('digital_id, publish, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, pages, series, salt, content_verified, creation_date, creation_id, modified_date, modified_id,
+			array('digital_id, publish, headline, cat_id, publisher_id, language_id, opac_id, digital_code, digital_title, digital_intro, digital_path, publish_year, publish_location, isbn, pages, series, salt, content_verified, creation_date, creation_id, modified_date, modified_id, headline_date,
 				editor_choice_input, 
 				publisher_search, cover_search, file_search, like_search, view_search, choice_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
@@ -169,6 +171,7 @@ class Digitals extends CActiveRecord
 		return array(
 			'digital_id' => Yii::t('attribute', 'Digital'),
 			'publish' => Yii::t('attribute', 'Publish'),
+			'headline' => Yii::t('attribute', 'Headline'),
 			'cat_id' => Yii::t('attribute', 'Category'),
 			'publisher_id' => Yii::t('attribute', 'Publisher'),
 			'language_id' => Yii::t('attribute', 'Language'),
@@ -188,6 +191,7 @@ class Digitals extends CActiveRecord
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
+			'headline_date' => Yii::t('attribute', 'Headline Date'),
 			'cover_input' => Yii::t('attribute', 'Cover (Photo)'),
 			'cover_old_input' => Yii::t('attribute', 'Old Cover (Photo)'),
 			'digital_file_input' => Yii::t('attribute', 'Digital File'),
@@ -278,6 +282,7 @@ class Digitals extends CActiveRecord
 			$criteria->addInCondition('t.publish',array(0,1));
 			$criteria->compare('t.publish',$this->publish);
 		}
+		$criteria->compare('t.headline',$this->headline);
 		if(isset($_GET['category']))
 			$criteria->compare('t.cat_id',$_GET['category']);
 		else
@@ -313,7 +318,9 @@ class Digitals extends CActiveRecord
 		if(isset($_GET['modified']))
 			$criteria->compare('t.modified_id',$_GET['modified']);
 		else
-			$criteria->compare('t.modified_id',$this->modified_id);		
+			$criteria->compare('t.modified_id',$this->modified_id);
+		if($this->headline_date != null && !in_array($this->headline_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.headline_date)',date('Y-m-d', strtotime($this->headline_date)));
 		$criteria->compare('t.editor_choice_input',$this->editor_choice_input);
 		
 		$criteria->compare('publisher.publisher_name',strtolower($this->publisher_search), true);
@@ -356,6 +363,7 @@ class Digitals extends CActiveRecord
 		} else {
 			//$this->defaultColumns[] = 'digital_id';
 			$this->defaultColumns[] = 'publish';
+			$this->defaultColumns[] = 'headline';
 			$this->defaultColumns[] = 'cat_id';
 			$this->defaultColumns[] = 'publisher_id';
 			$this->defaultColumns[] = 'language_id';
@@ -375,6 +383,7 @@ class Digitals extends CActiveRecord
 			$this->defaultColumns[] = 'creation_id';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = 'modified_id';
+			$this->defaultColumns[] = 'headline_date';
 		}
 
 		return $this->defaultColumns;
@@ -385,7 +394,7 @@ class Digitals extends CActiveRecord
 	 */
 	protected function afterConstruct() {
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'form_standard, form_custom_field, editor_choice_status, editor_choice_userlevel, content_verified',
+			'select' => 'headline, form_standard, form_custom_field, editor_choice_status, editor_choice_userlevel, content_verified',
 		));
 		$form_custom_field = unserialize($setting->form_custom_field);		
 		if(empty($form_custom_field))
@@ -514,33 +523,47 @@ class Digitals extends CActiveRecord
 						),
 					), true),
 				);
+			}				
+			if($setting->content_verified == 1) {
+				$this->defaultColumns[] = array(
+					'name' => 'content_verified',
+					'value' => '$data->content_verified == 1 ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+					'filter'=>array(
+						1=>Yii::t('phrase', 'Yes'),
+						0=>Yii::t('phrase', 'No'),
+					),
+					'type' => 'raw',
+				);
+			}
+			if($setting->editor_choice_status == 1 && in_array(Yii::app()->user->level, $editor_choice_userlevel)) {
+				$this->defaultColumns[] = array(
+					'header' => Yii::t('phrase', 'Choice'),
+					//'name' => 'editor_choice_input',
+					'value' => '$data->editor_choice_input != 2 ? Utility::getPublish(Yii::app()->controller->createUrl("choice",array("id"=>$data->digital_id)), $data->editor_choice_input, Yii::t(\'phrase\', \'Choice\').\',\'.Yii::t(\'phrase\', \'Unchoice\')) : "-"',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+					'type' => 'raw',
+				);
+			}
+			if($setting->headline == 1) {
+				$this->defaultColumns[] = array(
+					'name' => 'headline',
+					'value' => 'in_array($data->cat_id, DigitalSetting::getHeadlineCategory()) ? ($data->headline == 1 ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Utility::getPublish(Yii::app()->controller->createUrl("headline",array("id"=>$data->digital_id)), $data->headline, 9)) : \'-\'',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+					'filter'=>array(
+						1=>Yii::t('phrase', 'Yes'),
+						0=>Yii::t('phrase', 'No'),
+					),
+					'type' => 'raw',
+				);
 			}
 			if(!isset($_GET['type'])) {
-				if($setting->content_verified == 1) {
-					$this->defaultColumns[] = array(
-						'name' => 'content_verified',
-						'value' => '$data->content_verified == 1 ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
-						'htmlOptions' => array(
-							'class' => 'center',
-						),
-						'filter'=>array(
-							1=>Yii::t('phrase', 'Yes'),
-							0=>Yii::t('phrase', 'No'),
-						),
-						'type' => 'raw',
-					);
-				}
-				if($setting->editor_choice_status == 1 && in_array(Yii::app()->user->level, $editor_choice_userlevel)) {
-					$this->defaultColumns[] = array(
-						'header' => Yii::t('phrase', 'Choice'),
-						//'name' => 'editor_choice_input',
-						'value' => '$data->editor_choice_input != 2 ? Utility::getPublish(Yii::app()->controller->createUrl("choice",array("id"=>$data->digital_id)), $data->editor_choice_input, Yii::t(\'phrase\', \'Choice\').\',\'.Yii::t(\'phrase\', \'Unchoice\')) : "-"',
-						'htmlOptions' => array(
-							'class' => 'center',
-						),
-						'type' => 'raw',
-					);
-				}
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
 					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->digital_id)), $data->publish, 1)',
@@ -601,6 +624,37 @@ class Digitals extends CActiveRecord
 	{
 		return $salt.$id.$md5path;
 	}
+
+	/**
+	 * Articles get information
+	 */
+	public static function getHeadline()
+	{
+		$setting = DigitalSetting::model()->findByPk(1, array(
+			'select' => 'headline_limit, headline_category',
+		));
+		$headline_category = unserialize($setting->headline_category);
+					
+		$criteria=new CDbCriteria;
+		$criteria->compare('t.publish', 1);
+		$criteria->compare('t.headline', 1);
+		$criteria->addInCondition('t.cat_id', $headline_category);
+		$criteria->order = 't.headline_date DESC';
+		
+		$model = self::model()->findAll($criteria);
+		
+		$headline = array();
+		if(!empty($model)) {
+			$i=0;
+			foreach($model as $key => $val) {
+				$i++;
+				if($i <= $setting->headline_limit)
+					$headline[] = $val->digital_id;
+			}
+		}
+		
+		return $headline;
+	}
 	
 	protected function afterFind() {
 		$this->editor_choice_input = DigitalChoice::getChoiceUser($this->digital_id);
@@ -629,6 +683,9 @@ class Digitals extends CActiveRecord
 				$this->creation_id = Yii::app()->user->id;
 			else
 				$this->modified_id = Yii::app()->user->id;
+			
+			if($this->headline == 1 && $this->publish == 0)
+				$this->addError('publish', Yii::t('phrase', 'Publish cannot be blank.'));
 			
 			$cover_input = CUploadedFile::getInstance($this, 'cover_input');
 			if($cover_input != null) {
@@ -678,7 +735,7 @@ class Digitals extends CActiveRecord
 		$action = strtolower(Yii::app()->controller->action->id);
 			
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'digital_global_file_type, cover_limit, cover_resize, cover_resize_size, cover_file_type, digital_file_type, digital_path, form_standard, form_custom_field',
+			'select' => 'digital_global_file_type, cover_limit, cover_resize, cover_resize_size, cover_file_type, digital_file_type, digital_path, form_standard, form_custom_field, headline',
 		));
 		$cover_resize_size = unserialize($setting->cover_resize_size);
 		$digital_file_type = unserialize($setting->digital_file_type);
@@ -824,6 +881,15 @@ class Digitals extends CActiveRecord
 					}
 				}
 			}				
+		}
+		
+		// Reset headline
+		if($setting->headline == 1 && $this->headline == 1) {
+			$headline = self::getHeadline();
+			
+			$criteria=new CDbCriteria;
+			$criteria->addNotInCondition('digital_id', $headline);
+			self::model()->updateAll(array('headline'=>0), $criteria);
 		}
 	}
 

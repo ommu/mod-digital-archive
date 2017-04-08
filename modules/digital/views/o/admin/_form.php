@@ -419,6 +419,19 @@
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
 				</div>
+	
+				<?php if($setting->headline == 1) {?>
+				<div class="clearfix">
+					<?php echo $form->labelEx($model,'headline'); ?>
+					<div class="desc">
+						<?php echo $form->checkBox($model,'headline'); ?>
+						<?php echo $form->error($model,'headline'); ?>
+					</div>
+				</div>
+				<?php } else {
+					$model->headline = 0;
+					echo $form->hiddenField($model,'headline');
+				}?>
 
 				<div class="clearfix">
 					<?php echo $form->labelEx($model,'publish'); ?>
