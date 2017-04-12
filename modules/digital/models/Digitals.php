@@ -119,7 +119,7 @@ class Digitals extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('publish, digital_title, digital_intro, content_verified', 'required'),
+			array('publish, headline, digital_title, digital_intro, content_verified', 'required'),
 			array('cat_id, language_id', 'required', 'on'=>'standardForm'),
 			array('publish, headline, cat_id, language_id, opac_id, content_verified', 'numerical', 'integerOnly'=>true),
 			array('publisher_id, creation_id, modified_id', 'length', 'max'=>11),
@@ -506,8 +506,8 @@ class Digitals extends CActiveRecord
 					'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
 						'model'=>$this,
 						'attribute'=>'creation_date',
-						'language' => 'ja',
-						'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
+						'language' => 'en',
+						'i18nScriptFile' => 'jquery-ui-i18n.min.js'
 						//'mode'=>'datetime',
 						'htmlOptions' => array(
 							'id' => 'creation_date_filter',
@@ -667,7 +667,7 @@ class Digitals extends CActiveRecord
 	 */
 	protected function beforeValidate() {	
 		$setting = DigitalSetting::model()->findByPk(1, array(
-			'select' => 'digital_global_file_type, cover_file_type, digital_file_type, form_standard, form_custom_field',
+			'select' => 'digital_global_file_type, cover_file_type, digital_file_type, form_standard, form_custom_field, content_verified',
 		));
 		$cover_file_type = unserialize($setting->cover_file_type);
 		$digital_file_type = unserialize($setting->digital_file_type);
@@ -684,8 +684,11 @@ class Digitals extends CActiveRecord
 			else
 				$this->modified_id = Yii::app()->user->id;
 			
+			if($setting->content_verified == 1 && $this->headline == 1 && $this->content_verified == 0)
+				$this->addError('content_verified', Yii::t('phrase', 'Content digital belum dalam kondisi terverifikasi.'));
+			
 			if($this->headline == 1 && $this->publish == 0)
-				$this->addError('publish', Yii::t('phrase', 'Publish cannot be blank.'));
+				$this->addError('publish', Yii::t('phrase', 'Content digital belum dalam kondisi publish.'));
 			
 			$cover_input = CUploadedFile::getInstance($this, 'cover_input');
 			if($cover_input != null) {
