@@ -178,7 +178,7 @@ class AdminController extends Controller
 	public function actionAdd() 
 	{
 		$setting = DigitalSetting::model()->findByPk(1,array(
-			'select' => 'digital_global_file_type, cover_limit, cover_file_type, digital_file_type, form_standard, form_custom_field, headline',
+			'select' => 'digital_global_file_type, cover_limit, cover_file_type, digital_file_type, form_standard, form_custom_field, headline, content_verified',
 		));
 		$digital_file_type = unserialize($setting->digital_file_type);
 		$form_custom_field = unserialize($setting->form_custom_field);
@@ -262,7 +262,7 @@ class AdminController extends Controller
 	public function actionEdit($id) 
 	{
 		$setting = DigitalSetting::model()->findByPk(1,array(
-			'select' => 'cover_limit, cover_file_type, form_standard, form_custom_field, headline',
+			'select' => 'cover_limit, cover_file_type, form_standard, form_custom_field, headline, content_verified',
 		));
 		$form_custom_field = unserialize($setting->form_custom_field);
 		if(empty($form_custom_field))

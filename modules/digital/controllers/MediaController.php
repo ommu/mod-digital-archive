@@ -40,7 +40,7 @@ class MediaController extends Controller
 			Yii::app()->theme = $arrThemes['folder'];
 			$this->layout = $arrThemes['layout'];
 		} else
-			$this->redirect(Yii::app()->createUrl('site/index'));
+			$this->redirect(Yii::app()->createUrl('site/login'));
 	}
 
 	/**
