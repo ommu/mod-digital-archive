@@ -233,7 +233,7 @@ class DigitalChoice extends CActiveRecord
 					'model'=>$this,
 					'attribute'=>'choice_date',
 					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'choice_date_filter',
