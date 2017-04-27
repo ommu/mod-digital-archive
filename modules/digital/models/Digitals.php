@@ -154,6 +154,7 @@ class Digitals extends CActiveRecord
 			'authors' => array(self::HAS_MANY, 'DigitalAuthors', 'digital_id'),
 			'choices' => array(self::HAS_MANY, 'DigitalChoice', 'digital_id'),
 			'covers' => array(self::HAS_MANY, 'DigitalCover', 'digital_id', 'on'=>'covers.publish=1'),
+			'cover_all' => array(self::HAS_MANY, 'DigitalCover', 'digital_id'),
 			'files' => array(self::HAS_MANY, 'DigitalFile', 'digital_id', 'on'=>'files.publish=1'),
 			'history_prints' => array(self::HAS_MANY, 'DigitalHistoryPrint', 'digital_id'),
 			'likes' => array(self::HAS_MANY, 'DigitalLikes', 'digital_id'),	
@@ -913,10 +914,10 @@ class Digitals extends CActiveRecord
 					$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
 			}
 			
-			//delete digital covers
-			$covers = $this->covers;
-			if(!empty($covers)) {
-				foreach($covers as $val) {
+			//delete digital cover_all
+			$cover_all = $this->cover_all;
+			if(!empty($cover_all)) {
+				foreach($cover_all as $val) {
 					if($val->cover_filename != '' && file_exists($digital_path.'/'.$val->cover_filename))
 						rename($digital_path.'/'.$val->cover_filename, 'public/digital/verwijderen/'.$val->digital_id.'_'.$val->cover_filename);
 				}
