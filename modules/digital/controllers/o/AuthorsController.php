@@ -20,7 +20,7 @@
  * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
  * @created date 20 October 2016, 10:12 WIB
  * @link https://github.com/ommu/Digital-Archive
- * @contect (+62)856-299-4114
+ * @contact (+62)856-299-4114
  *
  *----------------------------------------------------------------------------------------------------------
  */
