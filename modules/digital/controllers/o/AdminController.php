@@ -180,12 +180,21 @@ class AdminController extends Controller
 		$setting = DigitalSetting::model()->findByPk(1,array(
 			'select' => 'digital_global_file_type, cover_limit, cover_file_type, digital_file_type, form_standard, form_custom_field, headline, content_verified',
 		));
+		$cover_file_type = unserialize($setting->cover_file_type);
+		if(empty($cover_file_type))
+			$cover_file_type = array();
 		$digital_file_type = unserialize($setting->digital_file_type);
+		if(empty($digital_file_type))
+			$digital_file_type = array();
 		$form_custom_field = unserialize($setting->form_custom_field);
 		if(empty($form_custom_field))
 			$form_custom_field = array();
-		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
-			$digital_file_type = unserialize($setting->digital_file_type);
+		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field)))) {
+			if($model->getErrors())
+				$digital_file_type = unserialize($model->category->cat_file_type);
+			if(empty($digital_file_type))
+				$digital_file_type = array();	
+		}
 		
 		ini_set('max_execution_time', 0);
 		ob_start();
@@ -250,7 +259,9 @@ class AdminController extends Controller
 			'model'=>$model,
 			'publisher'=>$publisher,
 			'setting'=>$setting,
+			'cover_file_type'=>$cover_file_type,
 			'digital_file_type'=>$digital_file_type,
+			'form_custom_field'=>$form_custom_field,
 		));
 	}
 
@@ -264,6 +275,9 @@ class AdminController extends Controller
 		$setting = DigitalSetting::model()->findByPk(1,array(
 			'select' => 'cover_limit, cover_file_type, form_standard, form_custom_field, headline, content_verified',
 		));
+		$cover_file_type = unserialize($setting->cover_file_type);
+		if(empty($cover_file_type))
+			$cover_file_type = array();
 		$form_custom_field = unserialize($setting->form_custom_field);
 		if(empty($form_custom_field))
 			$form_custom_field = array();
@@ -338,6 +352,8 @@ class AdminController extends Controller
 			'model'=>$model,
 			'publisher'=>$publisher,
 			'setting'=>$setting,
+			'cover_file_type'=>$cover_file_type,
+			'form_custom_field'=>$form_custom_field,
 		));
 	}
 	
@@ -367,6 +383,8 @@ class AdminController extends Controller
 			'select' => 'digital_global_file_type, digital_file_type, form_standard, form_custom_field',
 		));
 		$digital_file_type = unserialize($setting->digital_file_type);
+		if(empty($digital_file_type))
+			$digital_file_type = array();
 		$form_custom_field = unserialize($setting->form_custom_field);
 		if(empty($form_custom_field))
 			$form_custom_field = array();
@@ -378,6 +396,8 @@ class AdminController extends Controller
 		if($model != null) {
 			if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
 				$digital_file_type = unserialize($model->category->cat_file_type);
+				if(empty($digital_file_type))
+					$digital_file_type = array();
 			
 			// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation($model);

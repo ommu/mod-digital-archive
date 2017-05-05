@@ -157,6 +157,8 @@ class FileController extends Controller
 			'select' => 'digital_global_file_type, digital_file_type, form_standard, form_custom_field',
 		));
 		$digital_file_type = unserialize($setting->digital_file_type);
+		if(empty($digital_file_type))
+			$digital_file_type = array();
 		$form_custom_field = unserialize($setting->form_custom_field);
 		if(empty($form_custom_field))
 			$form_custom_field = array();
@@ -169,8 +171,11 @@ class FileController extends Controller
 		
 		$model=new DigitalFile;
 
-		if($digital != null && $setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
+		if($digital != null && $setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field)))) {
 			$digital_file_type = unserialize($digital->category->cat_file_type);
+			if(empty($digital_file_type))
+				$digital_file_type = array();
+		}
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
@@ -216,14 +221,19 @@ class FileController extends Controller
 			'select' => 'digital_global_file_type, digital_file_type, form_standard, form_custom_field',
 		));
 		$digital_file_type = unserialize($setting->digital_file_type);
+		if(empty($digital_file_type))
+			$digital_file_type = array();
 		$form_custom_field = unserialize($setting->form_custom_field);
 		if(empty($form_custom_field))
 			$form_custom_field = array();
 		
 		$model=$this->loadModel($id);
 
-		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
-			$digital_file_type = unserialize($model->digital->category->cat_file_type);		
+		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field)))) {
+			$digital_file_type = unserialize($model->digital->category->cat_file_type);	
+			if(empty($digital_file_type))
+				$digital_file_type = array();			
+		}	
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);

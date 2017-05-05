@@ -21,7 +21,7 @@
 	);
 	$cs = Yii::app()->getClientScript();
 $js=<<<EOP
-	$('input[name="DigitalSetting[cover_resize]"]').live('change', function() {
+	$('input[name="DigitalSetting[cover_resize]"]').on('change', function() {
 		var id = $(this).val();
 		if(id == '1') {
 			$('div#resize_size').slideDown();
@@ -29,7 +29,7 @@ $js=<<<EOP
 			$('div#resize_size').slideUp();
 		}
 	});
-	$('input[name="DigitalSetting[form_standard]"]').live('change', function() {
+	$('input[name="DigitalSetting[form_standard]"]').on('change', function() {
 		var id = $(this).val();
 		if(id == '1') {
 			$('div#custom_field').slideUp();
@@ -37,7 +37,7 @@ $js=<<<EOP
 			$('div#custom_field').slideDown();
 		}
 	});
-	$('input[name="DigitalSetting[editor_choice_status]"]').live('change', function() {
+	$('input[name="DigitalSetting[editor_choice_status]"]').on('change', function() {
 		var id = $(this).val();
 		if(id == '1') {
 			$('div#editor_choice').slideDown();
@@ -45,7 +45,7 @@ $js=<<<EOP
 			$('div#editor_choice').slideUp();
 		}
 	});
-	$('#DigitalSetting_cover_unlimit_input').live('change', function() {
+	$('#DigitalSetting_cover_unlimit_input').on('change', function() {
 		var id = $(this).prop('checked');		
 		if(id == true) {
 			$('div#cover-limit').slideUp();

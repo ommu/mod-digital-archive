@@ -13,11 +13,6 @@
  * @contact (+62)856-299-4114
  *
  */
-
-	$cover_file_type = unserialize($setting->cover_file_type);
-	$form_custom_field = unserialize($setting->form_custom_field);
-	if(empty($form_custom_field))
-		$form_custom_field = array();
 ?>
 
 <?php $form=$this->beginWidget('application.components.system.OActiveForm', array(

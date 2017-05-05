@@ -16,7 +16,7 @@
 
 	$cs = Yii::app()->getClientScript();
 $js=<<<EOP
-	$('select#DigitalSetting_headline').live('change', function() {
+	$('select#DigitalSetting_headline').on('change', function() {
 		var id = $(this).val();
 		if(id == '1') {
 			$('div#headline').slideDown();

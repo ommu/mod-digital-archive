@@ -158,6 +158,8 @@ class CoverController extends Controller
 			'select' => 'cover_limit, cover_file_type',
 		));
 		$cover_file_type = unserialize($setting->cover_file_type);	
+		if(empty($cover_file_type))
+			$cover_file_type = array();
 		
 		if(isset($id) && $id != '') {
 			$digital = Digitals::model()->findByPk($id);
@@ -211,6 +213,8 @@ class CoverController extends Controller
 			'select' => 'cover_limit, cover_file_type',
 		));
 		$cover_file_type = unserialize($setting->cover_file_type);
+		if(empty($cover_file_type))
+			$cover_file_type = array();
 		
 		$model=$this->loadModel($id);
 

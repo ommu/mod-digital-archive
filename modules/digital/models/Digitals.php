@@ -671,12 +671,19 @@ class Digitals extends CActiveRecord
 			'select' => 'digital_global_file_type, cover_file_type, digital_file_type, form_standard, form_custom_field, content_verified',
 		));
 		$cover_file_type = unserialize($setting->cover_file_type);
+		if(empty($cover_file_type))
+			$cover_file_type = array();
 		$digital_file_type = unserialize($setting->digital_file_type);
+		if(empty($digital_file_type))
+			$digital_file_type = array();
 		$form_custom_field = unserialize($setting->form_custom_field);
 		if(empty($form_custom_field))
 			$form_custom_field = array();
-		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
-			$digital_file_type = unserialize($this->category->cat_file_type);
+		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field)))) {
+			$digital_file_type = unserialize($this->category->cat_file_type);	
+			if(empty($digital_file_type))
+				$digital_file_type = array();
+		}
 		array_push($digital_file_type, 'zip');
 		
 		if(parent::beforeValidate()) {

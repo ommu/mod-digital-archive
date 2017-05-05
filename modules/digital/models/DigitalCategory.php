@@ -454,6 +454,8 @@ class DigitalCategory extends CActiveRecord
 			'select' => 'cover_file_type',
 		));
 		$cover_file_type = unserialize($setting->cover_file_type);
+		if(empty($cover_file_type))
+			$cover_file_type = array();
 		
 		if(parent::beforeValidate()) {
 			$cat_icon_image = CUploadedFile::getInstance($this, 'cat_icon_image');

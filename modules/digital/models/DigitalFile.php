@@ -348,12 +348,17 @@ class DigitalFile extends CActiveRecord
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'digital_global_file_type, digital_file_type, form_standard, form_custom_field',
 		));
-		$digital_file_type = unserialize($setting->digital_file_type);	
+		$digital_file_type = unserialize($setting->digital_file_type);
+		if(empty($digital_file_type))
+			$digital_file_type = array();
 		$form_custom_field = unserialize($setting->form_custom_field);
 		if(empty($form_custom_field))
 			$form_custom_field = array();	
-		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field))))
-			$digital_file_type = unserialize($this->digital->category->cat_file_type);
+		if($setting->digital_global_file_type == 0 && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field)))) {
+			$digital_file_type = unserialize($this->digital->category->cat_file_type);	
+			if(empty($digital_file_type))
+				$digital_file_type = array();
+		}
 		
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)

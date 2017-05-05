@@ -13,7 +13,7 @@
  * @contact (+62)856-299-4114
  *
  */
-
+	
 	$this->breadcrumbs=array(
 		'Digital Categories'=>array('manage'),
 		$model->cat_id=>array('view','id'=>$model->cat_id),
