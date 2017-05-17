@@ -637,10 +637,10 @@ class Digitals extends CActiveRecord
 		$headline_category = unserialize($setting->headline_category);
 					
 		$criteria=new CDbCriteria;
-		$criteria->compare('t.publish', 1);
-		$criteria->compare('t.headline', 1);
-		$criteria->addInCondition('t.cat_id', $headline_category);
-		$criteria->order = 't.headline_date DESC';
+		$criteria->compare('publish', 1);
+		$criteria->compare('headline', 1);
+		$criteria->addInCondition('cat_id', $headline_category);
+		$criteria->order = 'headline_date DESC';
 		
 		$model = self::model()->findAll($criteria);
 		

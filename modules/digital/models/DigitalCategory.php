@@ -415,7 +415,7 @@ class DigitalCategory extends CActiveRecord
 	{		
 		$criteria=new CDbCriteria;
 		if($publish != null)
-			$criteria->compare('t.publish',$publish);
+			$criteria->compare('publish',$publish);
 		
 		$model = self::model()->findAll($criteria);
 
