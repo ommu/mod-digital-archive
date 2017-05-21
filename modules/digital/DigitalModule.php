@@ -17,8 +17,6 @@ class DigitalModule extends CWebModule
 		$this->setImport(array(
 			'digital.models.*',
 			'digital.components.*',
-			'digital.model_bpad_digital.*',
-			'digital.model_bpad_sync.*',
 		));
 	}
  
@@ -36,7 +34,6 @@ class DigitalModule extends CWebModule
 			// you may place customized code here
 			//list public controller in this module
 			$publicControllers = array(
-				'media',
 				'site',
 			);
 			
