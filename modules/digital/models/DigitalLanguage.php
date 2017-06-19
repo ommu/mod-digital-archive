@@ -117,14 +117,6 @@ class DigitalLanguage extends CActiveRecord
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
-		/*
-			'Language' => 'Language',
-			'Language Name' => 'Language Name',
-			'Language Desc' => 'Language Desc',
-			'Creation Date' => 'Creation Date',
-			'Creation' => 'Creation',
-		
-		*/
 	}
 
 	/**

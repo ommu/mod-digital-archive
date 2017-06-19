@@ -95,13 +95,6 @@ class ViewDigitalPublisher extends CActiveRecord
 			'digitals' => Yii::t('attribute', 'Digitals'),
 			'digital_all' => Yii::t('attribute', 'Digital All'),
 		);
-		/*
-			'Publisher' => 'Publisher',
-			'Digitals' => 'Digitals',
-			'Digital Publish' => 'Digital Publish',
-			'Digital Unpublish' => 'Digital Unpublish',
-		
-		*/
 	}
 
 	/**

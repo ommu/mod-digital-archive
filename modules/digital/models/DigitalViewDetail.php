@@ -100,13 +100,6 @@ class DigitalViewDetail extends CActiveRecord
 			'view_ip' => Yii::t('attribute', 'View Ip'),
 			'digital_search' => Yii::t('attribute', 'Digital'),
 		);
-		/*
-			'ID' => 'ID',
-			'View' => 'View',
-			'View Date' => 'View Date',
-			'View Ip' => 'View Ip',
-		
-		*/
 	}
 
 	/**

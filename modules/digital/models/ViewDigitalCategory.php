@@ -97,13 +97,6 @@ class ViewDigitalCategory extends CActiveRecord
 			'digital_all' => Yii::t('attribute', 'Digital All'),
 			'tags' => Yii::t('attribute', 'Tags'),
 		);
-		/*
-			'Cat' => 'Cat',
-			'Digitals' => 'Digitals',
-			'Digital Publish' => 'Digital Publish',
-			'Digital Unpublish' => 'Digital Unpublish',
-		
-		*/
 	}
 
 	/**

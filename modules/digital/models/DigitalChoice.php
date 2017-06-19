@@ -105,14 +105,6 @@ class DigitalChoice extends CActiveRecord
 			'digital_search' => Yii::t('attribute', 'Digital'),
 			'user_search' => Yii::t('attribute', 'User'),
 		);
-		/*
-			'Choice' => 'Choice',
-			'Digital' => 'Digital',
-			'User' => 'User',
-			'Choice Date' => 'Choice Date',
-			'Choice Ip' => 'Choice Ip',
-		
-		*/
 	}
 
 	/**

@@ -117,18 +117,6 @@ class DigitalHistoryPrint extends CActiveRecord
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
-		/*
-			'ID' => 'ID',
-			'Digital' => 'Digital',
-			'Print Price' => 'Print Price',
-			'Print Request Date' => 'Print Request Date',
-			'Print Date' => 'Print Date',
-			'Creation Date' => 'Creation Date',
-			'Creation' => 'Creation',
-			'Modified Date' => 'Modified Date',
-			'Modified' => 'Modified',
-		
-		*/
 	}
 
 	/**

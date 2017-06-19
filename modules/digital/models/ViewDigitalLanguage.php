@@ -96,13 +96,6 @@ class ViewDigitalLanguage extends CActiveRecord
 			'digitals' => Yii::t('attribute', 'Digitals'),
 			'digital_all' => Yii::t('attribute', 'Digital All'),
 		);
-		/*
-			'Language' => 'Language',
-			'Digitals' => 'Digitals',
-			'Digital Publish' => 'Digital Publish',
-			'Digital Unpublish' => 'Digital Unpublish',
-		
-		*/
 	}
 
 	/**

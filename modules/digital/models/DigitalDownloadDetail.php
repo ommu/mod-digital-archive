@@ -102,13 +102,6 @@ class DigitalDownloadDetail extends CActiveRecord
 			'file_search' => Yii::t('attribute', 'File'),
 			'digital_search' => Yii::t('attribute', 'Digital'),
 		);
-		/*
-			'ID' => 'ID',
-			'Download' => 'Download',
-			'Download Date' => 'Download Date',
-			'Download Ip' => 'Download Ip',
-		
-		*/
 	}
 
 	/**

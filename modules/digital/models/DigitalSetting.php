@@ -144,20 +144,6 @@ class DigitalSetting extends CActiveRecord
 			'modified_search' => Yii::t('attribute', 'Modified'),
 			'cover_unlimit_input' => Yii::t('attribute', 'Unlimited Cover'),
 		);
-		/*
-			'ID' => 'ID',
-			'License' => 'License',
-			'Permission' => 'Permission',
-			'Meta Keyword' => 'Meta Keyword',
-			'Meta Description' => 'Meta Description',
-			'Cover Limit' => 'Cover Limit',
-			'Cover Resize' => 'Cover Resize',
-			'Cover Resize Size' => 'Cover Resize Size',
-			'Cover View Size' => 'Cover View Size',
-			'Modified Date' => 'Modified Date',
-			'Modified' => 'Modified',
-		
-		*/
 	}
 
 	/**
@@ -369,7 +355,8 @@ class DigitalSetting extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	protected function beforeValidate() {
+	protected function beforeValidate() 
+	{
 		if(parent::beforeValidate()) {
 			if($this->headline == 1) {
 				if($this->headline_limit != '' && $this->headline_limit <= 0)

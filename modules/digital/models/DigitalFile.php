@@ -121,17 +121,6 @@ class DigitalFile extends CActiveRecord
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
-		/*
-			'File' => 'File',
-			'Publish' => 'Publish',
-			'Digital' => 'Digital',
-			'Digital Filename' => 'Digital Filename',
-			'Creation Date' => 'Creation Date',
-			'Creation' => 'Creation',
-			'Modified Date' => 'Modified Date',
-			'Modified' => 'Modified',
-		
-		*/
 	}
 
 	/**

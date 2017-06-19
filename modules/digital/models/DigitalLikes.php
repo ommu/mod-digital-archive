@@ -115,16 +115,6 @@ class DigitalLikes extends CActiveRecord
 			'digital_search' => Yii::t('attribute', 'Digital'),
 			'user_search' => Yii::t('attribute', 'User'),
 		);
-		/*
-			'Like' => 'Like',
-			'Publish' => 'Publish',
-			'Digital' => 'Digital',
-			'User' => 'User',
-			'Likes Date' => 'Likes Date',
-			'Likes Ip' => 'Likes Ip',
-			'Deleted Date' => 'Deleted Date',
-		
-		*/
 	}
 
 	/**

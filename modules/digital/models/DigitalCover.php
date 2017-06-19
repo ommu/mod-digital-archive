@@ -124,18 +124,6 @@ class DigitalCover extends CActiveRecord
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
-		/*
-			'Cover' => 'Cover',
-			'Publish' => 'Publish',
-			'Status' => 'Status',
-			'Digital' => 'Digital',
-			'Cover Filename' => 'Cover Filename',
-			'Creation Date' => 'Creation Date',
-			'Creation' => 'Creation',
-			'Modified Date' => 'Modified Date',
-			'Modified' => 'Modified',
-		
-		*/
 	}
 
 	/**

@@ -110,14 +110,6 @@ class DigitalAuthors extends CActiveRecord
 			'author_search' => Yii::t('attribute', 'Author'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 		);
-		/*
-			'ID' => 'ID',
-			'Digital' => 'Digital',
-			'Author' => 'Author',
-			'Creation Date' => 'Creation Date',
-			'Creation' => 'Creation',
-		
-		*/
 	}
 
 	/**

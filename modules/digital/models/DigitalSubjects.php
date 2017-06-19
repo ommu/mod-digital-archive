@@ -110,14 +110,6 @@ class DigitalSubjects extends CActiveRecord
 			'tag_search' => Yii::t('attribute', 'Subject'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 		);
-		/*
-			'ID' => 'ID',
-			'Digital' => 'Digital',
-			'Author' => 'Author',
-			'Creation Date' => 'Creation Date',
-			'Creation' => 'Creation',
-		
-		*/
 	}
 
 	/**

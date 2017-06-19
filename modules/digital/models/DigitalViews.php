@@ -112,17 +112,6 @@ class DigitalViews extends CActiveRecord
 			'digital_search' => Yii::t('attribute', 'Digital'),
 			'user_search' => Yii::t('attribute', 'User'),
 		);
-		/*
-			'View' => 'View',
-			'Publish' => 'Publish',
-			'Digital' => 'Digital',
-			'User' => 'User',
-			'Views' => 'Views',
-			'Views Date' => 'Views Date',
-			'Views Ip' => 'Views Ip',
-			'Deleted Date' => 'Deleted Date',
-		
-		*/
 	}
 
 	/**

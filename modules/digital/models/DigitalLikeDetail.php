@@ -103,14 +103,6 @@ class DigitalLikeDetail extends CActiveRecord
 			'likes_ip' => Yii::t('attribute', 'Likes Ip'),
 			'digital_search' => Yii::t('attribute', 'Digital'),
 		);
-		/*
-			'ID' => 'ID',
-			'Publish' => 'Publish',
-			'Like' => 'Like',
-			'Likes Date' => 'Likes Date',
-			'Likes Ip' => 'Likes Ip',
-		
-		*/
 	}
 
 	/**

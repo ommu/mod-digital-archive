@@ -103,13 +103,6 @@ class ViewDigitalSubject extends CActiveRecord
 			'digital_all' => Yii::t('attribute', 'Digital All'),
 			'tag_search' => Yii::t('attribute', 'Subject'),
 		);
-		/*
-			'Tag' => 'Tag',
-			'Digitals' => 'Digitals',
-			'Digital Publish' => 'Digital Publish',
-			'Digital Unpublish' => 'Digital Unpublish',
-		
-		*/
 	}
 
 	/**

@@ -210,28 +210,6 @@ class Digitals extends CActiveRecord
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
-		/*
-			'Digital' => 'Digital',
-			'Publish' => 'Publish',
-			'Cat' => 'Cat',
-			'Publisher' => 'Publisher',
-			'Language' => 'Language',
-			'Opac' => 'Opac',
-			'Digital Code' => 'Digital Code',
-			'Digital Title' => 'Digital Title',
-			'Digital Intro' => 'Digital Intro',
-			'Digital Cover' => 'Digital Cover',
-			'Publish Year' => 'Publish Year',
-			'Publish Location' => 'Publish Location',
-			'Isbn' => 'Isbn',
-			'Pages' => 'Pages',
-			'Series' => 'Series',
-			'Creation Date' => 'Creation Date',
-			'Creation' => 'Creation',
-			'Modified Date' => 'Modified Date',
-			'Modified' => 'Modified',
-		
-		*/
 	}
 
 	/**

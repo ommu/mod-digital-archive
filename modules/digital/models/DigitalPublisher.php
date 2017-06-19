@@ -131,18 +131,6 @@ class DigitalPublisher extends CActiveRecord
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
-		/*
-			'Publisher' => 'Publisher',
-			'Publish' => 'Publish',
-			'Publisher Name' => 'Publisher Name',
-			'Publisher Location' => 'Publisher Location',
-			'Publisher Address' => 'Publisher Address',
-			'Creation Date' => 'Creation Date',
-			'Creation' => 'Creation',
-			'Modified Date' => 'Modified Date',
-			'Modified' => 'Modified',
-		
-		*/
 	}
 
 	/**

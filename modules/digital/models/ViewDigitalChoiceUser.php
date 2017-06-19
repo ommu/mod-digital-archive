@@ -94,11 +94,6 @@ class ViewDigitalChoiceUser extends CActiveRecord
 			'user_id' => Yii::t('attribute', 'User'),
 			'choices' => Yii::t('attribute', 'Choices'),
 		);
-		/*
-			'User' => 'User',
-			'Choices' => 'Choices',
-		
-		*/
 	}
 
 	/**

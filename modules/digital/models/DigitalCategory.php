@@ -148,17 +148,6 @@ class DigitalCategory extends CActiveRecord
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
-		/*
-			'Cat' => 'Cat',
-			'Publish' => 'Publish',
-			'Cat Title' => 'Cat Title',
-			'Cat Desc' => 'Cat Desc',
-			'Creation Date' => 'Creation Date',
-			'Creation' => 'Creation',
-			'Modified Date' => 'Modified Date',
-			'Modified' => 'Modified',
-		
-		*/
 	}
 
 	/**

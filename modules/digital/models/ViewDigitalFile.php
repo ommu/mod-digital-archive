@@ -99,13 +99,6 @@ class ViewDigitalFile extends CActiveRecord
 			'download_backend' => Yii::t('attribute', 'Download Backend'),
 			'download_all' => Yii::t('attribute', 'Download All'),
 		);
-		/*
-			'File' => 'File',
-			'Digital' => 'Digital',
-			'Downloads' => 'Downloads',
-			'Download All' => 'Download All',
-		
-		*/
 	}
 
 	/**
