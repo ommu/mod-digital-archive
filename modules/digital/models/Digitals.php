@@ -48,12 +48,12 @@
  * @property string $headline_date
  *
  * The followings are the available model relations:
- * @property OmmuDigitalAuthors[] $ommuDigitalAuthors
- * @property OmmuDigitalHistoryPrint[] $ommuDigitalHistoryPrints
- * @property OmmuDigitalTag[] $ommuDigitalTags
- * @property OmmuDigitalCategory $cat
- * @property OmmuDigitalLanguage $language
- * @property OmmuDigitalPublisher $publisher
+ * @property DigitalAuthors[] $DigitalAuthors
+ * @property DigitalHistoryPrint[] $DigitalHistoryPrints
+ * @property DigitalTag[] $DigitalTags
+ * @property DigitalCategory $cat
+ * @property DigitalLanguage $language
+ * @property DigitalPublisher $publisher
  */
 class Digitals extends CActiveRecord
 {

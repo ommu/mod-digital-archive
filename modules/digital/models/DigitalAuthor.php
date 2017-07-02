@@ -32,7 +32,7 @@
  * @property string $modified_id
  *
  * The followings are the available model relations:
- * @property OmmuDigitalAuthors[] $ommuDigitalAuthors
+ * @property DigitalAuthors[] $DigitalAuthors
  */
 class DigitalAuthor extends CActiveRecord
 {

@@ -30,7 +30,7 @@
  * @property string $creation_id
  *
  * The followings are the available model relations:
- * @property OmmuDigitals $digital
+ * @property Digitals $digital
  */
 class DigitalTags extends CActiveRecord
 {

@@ -33,7 +33,7 @@
  * @property string $deleted_date
  *
  * The followings are the available model relations:
- * @property OmmuDigitals $digital
+ * @property Digitals $digital
  */
 class DigitalViews extends CActiveRecord
 {

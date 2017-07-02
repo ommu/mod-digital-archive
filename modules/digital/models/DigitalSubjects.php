@@ -31,7 +31,7 @@
  *
  * The followings are the available model relations:
  * @property Digitals $digital
- * @property OmmuTags $tag
+ * @property Tags $tag
  */
 class DigitalSubjects extends CActiveRecord
 {

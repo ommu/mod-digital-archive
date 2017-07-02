@@ -32,7 +32,7 @@
  * @property string $updated_date
  *
  * The followings are the available model relations:
- * @property OmmuDigitals $digital
+ * @property Digitals $digital
  */
 class DigitalLikes extends CActiveRecord
 {

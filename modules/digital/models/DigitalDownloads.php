@@ -32,8 +32,8 @@
  * @property string $download_ip
  *
  * The followings are the available model relations:
- * @property OmmuDigitalDownloadDetail[] $ommuDigitalDownloadDetails
- * @property OmmuDigitalFile $file
+ * @property DigitalDownloadDetail[] $DigitalDownloadDetails
+ * @property DigitalFile $file
  */
 class DigitalDownloads extends CActiveRecord
 {

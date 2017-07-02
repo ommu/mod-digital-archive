@@ -29,7 +29,7 @@
  * @property string $view_ip
  *
  * The followings are the available model relations:
- * @property OmmuDigitalViews $view
+ * @property DigitalViews $view
  */
 class DigitalViewDetail extends CActiveRecord
 {

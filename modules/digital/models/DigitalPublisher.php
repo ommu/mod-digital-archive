@@ -34,7 +34,7 @@
  * @property string $modified_id
  *
  * The followings are the available model relations:
- * @property OmmuDigitals[] $ommuDigitals
+ * @property Digitals[] $Digitals
  */
 class DigitalPublisher extends CActiveRecord
 {

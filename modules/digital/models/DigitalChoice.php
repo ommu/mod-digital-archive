@@ -30,7 +30,7 @@
  * @property string $choice_ip
  *
  * The followings are the available model relations:
- * @property OmmuDigitals $digital
+ * @property Digitals $digital
  */
 class DigitalChoice extends CActiveRecord
 {
