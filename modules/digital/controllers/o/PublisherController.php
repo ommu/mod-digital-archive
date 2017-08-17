@@ -118,7 +118,7 @@ class PublisherController extends Controller
 			if(isset($_GET['term'])) {
 				$criteria = new CDbCriteria;
 				$criteria->condition = 'publisher_name LIKE :publisher_name';
-				$criteria->select	= "publisher_id, publisher_name";
+				$criteria->select = "publisher_id, publisher_name";
 				$criteria->limit = $limit;
 				$criteria->order = "publisher_id ASC";
 				$criteria->params = array(':publisher_name' => '%' . strtolower($_GET['term']) . '%');

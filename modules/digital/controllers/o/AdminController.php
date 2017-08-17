@@ -123,7 +123,7 @@ class AdminController extends Controller
 			if(isset($_GET['term'])) {
 				$criteria = new CDbCriteria;
 				$criteria->condition = 'digital_title LIKE :digital_title';
-				$criteria->select	= "digital_id, digital_title";
+				$criteria->select = "digital_id, digital_title";
 				$criteria->limit = $limit;
 				$criteria->order = "digital_id ASC";
 				$criteria->params = array(':digital_title' => '%' . strtolower($_GET['term']) . '%');

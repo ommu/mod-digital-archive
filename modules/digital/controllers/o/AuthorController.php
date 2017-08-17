@@ -118,7 +118,7 @@ class AuthorController extends Controller
 			if(isset($_GET['term'])) {
 				$criteria = new CDbCriteria;
 				$criteria->condition = 'publish = 1 AND author_name LIKE :name';
-				$criteria->select	= "author_id, author_name";
+				$criteria->select = "author_id, author_name";
 				$criteria->limit = $limit;
 				$criteria->order = "author_id ASC";
 				$criteria->params = array(':name' => '%' . strtolower(trim($_GET['term'])) . '%');
