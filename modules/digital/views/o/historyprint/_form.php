@@ -15,7 +15,7 @@
  */
 ?>
 
-<?php $form=$this->beginWidget('application.components.system.OActiveForm', array(
+<?php $form=$this->beginWidget('application.libraries.core.components.system.OActiveForm', array(
 	'id'=>'digital-history-print-form',
 	'enableAjaxValidation'=>true,
 	//'htmlOptions' => array('enctype' => 'multipart/form-data')
@@ -53,7 +53,7 @@
 			<?php
 			$model->print_request_date = !$model->isNewRecord ? (!in_array($model->print_request_date, array('0000-00-00','1970-01-01')) ? date('d-m-Y', strtotime($model->print_request_date)) : '') : '';
 			//echo $form->textField($model,'print_request_date');
-			$this->widget('application.components.system.CJuiDatePicker',array(
+			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'print_request_date',
 				//'mode'=>'datetime',
@@ -75,7 +75,7 @@
 			<?php
 			$model->print_date = !$model->isNewRecord ? (!in_array($model->print_date, array('0000-00-00','1970-01-01')) ? date('d-m-Y', strtotime($model->print_date)) : '') : '';
 			//echo $form->textField($model,'print_date');
-			$this->widget('application.components.system.CJuiDatePicker',array(
+			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'print_date',
 				//'mode'=>'datetime',
