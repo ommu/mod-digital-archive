@@ -28,12 +28,12 @@
 			),
 			array(
 				'name'=>'publish',
-				'value'=>$model->publish == 1 ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
+				'value'=>$model->publish == 1 ? CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
 				'type'=>'raw',
 			),
 			array(
 				'name'=>'status',
-				'value'=>$model->status == 1 ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
+				'value'=>$model->status == 1 ? CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
 				'type'=>'raw',
 			),
 			array(
@@ -42,8 +42,8 @@
 			),
 			array(
 				'name'=>'cover_filename',
-				//'value'=>$model->cover_filename != '' ? Chtml::image(Utility::getTimThumb(Yii::app()->request->baseUrl.'/public/digital/'.$model->digital->view->uniquepath.'/'.$model->cover_filename, 400, 800, 3)) : '-',
-				'value'=>$model->cover_filename != '' ? Chtml::image(Utility::getTimThumb(Yii::app()->controller->createUrl('media/cover', array('id'=>$model->cover_id,'abc'=>$model->md5coverpath)), 400, 800, 3)) : '-',
+				//'value'=>$model->cover_filename != '' ? CHtml::image(Utility::getTimThumb(Yii::app()->request->baseUrl.'/public/digital/'.$model->digital->view->uniquepath.'/'.$model->cover_filename, 400, 800, 3)) : '-',
+				'value'=>$model->cover_filename != '' ? CHtml::image(Utility::getTimThumb(Yii::app()->controller->createUrl('media/cover', array('id'=>$model->cover_id,'abc'=>$model->md5coverpath)), 400, 800, 3)) : '-',
 				'type'=>'raw',
 			),
 			array(

@@ -338,7 +338,7 @@ class DigitalCategory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'cat_icon_image',
-				'value' => '$data->cat_icon_image != \'\' ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'value' => '$data->cat_icon_image != \'\' ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -346,7 +346,7 @@ class DigitalCategory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'cat_cover',
-				'value' => '$data->cat_cover != \'\' ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'value' => '$data->cat_cover != \'\' ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -354,7 +354,7 @@ class DigitalCategory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'cat_file_type',
-				'value' => '$data->cat_file_type != \'\' ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'value' => '$data->cat_file_type != \'\' ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

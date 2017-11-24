@@ -30,7 +30,7 @@
 			),
 			array(
 				'name'=>'publish',
-				'value'=>$model->publish == 1 ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
+				'value'=>$model->publish == 1 ? CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
 				'type'=>'raw',
 			),
 			array(
@@ -52,11 +52,11 @@
 			),
 			array(
 				'name'=>'cat_icon_image',
-				'value'=>$model->cat_icon_image != '' ? CHtml::link(Chtml::image(Yii::app()->request->baseUrl.'/public/digital/'.$model->cat_icon_image), '') : '-',
+				'value'=>$model->cat_icon_image != '' ? CHtml::link(CHtml::image(Yii::app()->request->baseUrl.'/public/digital/'.$model->cat_icon_image), '') : '-',
 			),
 			array(
 				'name'=>'cat_cover',
-				'value'=>$model->cat_cover != '' ? CHtml::link(Chtml::image(Yii::app()->request->baseUrl.'/public/digital/'.$model->cat_cover), '') : '-',
+				'value'=>$model->cat_cover != '' ? CHtml::link(CHtml::image(Yii::app()->request->baseUrl.'/public/digital/'.$model->cat_cover), '') : '-',
 			),
 			array(
 				'name'=>'cat_file_type',
