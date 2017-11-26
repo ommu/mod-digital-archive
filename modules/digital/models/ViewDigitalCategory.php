@@ -6,7 +6,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
  * @created date 27 October 2016, 04:08 WIB
- * @link https://github.com/ommu/mod-digital-archive
+ * @link https://github.com/ommu/ommu-digital-archive
  * @contact (+62)856-299-4114
  *
  * This is the template for generating the model class of a specified table.
