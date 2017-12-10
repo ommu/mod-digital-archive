@@ -446,7 +446,7 @@
 			<div class="desc">
 				<?php 
 				//echo $form->textArea($model,'digital_intro',array('rows'=>6, 'cols'=>50));
-				$this->widget('application.extensions.imperavi.ImperaviRedactorWidget', array(
+				$this->widget('yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(
 					'model'=>$model,
 					'attribute'=>digital_intro,
 					// Redactor options
