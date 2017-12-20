@@ -48,8 +48,8 @@ class FileController extends Controller
 				$arrThemes = Utility::getCurrentTemplate('admin');
 				Yii::app()->theme = $arrThemes['folder'];
 				$this->layout = $arrThemes['layout'];
-			} else
-				throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
+				Utility::applyViewPath(__dir__);
+			}
 		} else
 			$this->redirect(Yii::app()->createUrl('site/login'));
 	}
