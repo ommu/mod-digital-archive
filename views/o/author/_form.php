@@ -29,19 +29,19 @@
 		</div>
 		<?php //begin.Messages ?>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'author_name'); ?>
-			<div class="desc">
-				<?php echo $form->textField($model,'author_name',array('rows'=>6, 'cols'=>50)); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'author_name', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textField($model,'author_name',array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'author_name'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 
-		<div class="clearfix publish">
-			<?php echo $form->labelEx($model,'publish'); ?>
-			<div class="desc">
-				<?php echo $form->checkBox($model,'publish'); ?>
+		<div class="form-group row publish">
+			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->checkBox($model,'publish', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model,'publish'); ?>
 				<?php echo $form->error($model,'publish'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>

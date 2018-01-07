@@ -32,11 +32,11 @@
 		<?php //begin.Messages ?>
 		
 		<?php if($model->isNewRecord && $digital == null) {?>
-			<div class="clearfix">
-				<?php echo $form->labelEx($model,'digital_title_input'); ?>
-				<div class="desc">
+			<div class="form-group row">
+				<?php echo $form->labelEx($model,'digital_title_input', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+				<div class="col-lg-8 col-md-9 col-sm-12">
 					<?php 
-					//echo $form->textField($model,'digital_title_input', array('class'=>'span-8'));		
+					//echo $form->textField($model,'digital_title_input', array('class'=>'form-control'));
 					$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 						'model' => $model,
 						'attribute' => 'digital_title_input',
@@ -51,7 +51,7 @@
 							}"
 						),
 						'htmlOptions' => array(
-							'class'	=> 'span-8',
+							'class'	=> 'form-control',
 						),
 					));
 					echo $form->hiddenField($model,'digital_id'); ?>
@@ -61,9 +61,9 @@
 			</div>
 		<?php }?>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'digital_filename'); ?>
-			<div class="desc">
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'digital_filename', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->getErrors())
 					$model->old_digital_filename_input = $model->digital_filename;
@@ -73,16 +73,16 @@
 					$file = Yii::app()->controller->createUrl('media/file',array('id'=>$model->file_id,'abc'=>$model->md5filepath));?>
 					<div class="mb-10"><a href="<?php echo $file;?>"><?php echo $model->old_digital_filename_input;?></a></div>
 				<?php }
-				echo $form->fileField($model,'digital_filename'); ?>
+				echo $form->fileField($model,'digital_filename', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'digital_filename'); ?>
 				<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($digital_file_type, false);?></span>
 			</div>
 		</div>
 
-		<div class="clearfix publish">
-			<?php echo $form->labelEx($model,'publish'); ?>
-			<div class="desc">
-				<?php echo $form->checkBox($model,'publish'); ?>
+		<div class="form-group row publish">
+			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->checkBox($model,'publish', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model,'publish'); ?>
 				<?php echo $form->error($model,'publish'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>

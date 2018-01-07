@@ -28,27 +28,27 @@
 
 <fieldset>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'digital_id'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'digital_id',array('size'=>11,'maxlength'=>11)); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'digital_id', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->textField($model,'digital_id',array('maxlength'=>11, 'class'=>'form-control')); ?>
 			<?php echo $form->error($model,'digital_id'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'print_price'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'print_price',array('size'=>32,'maxlength'=>32)); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'print_price', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->textField($model,'print_price',array('maxlength'=>32, 'class'=>'form-control')); ?>
 			<?php echo $form->error($model,'print_price'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'print_request_date'); ?>
-		<div class="desc">
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'print_request_date', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php
 			$model->print_request_date = !$model->isNewRecord ? (!in_array($model->print_request_date, array('0000-00-00','1970-01-01')) ? date('d-m-Y', strtotime($model->print_request_date)) : '') : '';
 			//echo $form->textField($model,'print_request_date');
@@ -60,7 +60,7 @@
 					'dateFormat' => 'dd-mm-yy',
 				),
 				'htmlOptions'=>array(
-					'class' => 'span-4',
+					'class' => 'form-control',
 				 ),
 			)); ?>
 			<?php echo $form->error($model,'print_request_date'); ?>
@@ -68,9 +68,9 @@
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'print_date'); ?>
-		<div class="desc">
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'print_date', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php
 			$model->print_date = !$model->isNewRecord ? (!in_array($model->print_date, array('0000-00-00','1970-01-01')) ? date('d-m-Y', strtotime($model->print_date)) : '') : '';
 			//echo $form->textField($model,'print_date');
@@ -82,7 +82,7 @@
 					'dateFormat' => 'dd-mm-yy',
 				),
 				'htmlOptions'=>array(
-					'class' => 'span-4',
+					'class' => 'form-control',
 				 ),
 			)); ?>
 			<?php echo $form->error($model,'print_date'); ?>
@@ -90,45 +90,45 @@
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'creation_date'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'creation_date'); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'creation_date', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->textField($model,'creation_date', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model,'creation_date'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'creation_id'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'creation_id',array('size'=>11,'maxlength'=>11)); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'creation_id', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->textField($model,'creation_id',array('maxlength'=>11, 'class'=>'form-control')); ?>
 			<?php echo $form->error($model,'creation_id'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'modified_date'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'modified_date'); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'modified_date', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->textField($model,'modified_date', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model,'modified_date'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'modified_id'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'modified_id',array('size'=>10,'maxlength'=>10)); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'modified_id', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->textField($model,'modified_id',array('maxlength'=>11, 'class'=>'form-control')); ?>
 			<?php echo $form->error($model,'modified_id'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
-	<div class="submit clearfix">
-		<label>&nbsp;</label>
-		<div class="desc">
+	<div class="form-group row submit">
+		<label class="col-form-label col-lg-4 col-md-3 col-sm-12">&nbsp;</label>
+		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save'), array('onclick' => 'setEnableSave()')); ?>
 		</div>
 	</div>

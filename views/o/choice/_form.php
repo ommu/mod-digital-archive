@@ -28,45 +28,45 @@
 
 <fieldset>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'digital_id'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'digital_id',array('size'=>11,'maxlength'=>11)); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'digital_id', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->textField($model,'digital_id',array('maxlength'=>11, 'class'=>'form-control')); ?>
 			<?php echo $form->error($model,'digital_id'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'user_id'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'user_id',array('size'=>11,'maxlength'=>11)); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'user_id', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->textField($model,'user_id',array('maxlength'=>11, 'class'=>'form-control')); ?>
 			<?php echo $form->error($model,'user_id'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'choice_date'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'choice_date'); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'choice_date', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->textField($model,'choice_date', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model,'choice_date'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'choice_ip'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'choice_ip',array('size'=>20,'maxlength'=>20)); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'choice_ip', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->textField($model,'choice_ip',array('maxlength'=>20, 'class'=>'form-control')); ?>
 			<?php echo $form->error($model,'choice_ip'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
-	<div class="submit clearfix">
-		<label>&nbsp;</label>
-		<div class="desc">
+	<div class="form-group row submit">
+		<label class="col-form-label col-lg-4 col-md-3 col-sm-12">&nbsp;</label>
+		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save'), array('onclick' => 'setEnableSave()')); ?>
 		</div>
 	</div>

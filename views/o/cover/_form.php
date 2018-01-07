@@ -32,11 +32,11 @@
 		<?php //begin.Messages ?>
 		
 		<?php if($model->isNewRecord && $digital == null) {?>
-			<div class="clearfix">
-				<?php echo $form->labelEx($model,'digital_title_input'); ?>
-				<div class="desc">
+			<div class="form-group row">
+				<?php echo $form->labelEx($model,'digital_title_input', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+				<div class="col-lg-8 col-md-9 col-sm-12">
 					<?php 
-					//echo $form->textField($model,'digital_title_input', array('class'=>'span-8'));		
+					//echo $form->textField($model,'digital_title_input', array('class'=>'form-control'));
 					$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 						'model' => $model,
 						'attribute' => 'digital_title_input',
@@ -51,7 +51,7 @@
 							}"
 						),
 						'htmlOptions' => array(
-							'class'	=> 'span-8',
+							'class'	=> 'form-control',
 						),
 					));
 					echo $form->hiddenField($model,'digital_id'); ?>
@@ -61,9 +61,9 @@
 			</div>
 		<?php }?>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'cover_filename'); ?>
-			<div class="desc">
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'cover_filename', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->getErrors())
 					$model->old_cover_filename_input = $model->cover_filename;
@@ -73,16 +73,16 @@
 					$cover = Yii::app()->controller->createUrl('media/cover', array('id'=>$model->cover_id,'abc'=>$model->md5coverpath));?>
 						<img class="mb-10" src="<?php echo Utility::getTimThumb($cover, 300, 400, 3);?>" alt="">
 				<?php }
-				echo $form->fileField($model,'cover_filename'); ?>
+				echo $form->fileField($model,'cover_filename', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cover_filename'); ?>
 				<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($cover_file_type, false);?></span>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'cover_caption'); ?>
-			<div class="desc">
-				<?php echo $form->textArea($model,'cover_caption',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller')); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'cover_caption', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textArea($model,'cover_caption',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cover_caption'); ?>
 			</div>
 		</div>
@@ -91,10 +91,10 @@
 			$model->status = 1;
 			echo $form->hiddenField($model,'status');?>
 		<?php } else {?>
-			<div class="clearfix publish">
-				<?php echo $form->labelEx($model,'status'); ?>
-				<div class="desc">
-					<?php echo $form->checkBox($model,'status'); ?>
+			<div class="form-group row publish">
+				<?php echo $form->labelEx($model,'status', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+				<div class="col-lg-8 col-md-9 col-sm-12">
+					<?php echo $form->checkBox($model,'status', array('class'=>'form-control')); ?>
 					<?php echo $form->labelEx($model,'status'); ?>
 					<?php echo $form->error($model,'status'); ?>
 					<?php /*<div class="small-px silent"></div>*/?>
@@ -102,10 +102,10 @@
 			</div>
 		<?php }?>
 
-		<div class="clearfix publish">
-			<?php echo $form->labelEx($model,'publish'); ?>
-			<div class="desc">
-				<?php echo $form->checkBox($model,'publish'); ?>
+		<div class="form-group row publish">
+			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->checkBox($model,'publish', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model,'publish'); ?>
 				<?php echo $form->error($model,'publish'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>

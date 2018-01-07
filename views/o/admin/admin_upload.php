@@ -38,19 +38,19 @@
 		</div>
 		<?php //begin.Messages ?>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'digital_file_input'); ?>
-			<div class="desc">
-				<?php echo $form->fileField($model,'digital_file_input'); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'digital_file_input', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->fileField($model,'digital_file_input', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'digital_file_input'); ?>
 				<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($digital_file_type, false);?></span>
 			</div>
 		</div>
 
-		<div class="clearfix publish">
-			<?php echo $form->labelEx($model,'multiple_file_input'); ?>
-			<div class="desc">
-				<?php echo $form->checkBox($model,'multiple_file_input'); ?>
+		<div class="form-group row publish">
+			<?php echo $form->labelEx($model,'multiple_file_input', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->checkBox($model,'multiple_file_input', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model,'multiple_file_input'); ?>
 				<?php echo $form->error($model,'multiple_file_input'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>

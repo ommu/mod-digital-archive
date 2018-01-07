@@ -34,42 +34,42 @@
 		<?php //begin.Messages 
 		*/?>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'cat_title'); ?>
-			<div class="desc">
-				<?php echo $form->textField($model,'cat_title',array('maxlength'=>32)); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'cat_title', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textField($model,'cat_title',array('maxlength'=>32, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_title'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'cat_desc'); ?>
-			<div class="desc">
-				<?php echo $form->textArea($model,'cat_desc',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller')); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'cat_desc', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textArea($model,'cat_desc',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_desc'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'cat_code'); ?>
-			<div class="desc">
-				<?php echo $form->textField($model,'cat_code',array('maxlength'=>6)); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'cat_code', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textField($model,'cat_code',array('maxlength'=>6, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_code'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 		
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'tag_input'); ?>
-			<div class="desc">
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'tag_input', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if($model->isNewRecord) {
-					echo $form->textArea($model,'tag_input',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller'));
+					echo $form->textArea($model,'tag_input',array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
 					
 				} else {
-					//echo $form->textField($model,'tag_input',array('maxlength'=>32,'class'=>'span-6'));
+					//echo $form->textField($model,'tag_input',array('maxlength'=>32,'class'=>'form-control'));
 					$url = Yii::app()->controller->createUrl('o/categorytag/add', array('type'=>'digital'));
 					$category = $model->cat_id;
 					$tagId = 'DigitalCategory_tag_input';
@@ -96,7 +96,7 @@
 							}"
 						),
 						'htmlOptions' => array(
-							'class'	=> 'span-7',
+							'class'	=> 'form-control',
 						),
 					));
 					echo $form->error($model,'tag_input');
@@ -116,33 +116,33 @@
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'cat_icon'); ?>
-			<div class="desc">
-				<?php echo $form->textField($model,'cat_icon',array('maxlength'=>32)); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'cat_icon', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textField($model,'cat_icon',array('maxlength'=>32, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_icon'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'cat_file_type'); ?>
-			<div class="desc">
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'cat_file_type', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php				
 				if(!$model->getErrors()) {
 					$cat_file_type = unserialize($model->cat_file_type);
 					if(!empty($cat_file_type))
 						$model->cat_file_type = Utility::formatFileType($cat_file_type, false);
 				}
-				echo $form->textField($model,'cat_file_type', array('class'=>'span-8')); ?>
+				echo $form->textField($model,'cat_file_type', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_file_type'); ?>
 				<span class="small-px">pisahkan type file dengan koma (,). example: "mp3, mp4, pdf, doc, docx"</span>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'cat_icon_image'); ?>
-			<div class="desc">
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'cat_icon_image', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->isNewRecord) {
 					if(!$model->getErrors())
@@ -150,18 +150,18 @@
 					echo $form->hiddenField($model,'old_cat_icon_image_input');
 					if($model->old_cat_icon_image_input != '') {
 						$cat_icon_image = Yii::app()->request->baseUrl.'/public/digital/'.$model->old_cat_icon_image_input;?>
-						<img class="mb-15" src="<?php echo Utility::getTimThumb($cat_icon_image, 200, 300, 3);?>" alt="">					
+						<img class="mb-15" src="<?php echo Utility::getTimThumb($cat_icon_image, 200, 300, 3);?>" alt="">
 				<?php }
 				}
-				echo $form->fileField($model,'cat_icon_image'); ?>
+				echo $form->fileField($model,'cat_icon_image', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_icon_image'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'cat_cover'); ?>
-			<div class="desc">
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'cat_cover', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->isNewRecord) {
 					if(!$model->getErrors())
@@ -169,19 +169,19 @@
 					echo $form->hiddenField($model,'old_cat_cover_input');
 					if($model->old_cat_cover_input != '') {
 						$cat_cover = Yii::app()->request->baseUrl.'/public/digital/'.$model->old_cat_cover_input;?>
-						<img class="mb-15" src="<?php echo Utility::getTimThumb($cat_cover, 300, 400, 3);?>" alt="">					
+						<img class="mb-15" src="<?php echo Utility::getTimThumb($cat_cover, 300, 400, 3);?>" alt="">
 				<?php }
 				}
-				echo $form->fileField($model,'cat_cover'); ?>
+				echo $form->fileField($model,'cat_cover', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_cover'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 
-		<div class="clearfix publish">
-			<?php echo $form->labelEx($model,'publish'); ?>
-			<div class="desc">
-				<?php echo $form->checkBox($model,'publish'); ?>
+		<div class="form-group row publish">
+			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->checkBox($model,'publish', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model,'publish'); ?>
 				<?php echo $form->error($model,'publish'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
