@@ -170,27 +170,25 @@ class CategorytagController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				if($model->delete()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-digital-category-tag',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'DigitalCategoryTag success deleted.').'</strong></div>',
-					));
-				}
+			if($model->delete()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-digital-category-tag',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'DigitalCategoryTag success deleted.').'</strong></div>',
+				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'DigitalCategoryTag Delete.');
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('/o/category_tag/admin_delete');
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'DigitalCategoryTag Delete.');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('/o/category_tag/admin_delete');
 	}
 
 	/**

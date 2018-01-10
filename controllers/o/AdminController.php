@@ -475,27 +475,28 @@ class AdminController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				if($model->delete()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-digitals',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Digitals success deleted.').'</strong></div>',
-					));
-				}
+			$model->publish = 2;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+			
+			if($model->update()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-digitals',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Digitals success deleted.').'</strong></div>',
+				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'Digitals Delete.');
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_delete');
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'Digitals Delete.');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_delete');
 	}
 
 	/**
@@ -507,43 +508,37 @@ class AdminController extends Controller
 	{
 		$model=$this->loadModel($id);
 		
-		if($model->publish == 1) {
-			$title = Yii::t('phrase', 'Unpublish');
-			$replace = 0;
-		} else {
-			$title = Yii::t('phrase', 'Publish');
-			$replace = 1;
-		}
+		$title = $model->publish == 1 ? Yii::t('phrase', 'Unpublish') : Yii::t('phrase', 'Publish');
+		$replace = $model->publish == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				//change value active or publish
-				$model->publish = $replace;
-
-				if($model->update()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-digitals',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Digitals success updated.').'</strong></div>',
-					));
-				}
+			//change value active or publish
+			$model->publish = $replace;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+			
+			if($model->update()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-digitals',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Digitals success updated.').'</strong></div>',
+				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = $title;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_publish',array(
-				'title'=>$title,
-				'model'=>$model,
-			));
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = $title;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_publish',array(
+			'title'=>$title,
+			'model'=>$model,
+		));
 	}
 
 	/**
@@ -557,31 +552,30 @@ class AdminController extends Controller
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				//change value active or publish
-				$model->headline = 1;
-				$model->publish = 1;
-
-				if($model->update()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-digitals',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Digitals success updated.').'</strong></div>',
-					));
-				}
+			//change value active or publish
+			$model->headline = 1;
+			$model->publish = 1;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+			
+			if($model->update()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-digitals',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Digitals success updated.').'</strong></div>',
+				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'Headline');
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_headline');
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'Headline');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_headline');
 	}
 
 	/**
@@ -606,54 +600,48 @@ class AdminController extends Controller
 		
 		if($setting->editor_choice_status == 1 && in_array(Yii::app()->user->level, $editor_choice_userlevel) && ($choiceLimit == null || $choiceLimit != null && $choiceLimit->choices <= $setting->editor_choice_limit)) {
 			$model=$this->loadModel($id);
-			if($model->editor_choice_input == 1) {
-				$title = Yii::t('phrase', 'Unchoice');
-				$replace = 0;
-			} else {
-				$title = Yii::t('phrase', 'Choice');
-				$replace = 1;
-			}
+		
+			$title = $model->editor_choice_input == 1 ? Yii::t('phrase', 'Unchoice') : Yii::t('phrase', 'Choice');
+			$replace = $model->editor_choice_input == 1 ? 0 : 1;
 
 			if(Yii::app()->request->isPostRequest) {
 				// we only allow deletion via POST request
-				if(isset($id)) {
-					$redirect = false;
+				$redirect = false;
+				
+				//change value active or publish
+				if($replace == 1) {
+					$choice = new DigitalChoice;
+					$choice->digital_id = $model->digital_id;
+					if($choice->save())
+						$redirect = true;
 					
-					//change value active or publish
-					if($replace == 1) {
-						$choice = new DigitalChoice;
-						$choice->digital_id = $model->digital_id;
-						if($choice->save())
-							$redirect = true;
-						
-					} else if($replace == 0) {
-						if(DigitalChoice::model()->deleteAll('digital_id = :digital AND user_id = :user', array(':digital' => $id,':user' => Yii::app()->user->id,)))
-							$redirect = true;
-					}
-
-					if($redirect == true) {
-						echo CJSON::encode(array(
-							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('manage'),
-							'id' => 'partial-digitals',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Digitals success updated.').'</strong></div>',
-						));
-					}
+				} else if($replace == 0) {
+					if(DigitalChoice::model()->deleteAll('digital_id = :digital AND user_id = :user', array(':digital' => $id,':user' => Yii::app()->user->id,)))
+						$redirect = true;
 				}
 
-			} else {
-				$this->dialogDetail = true;
-				$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-				$this->dialogWidth = 350;
-
-				$this->pageTitle = $title;
-				$this->pageDescription = '';
-				$this->pageMeta = '';
-				$this->render('admin_choice',array(
-					'title'=>$title,
-					'model'=>$model,
-				));
+				if($redirect == true) {
+					echo CJSON::encode(array(
+						'type' => 5,
+						'get' => Yii::app()->controller->createUrl('manage'),
+						'id' => 'partial-digitals',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Digitals success updated.').'</strong></div>',
+					));
+				}
+				Yii::app()->end();
 			}
+	
+			$this->dialogDetail = true;
+			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+			$this->dialogWidth = 350;
+
+			$this->pageTitle = $title;
+			$this->pageDescription = '';
+			$this->pageMeta = '';
+			$this->render('admin_choice',array(
+				'title'=>$title,
+				'model'=>$model,
+			));
 			
 		} else 
 			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));

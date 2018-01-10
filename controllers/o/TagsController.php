@@ -178,8 +178,7 @@ class TagsController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				$model->delete();
+			if($model->delete()) {
 				if(isset($_GET['type']) && $_GET['type'] == 'digital') {
 					echo CJSON::encode(array(
 						'type' => 4,
@@ -193,22 +192,22 @@ class TagsController extends Controller
 					));
 				}
 			}
-
-		} else {
-			if(isset($_GET['type']) && $_GET['type'] == 'digital')
-				$url = Yii::app()->controller->createUrl('o/admin/edit', array('id'=>$model->digital_id));
-			else
-				$url = Yii::app()->controller->createUrl('manage');
-			
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = $url;
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'DigitalTags Delete.');
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_delete');
+			Yii::app()->end();
 		}
+
+		if(isset($_GET['type']) && $_GET['type'] == 'digital')
+			$url = Yii::app()->controller->createUrl('o/admin/edit', array('id'=>$model->digital_id));
+		else
+			$url = Yii::app()->controller->createUrl('manage');
+		
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = $url;
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'DigitalTags Delete.');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_delete');
 	}
 
 	/**

@@ -311,9 +311,10 @@ class CoverController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				$model->delete();
-				
+			$model->publish = 2;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+			
+			if($model->update()) {
 				if(isset($_GET['hook']) && $_GET['hook'] == 'admin') {
 					$url = Yii::app()->controller->createUrl('o/admin/getcover', array('id'=>$model->digital_id,'replace'=>'true'));
 					echo CJSON::encode(array(
@@ -330,21 +331,21 @@ class CoverController extends Controller
 					));					
 				}
 			}
-
-		} else {
-			if(isset($_GET['hook']) && $_GET['hook'] == 'admin')
-				$dialogGroundUrl = Yii::app()->controller->createUrl('o/admin/edit', array('id'=>$model->digital_id));
-			else 
-				$dialogGroundUrl = Yii::app()->controller->createUrl('manage');				
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = $dialogGroundUrl;
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'DigitalCover Delete.');
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_delete');
+			Yii::app()->end();
 		}
+
+		if(isset($_GET['hook']) && $_GET['hook'] == 'admin')
+			$dialogGroundUrl = Yii::app()->controller->createUrl('o/admin/edit', array('id'=>$model->digital_id));
+		else 
+			$dialogGroundUrl = Yii::app()->controller->createUrl('manage');				
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = $dialogGroundUrl;
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'DigitalCover Delete.');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_delete');
 	}
 
 	/**
@@ -356,43 +357,37 @@ class CoverController extends Controller
 	{
 		$model=$this->loadModel($id);
 		
-		if($model->publish == 1) {
-			$title = Yii::t('phrase', 'Unpublish');
-			$replace = 0;
-		} else {
-			$title = Yii::t('phrase', 'Publish');
-			$replace = 1;
-		}
+		$title = $model->publish == 1 ? Yii::t('phrase', 'Unpublish') : Yii::t('phrase', 'Publish');
+		$replace = $model->publish == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				//change value active or publish
-				$model->publish = $replace;
+			//change value active or publish
+			$model->publish = $replace;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 
-				if($model->update()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-digital-cover',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'DigitalCover success updated.').'</strong></div>',
-					));
-				}
+			if($model->update()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-digital-cover',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'DigitalCover success updated.').'</strong></div>',
+				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = $title;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_publish',array(
-				'title'=>$title,
-				'model'=>$model,
-			));
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = $title;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_publish',array(
+			'title'=>$title,
+			'model'=>$model,
+		));
 	}
 
 	/**
@@ -406,42 +401,41 @@ class CoverController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {				
-				$model->status = 1;
-				
-				if($model->update()) {
-					if(isset($_GET['hook']) && $_GET['hook'] == 'admin') {
-						$url = Yii::app()->controller->createUrl('o/admin/getcover', array('id'=>$model->digital_id,'replace'=>'true'));
-						echo CJSON::encode(array(
-							'type' => 2,
-							'id' => 'media-render',
-							'get' => $url,
-						));						
-					} else {
-						echo CJSON::encode(array(
-							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('manage'),
-							'id' => 'partial-digital-cover',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'DigitalCover success updated.').'</strong></div>',
-						));							
-					}
+			$model->status = 1;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+			
+			if($model->update()) {
+				if(isset($_GET['hook']) && $_GET['hook'] == 'admin') {
+					$url = Yii::app()->controller->createUrl('o/admin/getcover', array('id'=>$model->digital_id,'replace'=>'true'));
+					echo CJSON::encode(array(
+						'type' => 2,
+						'id' => 'media-render',
+						'get' => $url,
+					));						
+				} else {
+					echo CJSON::encode(array(
+						'type' => 5,
+						'get' => Yii::app()->controller->createUrl('manage'),
+						'id' => 'partial-digital-cover',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'DigitalCover success updated.').'</strong></div>',
+					));							
 				}
 			}
-
-		} else {
-			if(isset($_GET['hook']) && $_GET['hook'] == 'admin')
-				$dialogGroundUrl = Yii::app()->controller->createUrl('o/admin/edit', array('id'=>$model->digital_id));
-			else 
-				$dialogGroundUrl = Yii::app()->controller->createUrl('manage');		
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = $dialogGroundUrl;
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'Cover Photo');
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_cover');
+			Yii::app()->end();
 		}
+
+		if(isset($_GET['hook']) && $_GET['hook'] == 'admin')
+			$dialogGroundUrl = Yii::app()->controller->createUrl('o/admin/edit', array('id'=>$model->digital_id));
+		else 
+			$dialogGroundUrl = Yii::app()->controller->createUrl('manage');		
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = $dialogGroundUrl;
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'Cover Photo');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_cover');
 	}
 
 	/**
