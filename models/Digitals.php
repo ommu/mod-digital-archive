@@ -937,7 +937,7 @@ class Digitals extends CActiveRecord
 			else
 				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
 		}
-		Utility::deleteFolder($digital_path);		
+		Utility::deleteFolder($digital_path);
 	}
 
 }
