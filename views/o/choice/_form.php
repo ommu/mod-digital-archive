@@ -29,7 +29,7 @@
 <fieldset>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model,'digital_id', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<?php echo $form->labelEx($model,'digital_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php echo $form->textField($model,'digital_id',array('maxlength'=>11, 'class'=>'form-control')); ?>
 			<?php echo $form->error($model,'digital_id'); ?>
@@ -38,7 +38,7 @@
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model,'user_id', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<?php echo $form->labelEx($model,'user_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php echo $form->textField($model,'user_id',array('maxlength'=>11, 'class'=>'form-control')); ?>
 			<?php echo $form->error($model,'user_id'); ?>
@@ -47,7 +47,7 @@
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model,'choice_date', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<?php echo $form->labelEx($model,'choice_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php echo $form->textField($model,'choice_date', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model,'choice_date'); ?>
@@ -56,7 +56,7 @@
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model,'choice_ip', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+		<?php echo $form->labelEx($model,'choice_ip', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php echo $form->textField($model,'choice_ip',array('maxlength'=>20, 'class'=>'form-control')); ?>
 			<?php echo $form->error($model,'choice_ip'); ?>

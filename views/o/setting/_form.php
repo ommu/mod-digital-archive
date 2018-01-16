@@ -61,7 +61,7 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'permission', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'permission', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<span class="small-px"><?php echo Yii::t('phrase', 'Select whether or not you want to let the public (visitors that are not logged-in) to view the following sections of your social network. In some cases (such as Profiles, Blogs, and Albums), if you have given them the option, your users will be able to make their pages private even though you have made them publically viewable here. For more permissions settings, please visit the General Settings page.');?></span>
 				<?php echo $form->radioButtonList($model, 'permission', array(
@@ -73,7 +73,7 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'meta_description', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'meta_description', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->textArea($model,'meta_description',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'meta_description'); ?>
@@ -81,7 +81,7 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'meta_keyword', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'meta_keyword', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->textArea($model,'meta_keyword',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'meta_keyword'); ?>
@@ -89,7 +89,7 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cover_unlimit_input', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'cover_unlimit_input', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->getErrors())
@@ -100,7 +100,7 @@ EOP;
 		</div>
 
 		<div id="cover-limit" class="form-group row <?php echo $model->cover_limit == 0 ? 'hide' : '';?>">
-			<?php echo $form->labelEx($model,'cover_limit', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'cover_limit', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->textField($model,'cover_limit', array('maxlength'=>2, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cover_limit'); ?>
@@ -146,7 +146,7 @@ EOP;
 
 		<?php if(!$model->isNewRecord && $model->digital_admin == 1) {?>
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'form_standard', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'form_standard', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->radioButtonList($model, 'form_standard', array(
 					1 => Yii::t('phrase', 'Standard'),
@@ -184,7 +184,7 @@ EOP;
 		</div>
 		
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'headline', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'headline', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->dropDownLIst($model,'headline', array(
 					'1' => Yii::t('phrase', 'Enable'),
@@ -204,7 +204,7 @@ EOP;
 			</div>
 
 			<div class="form-group row">
-				<?php echo $form->labelEx($model,'headline_category', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+				<?php echo $form->labelEx($model,'headline_category', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 				<div class="col-lg-8 col-md-9 col-sm-12">
 					<?php 
 					$category = DigitalCategory::getCategory(1);
@@ -217,7 +217,7 @@ EOP;
 		</div>		
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'editor_choice_status', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'editor_choice_status', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->radioButtonList($model, 'editor_choice_status', array(
 					1 => Yii::t('phrase', 'Enable'),
@@ -229,7 +229,7 @@ EOP;
 
 		<div <?php echo $model->editor_choice_status == 0 ? 'class="hide"' : '';?> id="editor_choice">
 			<div class="form-group row">
-				<?php echo $form->labelEx($model,'editor_choice_limit', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+				<?php echo $form->labelEx($model,'editor_choice_limit', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 				<div class="col-lg-8 col-md-9 col-sm-12">
 					<?php echo $form->textField($model,'editor_choice_limit', array('maxlength'=>2, 'class'=>'form-control')); ?>
 					<?php echo $form->error($model,'editor_choice_limit'); ?>
@@ -237,7 +237,7 @@ EOP;
 			</div>
 			
 			<div class="form-group row">
-				<?php echo $form->labelEx($model,'editor_choice_userlevel', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+				<?php echo $form->labelEx($model,'editor_choice_userlevel', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 				<div class="col-lg-8 col-md-9 col-sm-12">
 					<?php 
 					if(!$model->getErrors())
@@ -249,7 +249,7 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'content_verified', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'content_verified', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->radioButtonList($model, 'content_verified', array(
 					1 => Yii::t('phrase', 'Enable'),
@@ -261,7 +261,7 @@ EOP;
 		<?php }?>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cover_file_type', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'cover_file_type', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->getErrors()) {
@@ -279,7 +279,7 @@ EOP;
 		$form_custom_field = $model->form_custom_field;
 		if($model->digital_global_file_type == 1 || ($model->digital_global_file_type == 0 && ($model->form_standard == 1 || ($model->form_standard == 0 && !in_array('cat_id', $form_custom_field))))) {?>
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'digital_file_type', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'digital_file_type', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php
 				if(!$model->getErrors()) {
@@ -295,7 +295,7 @@ EOP;
 		<?php }?>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'digital_path', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'digital_path', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if($model->isNewRecord || (!$model->isNewRecord && $model->digital_path == ''))
@@ -307,7 +307,7 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'digital_sync_path', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'digital_sync_path', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if($model->isNewRecord || (!$model->isNewRecord && $model->digital_sync_path == ''))

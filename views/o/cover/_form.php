@@ -33,7 +33,7 @@
 		
 		<?php if($model->isNewRecord && $digital == null) {?>
 			<div class="form-group row">
-				<?php echo $form->labelEx($model,'digital_title_input', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+				<?php echo $form->labelEx($model,'digital_title_input', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 				<div class="col-lg-8 col-md-9 col-sm-12">
 					<?php 
 					//echo $form->textField($model,'digital_title_input', array('class'=>'form-control'));
@@ -62,7 +62,7 @@
 		<?php }?>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cover_filename', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'cover_filename', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->getErrors())
@@ -80,7 +80,7 @@
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cover_caption', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'cover_caption', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->textArea($model,'cover_caption',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cover_caption'); ?>
@@ -92,7 +92,7 @@
 			echo $form->hiddenField($model,'status');?>
 		<?php } else {?>
 			<div class="form-group row publish">
-				<?php echo $form->labelEx($model,'status', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+				<?php echo $form->labelEx($model,'status', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 				<div class="col-lg-8 col-md-9 col-sm-12">
 					<?php echo $form->checkBox($model,'status', array('class'=>'form-control')); ?>
 					<?php echo $form->labelEx($model,'status'); ?>
@@ -103,7 +103,7 @@
 		<?php }?>
 
 		<div class="form-group row publish">
-			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->checkBox($model,'publish', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model,'publish'); ?>
