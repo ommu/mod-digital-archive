@@ -34,7 +34,7 @@
 
 	<fieldset>
 		<div class="row">
-			<div class="col-lg-9 col-md-12">
+			<div class="col-lg-8 col-md-12">
 				<div class="form-group row">
 					<?php echo $form->labelEx($model,'digital_title', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 					<div class="col-lg-8 col-md-9 col-sm-12">
@@ -329,7 +329,7 @@
 				<?php }?>
 
 			</div>
-			<div class="col-lg-3 col-md-12">
+			<div class="col-lg-4 col-md-12">
 				<?php if($model->isNewRecord) {?>
 				<div class="form-group row">
 					<?php echo $form->labelEx($model,'digital_file_input', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
@@ -371,7 +371,7 @@
 						if($category != null)
 							echo $form->dropDownList($model,'cat_id', $category, array('prompt'=>Yii::t('phrase', 'Select One'), 'class'=>'form-control'));
 						else
-							echo $form->dropDownList($model,'cat_id', array('prompt'=>Yii::t('phrase', 'Select One'), 'class'=>'form-control'));?>
+							echo $form->dropDownList($model,'cat_id', array('prompt'=>Yii::t('phrase', 'Select One')), array('class'=>'form-control'));?>
 						<?php echo $form->error($model,'cat_id'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
@@ -387,7 +387,7 @@
 						if($language != null)
 							echo $form->dropDownList($model,'language_id', $language, array('prompt'=>Yii::t('phrase', 'Select One'), 'class'=>'form-control'));
 						else
-							echo $form->dropDownList($model,'language_id', array('prompt'=>Yii::t('phrase', 'Select One'), 'class'=>'form-control'));?>
+							echo $form->dropDownList($model,'language_id', array('prompt'=>Yii::t('phrase', 'Select One')), array('class'=>'form-control'));?>
 						<?php echo $form->error($model,'language_id'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
