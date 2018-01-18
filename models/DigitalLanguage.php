@@ -357,7 +357,7 @@ class DigitalLanguage extends CActiveRecord
 				$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
-	}	
+	}
 	/**
 	 * before save attributes
 	 */

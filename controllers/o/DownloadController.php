@@ -129,7 +129,7 @@ class DownloadController extends Controller
 			'model'=>$model,
 			'columns' => $columns,
 		));
-	}	
+	}
 	
 	/**
 	 * Displays a particular model.

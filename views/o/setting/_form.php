@@ -196,7 +196,7 @@ EOP;
 		
 		<div id="headline" class="<?php echo $model->headline == 0 ? 'hide' : '';?>">
 			<div class="form-group row">
-				<?php echo $form->labelEx($model,'headline_limit'); ?>
+				<?php echo $form->labelEx($model,'headline_limit', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 				<div class="col-lg-8 col-md-9 col-sm-12">
 					<?php echo $form->textField($model,'headline_limit', array('maxlength'=>3, 'class'=>'form-control')); ?>
 					<?php echo $form->error($model,'headline_limit'); ?>

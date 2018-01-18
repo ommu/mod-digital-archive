@@ -232,7 +232,7 @@ class FileController extends Controller
 			$digital_file_type = unserialize($model->digital->category->cat_file_type);	
 			if(empty($digital_file_type))
 				$digital_file_type = array();			
-		}	
+		}
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
@@ -279,7 +279,7 @@ class FileController extends Controller
 		$this->render('admin_view',array(
 			'model'=>$model,
 		));
-	}	
+	}
 
 	/**
 	 * Displays a particular model.

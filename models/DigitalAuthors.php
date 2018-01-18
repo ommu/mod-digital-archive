@@ -319,7 +319,7 @@ class DigitalAuthors extends CActiveRecord
 						if($data->save()) {
 							$this->author_id = $data->author_id;
 						}
-					}					
+					}
 				}
 			}
 		}

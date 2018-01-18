@@ -373,7 +373,7 @@ class DigitalCover extends CActiveRecord
 		$this->md5coverpath = md5($this->digital->view->md5path.$this->creation_date);
 		
 		parent::afterFind();		
-	}	
+	}
 
 	/**
 	 * before validate attributes
@@ -547,7 +547,7 @@ class DigitalCover extends CActiveRecord
 									
 			foreach($cover_view_size as $key => $val) {
 				unlink($digital_path.'/'.$key.'_'.$model->cover_filename);
-			}		
+			}
 		}
 
 		//reset cover in article

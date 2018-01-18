@@ -161,7 +161,7 @@ class HistoryprintController extends Controller
 			'model'=>$model,
 		));
 		*/
-	}	
+	}
 
 	/**
 	 * Manages all models.
@@ -191,7 +191,7 @@ class HistoryprintController extends Controller
 			'model'=>$model,
 			'columns' => $columns,
 		));
-	}	
+	}
 	
 	/**
 	 * Creates a new model.

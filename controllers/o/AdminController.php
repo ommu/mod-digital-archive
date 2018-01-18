@@ -370,7 +370,7 @@ class AdminController extends Controller
 		$this->render('admin_view',array(
 			'model'=>$model,
 		));
-	}	
+	}
 	
 	/**
 	 * Creates a new model.

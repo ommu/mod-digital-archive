@@ -320,7 +320,7 @@ class DigitalSubjects extends CActiveRecord
 						if($data->save()) {
 							$this->tag_id = $data->tag_id;
 						}
-					}					
+					}
 				}
 			}
 		}

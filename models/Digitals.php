@@ -501,7 +501,7 @@ class Digitals extends CActiveRecord
 						),
 					), true),
 				);
-			}				
+			}
 			if($setting->content_verified == 1) {
 				$this->defaultColumns[] = array(
 					'name' => 'content_verified',
@@ -868,7 +868,7 @@ class Digitals extends CActiveRecord
 						}
 					}
 				}
-			}				
+			}
 		}
 		
 		// Reset headline
@@ -913,7 +913,7 @@ class Digitals extends CActiveRecord
 				foreach($files as $val) {
 					if($val->digital_filename != '' && file_exists($digital_path.'/'.$val->digital_filename))
 						rename($digital_path.'/'.$val->digital_filename, 'public/digital/verwijderen/'.$val->digital_id.'_'.$val->digital_filename);					
-				}				
+				}
 			}
 		}
 		return true;
