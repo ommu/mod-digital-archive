@@ -110,7 +110,7 @@
 							<div><?php echo $val->tag->body;?><a href="<?php echo Yii::app()->controller->createUrl('o/categorytag/delete',array('id'=>$val->id,'type'=>'digital'));?>" title="<?php echo Yii::t('phrase', 'Delete');?>"><?php echo Yii::t('phrase', 'Delete');?></a></div>
 						<?php }
 						}
-					}?>				
+					}?>
 				</div>
 				<?php if($model->isNewRecord) {?><span class="small-px">tambahkan tanda koma (,) jika ingin menambahkan tag lebih dari satu</span><?php }?>
 			</div>

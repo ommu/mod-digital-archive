@@ -127,7 +127,7 @@ EOP;
 					<?php echo $form->error($model,'cover_resize_size'); ?>
 				</div>
 				
-				<p><?php echo Yii::t('phrase', 'Large Size');?></p>				
+				<p><?php echo Yii::t('phrase', 'Large Size');?></p>
 				<?php echo Yii::t('phrase', 'Width').': ';?><?php echo $form->textField($model,'cover_view_size[large][width]',array('maxlength'=>4,'class'=>'form-control')); ?>&nbsp;&nbsp;&nbsp;
 				<?php echo Yii::t('phrase', 'Height').': ';?><?php echo $form->textField($model,'cover_view_size[large][height]',array('maxlength'=>4,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cover_view_size[large]'); ?>
@@ -214,7 +214,7 @@ EOP;
 					<?php echo $form->error($model,'headline_category'); ?>
 				</div>
 			</div>
-		</div>		
+		</div>
 
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'editor_choice_status', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>

@@ -21,6 +21,6 @@ foreach($authors as $key => $val) {
 	if($count != $i) {?>
 		<a href="<?php echo Yii::app()->controller->createUrl('o/authors/manage',array('author'=>$val->author_id));?>" title="<?php echo $val->author->author_name?>"><?php echo $val->author->author_name?></a>, 
 	<?php } else {?>
-		<a href="<?php echo Yii::app()->controller->createUrl('o/authors/manage',array('author'=>$val->author_id));?>" title="<?php echo $val->author->author_name?>"><?php echo $val->author->author_name?></a>	
+		<a href="<?php echo Yii::app()->controller->createUrl('o/authors/manage',array('author'=>$val->author_id));?>" title="<?php echo $val->author->author_name?>"><?php echo $val->author->author_name?></a>
 <?php }
 }?>

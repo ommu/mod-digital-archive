@@ -21,6 +21,6 @@ foreach($tags as $key => $val) {
 	if($count != $i) {?>
 		<a href="<?php echo Yii::app()->controller->createUrl('o/tags/manage',array('tag'=>$val->tag_id));?>" title="<?php echo $val->tag->body?>"><?php echo $val->tag->body?></a>, 
 	<?php } else {?>
-		<a href="<?php echo Yii::app()->controller->createUrl('o/tags/manage',array('tag'=>$val->tag_id));?>" title="<?php echo $val->tag->body?>"><?php echo $val->tag->body?></a>	
+		<a href="<?php echo Yii::app()->controller->createUrl('o/tags/manage',array('tag'=>$val->tag_id));?>" title="<?php echo $val->tag->body?>"><?php echo $val->tag->body?></a>
 <?php }
 }?>
