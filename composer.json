@@ -1,26 +1,25 @@
 {
 	"name": "ommu/digital",
-	"description": "Digital Archive Module for Ommu Platform",
+	"description": "Digital Archive Module from Ommu Platform",
 	"keywords": [
 		"module",
-		"digital-archive",
+		"digital archive",
 		"digital",
 		"archive",
 		"ommu",
-		"platform",
 		"ommu platform"
 	],
-	"homepage": "https://github.com/ommu/ommu-digital-archive",
+	"homepage": "https://github.com/ommu/mod-digital-archive",
 	"type": "ommu-module",
 	"license": "Apache-2.0",
 	"support": {
-		"issues": "https://github.com/ommu/ommu-digital-archive/issues",
-		"wiki": "https://github.com/ommu/ommu-digital-archive/wiki",
-		"source": "https://github.com/ommu/ommu-digital-archive"
+		"issues": "https://github.com/ommu/mod-digital-archive/issues",
+		"wiki": "https://github.com/ommu/mod-digital-archive/wiki",
+		"source": "https://github.com/ommu/mod-digital-archive"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ommu/ommu-digital-archive.git"
+		"url": "https://github.com/ommu/mod-digital-archive.git"
 	},
 	"authors": [
 		{
