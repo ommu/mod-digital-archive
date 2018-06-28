@@ -7,7 +7,7 @@
 		"digital",
 		"archive",
 		"ommu",
-		"ommu platform"
+		"ommu-platform"
 	],
 	"homepage": "https://github.com/ommu/mod-digital-archive",
 	"type": "ommu-module",
