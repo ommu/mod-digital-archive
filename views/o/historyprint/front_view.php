@@ -45,15 +45,15 @@ if(Yii::app()->user->hasFlash('success'))
 		),
 		array(
 			'name'=>'print_request_date',
-			'value'=>!in_array($model->print_request_date, array('0000-00-00','1970-01-01')) ? Utility::dateFormat($model->print_request_date) : '-',
+			'value'=>!in_array($model->print_request_date, array('0000-00-00','1970-01-01','0002-12-02','-0001-11-30')) ? Utility::dateFormat($model->print_request_date) : '-',
 		),
 		array(
 			'name'=>'print_date',
-			'value'=>!in_array($model->print_date, array('0000-00-00','1970-01-01')) ? Utility::dateFormat($model->print_date) : '-',
+			'value'=>!in_array($model->print_date, array('0000-00-00','1970-01-01','0002-12-02','-0001-11-30')) ? Utility::dateFormat($model->print_date) : '-',
 		),
 		array(
 			'name'=>'creation_date',
-			'value'=>!in_array($model->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')) ? Utility::dateFormat($model->creation_date, true) : '-',
+			'value'=>!in_array($model->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')) ? Utility::dateFormat($model->creation_date, true) : '-',
 		),
 		array(
 			'name'=>'creation_id',
@@ -62,7 +62,7 @@ if(Yii::app()->user->hasFlash('success'))
 		),
 		array(
 			'name'=>'modified_date',
-			'value'=>!in_array($model->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')) ? Utility::dateFormat($model->modified_date, true) : '-',
+			'value'=>!in_array($model->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')) ? Utility::dateFormat($model->modified_date, true) : '-',
 		),
 		array(
 			'name'=>'modified_id',

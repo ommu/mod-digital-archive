@@ -50,7 +50,7 @@
 		<?php echo $form->labelEx($model,'print_request_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php
-			$model->print_request_date = !$model->isNewRecord ? (!in_array($model->print_request_date, array('0000-00-00','1970-01-01')) ? date('d-m-Y', strtotime($model->print_request_date)) : '') : '';
+			$model->print_request_date = !$model->isNewRecord ? (!in_array($model->print_request_date, array('0000-00-00','1970-01-01','0002-12-02','-0001-11-30')) ? date('d-m-Y', strtotime($model->print_request_date)) : '') : '';
 			//echo $form->textField($model,'print_request_date');
 			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
@@ -72,7 +72,7 @@
 		<?php echo $form->labelEx($model,'print_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php
-			$model->print_date = !$model->isNewRecord ? (!in_array($model->print_date, array('0000-00-00','1970-01-01')) ? date('d-m-Y', strtotime($model->print_date)) : '') : '';
+			$model->print_date = !$model->isNewRecord ? (!in_array($model->print_date, array('0000-00-00','1970-01-01','0002-12-02','-0001-11-30')) ? date('d-m-Y', strtotime($model->print_date)) : '') : '';
 			//echo $form->textField($model,'print_date');
 			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
