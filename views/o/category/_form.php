@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 20 October 2016, 10:13 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -37,7 +37,7 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'cat_title', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'cat_title',array('maxlength'=>32, 'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'cat_title', array('maxlength'=>32, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_title'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
@@ -46,7 +46,7 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'cat_desc', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textArea($model,'cat_desc',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
+				<?php echo $form->textArea($model,'cat_desc', array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_desc'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
@@ -55,7 +55,7 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'cat_code', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'cat_code',array('maxlength'=>6, 'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'cat_code', array('maxlength'=>6, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_code'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
@@ -66,10 +66,10 @@
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if($model->isNewRecord) {
-					echo $form->textArea($model,'tag_input',array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
+					echo $form->textArea($model,'tag_input', array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
 					
 				} else {
-					//echo $form->textField($model,'tag_input',array('maxlength'=>32,'class'=>'form-control'));
+					//echo $form->textField($model,'tag_input', array('maxlength'=>32,'class'=>'form-control'));
 					$url = Yii::app()->controller->createUrl('o/categorytag/add', array('type'=>'digital'));
 					$category = $model->cat_id;
 					$tagId = 'DigitalCategory_tag_input';
@@ -107,7 +107,7 @@
 						$tags = $model->tags;
 						if(!empty($tags)) {
 							foreach($tags as $key => $val) {?>
-							<div><?php echo $val->tag->body;?><a href="<?php echo Yii::app()->controller->createUrl('o/categorytag/delete',array('id'=>$val->id,'type'=>'digital'));?>" title="<?php echo Yii::t('phrase', 'Delete');?>"><?php echo Yii::t('phrase', 'Delete');?></a></div>
+							<div><?php echo $val->tag->body;?><a href="<?php echo Yii::app()->controller->createUrl('o/categorytag/delete', array('id'=>$val->id,'type'=>'digital'));?>" title="<?php echo Yii::t('phrase', 'Delete');?>"><?php echo Yii::t('phrase', 'Delete');?></a></div>
 						<?php }
 						}
 					}?>
@@ -119,7 +119,7 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'cat_icon', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'cat_icon',array('maxlength'=>32, 'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'cat_icon', array('maxlength'=>32, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_icon'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
@@ -191,7 +191,7 @@
 	</fieldset>
 </div>
 <div class="dialog-submit">
-	<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') ,array('onclick' => 'setEnableSave()')); ?>
+	<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') , array('onclick' => 'setEnableSave()')); ?>
 	<?php echo CHtml::button(Yii::t('phrase', 'Cancel'), array('id'=>'closed')); ?>
 </div>
 <?php $this->endWidget(); ?>

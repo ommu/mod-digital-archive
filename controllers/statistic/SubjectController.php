@@ -15,7 +15,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 3 November 2016, 16:42 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -122,7 +122,7 @@ class SubjectController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'View Digital Subjects Manage');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));

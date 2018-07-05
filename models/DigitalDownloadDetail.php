@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 8 January 2017, 23:04 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -136,19 +136,19 @@ class DigitalDownloadDetail extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.id',strtolower($this->id),true);
-		if(isset($_GET['download']))
-			$criteria->compare('t.download_id',$_GET['download']);
+		$criteria->compare('t.id', strtolower($this->id), true);
+		if(Yii::app()->getRequest()->getParam('download'))
+			$criteria->compare('t.download_id', Yii::app()->getRequest()->getParam('download'));
 		else
-			$criteria->compare('t.download_id',$this->download_id);
-		if($this->download_date != null && !in_array($this->download_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.download_date)',date('Y-m-d', strtotime($this->download_date)));
-		$criteria->compare('t.download_ip',strtolower($this->download_ip),true);
+			$criteria->compare('t.download_id', $this->download_id);
+		if($this->download_date != null && !in_array($this->download_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.download_date)', date('Y-m-d', strtotime($this->download_date)));
+		$criteria->compare('t.download_ip', strtolower($this->download_ip), true);
 
-		$criteria->compare('file.digital_filename',strtolower($this->file_search), true);
-		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
+		$criteria->compare('file.digital_filename', strtolower($this->file_search), true);
+		$criteria->compare('digital.digital_title', strtolower($this->digital_search), true);
 
-		if(!isset($_GET['DigitalDownloadDetail_sort']))
+		if(!Yii::app()->getRequest()->getParam('DigitalDownloadDetail_sort'))
 			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -195,7 +195,7 @@ class DigitalDownloadDetail extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['download'])) {
+			if(!Yii::app()->getRequest()->getParam('download')) {
 				$this->defaultColumns[] = array(
 					'name' => 'file_search',
 					'value' => '$data->download->file->digital_filename',
@@ -222,7 +222,7 @@ class DigitalDownloadDetail extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,
@@ -248,7 +248,7 @@ class DigitalDownloadDetail extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

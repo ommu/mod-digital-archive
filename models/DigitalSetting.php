@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 20 October 2016, 10:10 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -171,38 +171,38 @@ class DigitalSetting extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.id',$this->id);
-		$criteria->compare('t.license',strtolower($this->license),true);
-		$criteria->compare('t.permission',$this->permission);
-		$criteria->compare('t.meta_keyword',strtolower($this->meta_keyword),true);
-		$criteria->compare('t.meta_description',strtolower($this->meta_description),true);
-		$criteria->compare('t.cover_limit',$this->cover_limit);
-		$criteria->compare('t.cover_resize',$this->cover_resize);
-		$criteria->compare('t.cover_resize_size',strtolower($this->cover_resize_size),true);
-		$criteria->compare('t.cover_view_size',strtolower($this->cover_view_size),true);
-		$criteria->compare('t.cover_file_type',strtolower($this->cover_file_type),true);
-		$criteria->compare('t.digital_file_type',strtolower($this->digital_file_type),true);
-		$criteria->compare('t.digital_path',strtolower($this->digital_path),true);
-		$criteria->compare('t.digital_sync_path',strtolower($this->digital_sync_path),true);
-		$criteria->compare('t.form_standard',$this->form_standard);
-		$criteria->compare('t.form_custom_field',strtolower($this->form_custom_field),true);
-		$criteria->compare('t.headline',$this->headline);
-		$criteria->compare('t.headline_limit',$this->headline_limit);
-		$criteria->compare('t.headline_category',$this->headline_category,true);
-		$criteria->compare('t.editor_choice_status',$this->editor_choice_status);
-		$criteria->compare('t.editor_choice_userlevel',strtolower($this->editor_choice_userlevel),true);
-		$criteria->compare('t.editor_choice_limit',$this->editor_choice_limit);
-		$criteria->compare('t.content_verified',$this->content_verified);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
-		if(isset($_GET['modified']))
-			$criteria->compare('t.modified_id',$_GET['modified']);
+		$criteria->compare('t.id', $this->id);
+		$criteria->compare('t.license', strtolower($this->license), true);
+		$criteria->compare('t.permission', $this->permission);
+		$criteria->compare('t.meta_keyword', strtolower($this->meta_keyword), true);
+		$criteria->compare('t.meta_description', strtolower($this->meta_description), true);
+		$criteria->compare('t.cover_limit', $this->cover_limit);
+		$criteria->compare('t.cover_resize', $this->cover_resize);
+		$criteria->compare('t.cover_resize_size', strtolower($this->cover_resize_size), true);
+		$criteria->compare('t.cover_view_size', strtolower($this->cover_view_size), true);
+		$criteria->compare('t.cover_file_type', strtolower($this->cover_file_type), true);
+		$criteria->compare('t.digital_file_type', strtolower($this->digital_file_type), true);
+		$criteria->compare('t.digital_path', strtolower($this->digital_path), true);
+		$criteria->compare('t.digital_sync_path', strtolower($this->digital_sync_path), true);
+		$criteria->compare('t.form_standard', $this->form_standard);
+		$criteria->compare('t.form_custom_field', strtolower($this->form_custom_field), true);
+		$criteria->compare('t.headline', $this->headline);
+		$criteria->compare('t.headline_limit', $this->headline_limit);
+		$criteria->compare('t.headline_category', $this->headline_category,true);
+		$criteria->compare('t.editor_choice_status', $this->editor_choice_status);
+		$criteria->compare('t.editor_choice_userlevel', strtolower($this->editor_choice_userlevel), true);
+		$criteria->compare('t.editor_choice_limit', $this->editor_choice_limit);
+		$criteria->compare('t.content_verified', $this->content_verified);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
+		if(Yii::app()->getRequest()->getParam('modified'))
+			$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified'));
 		else
-			$criteria->compare('t.modified_id',$this->modified_id);
+			$criteria->compare('t.modified_id', $this->modified_id);
 		
-		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
+		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
 
-		if(!isset($_GET['DigitalSetting_sort']))
+		if(!Yii::app()->getRequest()->getParam('DigitalSetting_sort'))
 			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -301,7 +301,7 @@ class DigitalSetting extends CActiveRecord
 	public static function getInfo($column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk(1,array(
+			$model = self::model()->findByPk(1, array(
 				'select' => $column,
 			));
 			if(count(explode(',', $column)) == 1)
@@ -325,33 +325,6 @@ class DigitalSetting extends CActiveRecord
 		));
 		
 		return unserialize($setting->headline_category);		
-	}
-
-	/**
-	 * get Module License
-	 */
-	public static function getLicense($source='1234567890', $length=16, $char=4)
-	{
-		$mod = $length%$char;
-		if($mod == 0)
-			$sep = ($length/$char);
-		else
-			$sep = (int)($length/$char)+1;
-		
-		$sourceLength = strlen($source);
-		$random = '';
-		for ($i = 0; $i < $length; $i++)
-			$random .= $source[rand(0, $sourceLength - 1)];
-		
-		$license = '';
-		for ($i = 0; $i < $sep; $i++) {
-			if($i != $sep-1)
-				$license .= substr($random,($i*$char),$char).'-';
-			else
-				$license .= substr($random,($i*$char),$char);
-		}
-
-		return $license;
 	}
 
 	/**

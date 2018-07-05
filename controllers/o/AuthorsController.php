@@ -17,7 +17,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 20 October 2016, 10:12 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -105,7 +105,7 @@ class AuthorsController extends Controller
 	 */
 	public function actionManage() 
 	{
-		$id = $_GET['digital'];
+		$id = Yii::app()->getRequest()->getParam('digital');
 		$digital_title = '';
 		if(isset($id) && $id != '') {
 			$digital = Digitals::model()->findByPk($id);
@@ -132,7 +132,7 @@ class AuthorsController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Digital Authors Manage').$digital_title;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -155,10 +155,10 @@ class AuthorsController extends Controller
 			$model->author_input = $_POST['author'];
 
 			if($model->save()) {
-				if(isset($_GET['type']) && $_GET['type'] == 'digital')
-					$url = Yii::app()->controller->createUrl('delete',array('id'=>$model->id,'type'=>'digital'));
+				if(Yii::app()->getRequest()->getParam('type') == 'digital')
+					$url = Yii::app()->controller->createUrl('delete', array('id'=>$model->id,'type'=>'digital'));
 				else 
-					$url = Yii::app()->controller->createUrl('delete',array('id'=>$model->id));
+					$url = Yii::app()->controller->createUrl('delete', array('id'=>$model->id));
 				echo CJSON::encode(array(
 					'data' => '<div>'.$model->author->author_name.'<a href="'.$url.'" title="'.Yii::t('phrase', 'Delete').'">'.Yii::t('phrase', 'Delete').'</a></div>',
 				));
@@ -179,7 +179,7 @@ class AuthorsController extends Controller
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
 			if($model->delete()) {
-				if(isset($_GET['type']) && $_GET['type'] == 'digital') {
+				if(Yii::app()->getRequest()->getParam('type') == 'digital') {
 					echo CJSON::encode(array(
 						'type' => 4,
 					));
@@ -195,7 +195,7 @@ class AuthorsController extends Controller
 			Yii::app()->end();
 		}
 
-		if(isset($_GET['type']) && $_GET['type'] == 'digital')
+		if(Yii::app()->getRequest()->getParam('type') == 'digital')
 			$url = Yii::app()->controller->createUrl('o/admin/edit', array('id'=>$model->digital_id));
 		else
 			$url = Yii::app()->controller->createUrl('manage');

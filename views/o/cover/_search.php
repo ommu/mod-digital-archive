@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 7 November 2016, 09:56 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -21,7 +21,7 @@
 	<ul>
 		<li>
 			<?php echo $model->getAttributeLabel('cover_id'); ?><br/>
-			<?php echo $form->textField($model,'cover_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'cover_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
@@ -36,12 +36,12 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('digital_id'); ?><br/>
-			<?php echo $form->textField($model,'digital_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'digital_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('cover_filename'); ?><br/>
-			<?php echo $form->textArea($model,'cover_filename',array('rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->textArea($model,'cover_filename', array('rows'=>6, 'cols'=>50)); ?>
 		</li>
 
 		<li>
@@ -51,7 +51,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('creation_id'); ?><br/>
-			<?php echo $form->textField($model,'creation_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'creation_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
@@ -61,7 +61,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('modified_id'); ?><br/>
-			<?php echo $form->textField($model,'modified_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'modified_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li class="submit">

@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 22 December 2016, 10:35 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -21,17 +21,17 @@
 	<ul>
 		<li>
 			<?php echo $model->getAttributeLabel('choice_id'); ?><br/>
-			<?php echo $form->textField($model,'choice_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'choice_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('digital_id'); ?><br/>
-			<?php echo $form->textField($model,'digital_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'digital_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('user_id'); ?><br/>
-			<?php echo $form->textField($model,'user_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'user_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
@@ -41,7 +41,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('choice_ip'); ?><br/>
-			<?php echo $form->textField($model,'choice_ip',array('size'=>20,'maxlength'=>20)); ?>
+			<?php echo $form->textField($model,'choice_ip', array('size'=>20,'maxlength'=>20)); ?>
 		</li>
 
 		<li class="submit">

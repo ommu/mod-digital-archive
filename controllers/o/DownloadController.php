@@ -17,7 +17,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 January 2017, 20:54 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -124,7 +124,7 @@ class DownloadController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Digital Downloads Manage');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -145,7 +145,7 @@ class DownloadController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'View Digital Downloads');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_view',array(
+		$this->render('admin_view', array(
 			'model'=>$model,
 		));
 	}

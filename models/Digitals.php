@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 20 October 2016, 10:11 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -83,7 +83,7 @@ class Digitals extends CActiveRecord
 	{
 		return array(
 			'sluggable' => array(
-				'class'=>'ext.yii-behavior-sluggable.SluggableBehavior',
+				'class'=>'ext.yii-sluggable.SluggableBehavior',
 				'columns' => array('digital_title'),
 				'unique' => true,
 				'update' => true,
@@ -249,68 +249,68 @@ class Digitals extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.digital_id',strtolower($this->digital_id),true);
-		if(isset($_GET['type']) && $_GET['type'] == 'publish')
-			$criteria->compare('t.publish',1);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
-			$criteria->compare('t.publish',0);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
-			$criteria->compare('t.publish',2);
+		$criteria->compare('t.digital_id', strtolower($this->digital_id), true);
+		if(Yii::app()->getRequest()->getParam('type') == 'publish')
+			$criteria->compare('t.publish', 1);
+		elseif(Yii::app()->getRequest()->getParam('type') == 'unpublish')
+			$criteria->compare('t.publish', 0);
+		elseif(Yii::app()->getRequest()->getParam('type') == 'trash')
+			$criteria->compare('t.publish', 2);
 		else {
-			$criteria->addInCondition('t.publish',array(0,1));
-			$criteria->compare('t.publish',$this->publish);
+			$criteria->addInCondition('t.publish', array(0,1));
+			$criteria->compare('t.publish', $this->publish);
 		}
-		$criteria->compare('t.headline',$this->headline);
-		if(isset($_GET['category']))
-			$criteria->compare('t.cat_id',$_GET['category']);
+		$criteria->compare('t.headline', $this->headline);
+		if(Yii::app()->getRequest()->getParam('category'))
+			$criteria->compare('t.cat_id', Yii::app()->getRequest()->getParam('category'));
 		else
-			$criteria->compare('t.cat_id',$this->cat_id);
-		if(isset($_GET['publisher']))
-			$criteria->compare('t.publisher_id',$_GET['publisher']);
+			$criteria->compare('t.cat_id', $this->cat_id);
+		if(Yii::app()->getRequest()->getParam('publisher'))
+			$criteria->compare('t.publisher_id', Yii::app()->getRequest()->getParam('publisher'));
 		else
-			$criteria->compare('t.publisher_id',$this->publisher_id);
-		if(isset($_GET['language']))
-			$criteria->compare('t.language_id',$_GET['language']);
+			$criteria->compare('t.publisher_id', $this->publisher_id);
+		if(Yii::app()->getRequest()->getParam('language'))
+			$criteria->compare('t.language_id', Yii::app()->getRequest()->getParam('language'));
 		else
-			$criteria->compare('t.language_id',$this->language_id);
-		$criteria->compare('t.opac_id',$this->opac_id);
-		$criteria->compare('t.digital_code',strtolower($this->digital_code),true);
-		$criteria->compare('t.digital_title',strtolower($this->digital_title),true);
-		$criteria->compare('t.digital_intro',strtolower($this->digital_intro),true);
-		$criteria->compare('t.digital_path',strtolower($this->digital_path),true);
-		$criteria->compare('t.publish_year',strtolower($this->publish_year),true);
-		$criteria->compare('t.publish_location',strtolower($this->publish_location),true);
-		$criteria->compare('t.isbn',strtolower($this->isbn),true);
-		$criteria->compare('t.pages',strtolower($this->pages),true);
-		$criteria->compare('t.series',strtolower($this->series),true);
-		$criteria->compare('t.salt',strtolower($this->salt),true);
-		$criteria->compare('t.content_verified',$this->content_verified);
-		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
-		if(isset($_GET['creation']))
-			$criteria->compare('t.creation_id',$_GET['creation']);
+			$criteria->compare('t.language_id', $this->language_id);
+		$criteria->compare('t.opac_id', $this->opac_id);
+		$criteria->compare('t.digital_code', strtolower($this->digital_code), true);
+		$criteria->compare('t.digital_title', strtolower($this->digital_title), true);
+		$criteria->compare('t.digital_intro', strtolower($this->digital_intro), true);
+		$criteria->compare('t.digital_path', strtolower($this->digital_path), true);
+		$criteria->compare('t.publish_year', strtolower($this->publish_year), true);
+		$criteria->compare('t.publish_location', strtolower($this->publish_location), true);
+		$criteria->compare('t.isbn', strtolower($this->isbn), true);
+		$criteria->compare('t.pages', strtolower($this->pages), true);
+		$criteria->compare('t.series', strtolower($this->series), true);
+		$criteria->compare('t.salt', strtolower($this->salt), true);
+		$criteria->compare('t.content_verified', $this->content_verified);
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.creation_date)', date('Y-m-d', strtotime($this->creation_date)));
+		if(Yii::app()->getRequest()->getParam('creation'))
+			$criteria->compare('t.creation_id', Yii::app()->getRequest()->getParam('creation'));
 		else
-			$criteria->compare('t.creation_id',$this->creation_id);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
-		if(isset($_GET['modified']))
-			$criteria->compare('t.modified_id',$_GET['modified']);
+			$criteria->compare('t.creation_id', $this->creation_id);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
+		if(Yii::app()->getRequest()->getParam('modified'))
+			$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified'));
 		else
-			$criteria->compare('t.modified_id',$this->modified_id);
-		if($this->headline_date != null && !in_array($this->headline_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.headline_date)',date('Y-m-d', strtotime($this->headline_date)));
-		$criteria->compare('t.editor_choice_input',$this->editor_choice_input);
+			$criteria->compare('t.modified_id', $this->modified_id);
+		if($this->headline_date != null && !in_array($this->headline_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.headline_date)', date('Y-m-d', strtotime($this->headline_date)));
+		$criteria->compare('t.editor_choice_input', $this->editor_choice_input);
 		
-		$criteria->compare('publisher.publisher_name',strtolower($this->publisher_search), true);
-		$criteria->compare('view.covers',$this->cover_search);
-		$criteria->compare('view.files',$this->file_search);
-		$criteria->compare('view.likes',$this->like_search);
-		$criteria->compare('view.views',$this->view_search);
-		$criteria->compare('view.choices',$this->choice_search);
-		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
-		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
+		$criteria->compare('publisher.publisher_name', strtolower($this->publisher_search), true);
+		$criteria->compare('view.covers', $this->cover_search);
+		$criteria->compare('view.files', $this->file_search);
+		$criteria->compare('view.likes', $this->like_search);
+		$criteria->compare('view.views', $this->view_search);
+		$criteria->compare('view.choices', $this->choice_search);
+		$criteria->compare('creation.displayname', strtolower($this->creation_search), true);
+		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
 
-		if(!isset($_GET['Digitals_sort']))
+		if(!Yii::app()->getRequest()->getParam('Digitals_sort'))
 			$criteria->order = 't.digital_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -393,7 +393,7 @@ class Digitals extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			//$this->defaultColumns[] = 'digital_code';
-			if(!isset($_GET['category']) && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field)))) {
+			if(!Yii::app()->getRequest()->getParam('category') && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('cat_id', $form_custom_field)))) {
 				$this->defaultColumns[] = array(
 					'name' => 'cat_id',
 					'value' => '$data->category->cat_title',
@@ -401,13 +401,13 @@ class Digitals extends CActiveRecord
 				);
 			}
 			$this->defaultColumns[] = 'digital_title';
-			if(!isset($_GET['publisher']) && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publisher_id', $form_custom_field)))) {
+			if(!Yii::app()->getRequest()->getParam('publisher') && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publisher_id', $form_custom_field)))) {
 				$this->defaultColumns[] = array(
 					'name' => 'publisher_search',
 					'value' => '$data->publisher->publisher_name',
 				);
 			}
-			if(!isset($_GET['language']) && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('language_id', $form_custom_field)))) {
+			if(!Yii::app()->getRequest()->getParam('language') && ($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('language_id', $form_custom_field)))) {
 				$this->defaultColumns[] = array(
 					'name' => 'language_id',
 					'value' => '$data->language->language_name',
@@ -429,7 +429,7 @@ class Digitals extends CActiveRecord
 			if($setting->form_standard == 0) {
 				$this->defaultColumns[] = array(
 					'name' => 'cover_search',
-					'value' => 'CHtml::link($data->view->covers != null ? $data->view->covers : "0", Yii::app()->controller->createUrl("o/cover/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
+					'value' => 'CHtml::link($data->view->covers != null ? $data->view->covers : "0", Yii::app()->controller->createUrl("o/cover/manage", array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -438,7 +438,7 @@ class Digitals extends CActiveRecord
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'file_search',
-				'value' => 'CHtml::link($data->view->files != null ? $data->view->files : "0", Yii::app()->controller->createUrl("o/file/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
+				'value' => 'CHtml::link($data->view->files != null ? $data->view->files : "0", Yii::app()->controller->createUrl("o/file/manage", array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -447,7 +447,7 @@ class Digitals extends CActiveRecord
 			if($setting->form_standard == 0) {
 				$this->defaultColumns[] = array(
 					'name' => 'like_search',
-					'value' => 'CHtml::link($data->view->likes != null ? $data->view->likes : "0", Yii::app()->controller->createUrl("o/likes/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
+					'value' => 'CHtml::link($data->view->likes != null ? $data->view->likes : "0", Yii::app()->controller->createUrl("o/likes/manage", array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -457,7 +457,7 @@ class Digitals extends CActiveRecord
 			if($setting->form_standard == 0) {
 				$this->defaultColumns[] = array(
 					'name' => 'view_search',
-					'value' => 'CHtml::link($data->view->views != null ? $data->view->views : "0", Yii::app()->controller->createUrl("o/views/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
+					'value' => 'CHtml::link($data->view->views != null ? $data->view->views : "0", Yii::app()->controller->createUrl("o/views/manage", array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -467,7 +467,7 @@ class Digitals extends CActiveRecord
 			if($setting->form_standard == 0) {
 				$this->defaultColumns[] = array(
 					'name' => 'choice_search',
-					'value' => 'CHtml::link($data->view->choices != null ? $data->view->choices : "0", Yii::app()->controller->createUrl("o/choice/manage",array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
+					'value' => 'CHtml::link($data->view->choices != null ? $data->view->choices : "0", Yii::app()->controller->createUrl("o/choice/manage", array(\'digital\'=>$data->digital_id,\'publish\'=>1)))',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -492,7 +492,7 @@ class Digitals extends CActiveRecord
 						),
 						'options'=>array(
 							'showOn' => 'focus',
-							'dateFormat' => 'dd-mm-yy',
+							'dateFormat' => 'yy-mm-dd',
 							'showOtherMonths' => true,
 							'selectOtherMonths' => true,
 							'changeMonth' => true,
@@ -520,7 +520,7 @@ class Digitals extends CActiveRecord
 				$this->defaultColumns[] = array(
 					'header' => Yii::t('phrase', 'Choice'),
 					//'name' => 'editor_choice_input',
-					'value' => '$data->editor_choice_input != 2 ? Utility::getPublish(Yii::app()->controller->createUrl("choice",array("id"=>$data->digital_id)), $data->editor_choice_input, Yii::t(\'phrase\', \'Choice\').\',\'.Yii::t(\'phrase\', \'Unchoice\')) : "-"',
+					'value' => '$data->editor_choice_input != 2 ? Utility::getPublish(Yii::app()->controller->createUrl("choice", array("id"=>$data->digital_id)), $data->editor_choice_input, Yii::t(\'phrase\', \'Choice\').\',\'.Yii::t(\'phrase\', \'Unchoice\')) : "-"',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -530,7 +530,7 @@ class Digitals extends CActiveRecord
 			if($setting->headline == 1) {
 				$this->defaultColumns[] = array(
 					'name' => 'headline',
-					'value' => 'in_array($data->cat_id, DigitalSetting::getHeadlineCategory()) ? ($data->headline == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Utility::getPublish(Yii::app()->controller->createUrl("headline",array("id"=>$data->digital_id)), $data->headline, 9)) : \'-\'',
+					'value' => 'in_array($data->cat_id, DigitalSetting::getHeadlineCategory()) ? ($data->headline == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Utility::getPublish(Yii::app()->controller->createUrl("headline", array("id"=>$data->digital_id)), $data->headline, 9)) : \'-\'',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -541,10 +541,10 @@ class Digitals extends CActiveRecord
 					'type' => 'raw',
 				);
 			}
-			if(!isset($_GET['type'])) {
+			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->digital_id)), $data->publish, 1)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish", array("id"=>$data->digital_id)), $data->publish, 1)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -565,7 +565,7 @@ class Digitals extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

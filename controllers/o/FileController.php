@@ -21,7 +21,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 7 November 2016, 09:56 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -109,7 +109,7 @@ class FileController extends Controller
 	 */
 	public function actionManage() 
 	{
-		$id = $_GET['digital'];
+		$id = Yii::app()->getRequest()->getParam('digital');
 		$digital_title = '';
 		if(isset($id) && $id != '') {
 			$digital = Digitals::model()->findByPk($id);
@@ -136,7 +136,7 @@ class FileController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Digital Files Manage').$digital_title;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -149,7 +149,7 @@ class FileController extends Controller
 	 */
 	public function actionAdd() 
 	{
-		$id = $_GET['id'];
+		$id = Yii::app()->getRequest()->getParam('id');
 		$digital_title = '';
 		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'digital_global_file_type, digital_file_type, form_standard, form_custom_field',
@@ -200,7 +200,7 @@ class FileController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Update Digital Files').$digital_title;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_add',array(
+		$this->render('admin_add', array(
 			'model'=>$model,
 			'digital'=>$digital,
 			'setting'=>$setting,
@@ -253,7 +253,7 @@ class FileController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Update Digital Files');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_edit',array(
+		$this->render('admin_edit', array(
 			'model'=>$model,
 			'setting'=>$setting,
 			'digital_file_type'=>$digital_file_type,
@@ -275,7 +275,7 @@ class FileController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'View Digital Files');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_view',array(
+		$this->render('admin_view', array(
 			'model'=>$model,
 		));
 	}
@@ -287,7 +287,7 @@ class FileController extends Controller
 	public function actionRunAction() {
 		$id       = $_POST['trash_id'];
 		$criteria = null;
-		$actions  = $_GET['action'];
+		$actions  = Yii::app()->getRequest()->getParam('action');
 
 		if(count($id) > 0) {
 			$criteria = new CDbCriteria;
@@ -311,7 +311,7 @@ class FileController extends Controller
 		}
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax'])) {
+		if(!Yii::app()->getRequest()->getParam('ajax')) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('manage'));
 		}
 	}
@@ -387,7 +387,7 @@ class FileController extends Controller
 		$this->pageTitle = $title;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_publish',array(
+		$this->render('admin_publish', array(
 			'title'=>$title,
 			'model'=>$model,
 		));

@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 28 October 2016, 19:46 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -114,11 +114,11 @@ class ViewDigitalPublisher extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.publisher_id',strtolower($this->publisher_id),true);
-		$criteria->compare('t.digitals',strtolower($this->digitals),true);
-		$criteria->compare('t.digital_all',strtolower($this->digital_all),true);
+		$criteria->compare('t.publisher_id', strtolower($this->publisher_id), true);
+		$criteria->compare('t.digitals', strtolower($this->digitals), true);
+		$criteria->compare('t.digital_all', strtolower($this->digital_all), true);
 
-		if(!isset($_GET['ViewDigitalPublisher_sort']))
+		if(!Yii::app()->getRequest()->getParam('ViewDigitalPublisher_sort'))
 			$criteria->order = 't.publisher_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -177,7 +177,7 @@ class ViewDigitalPublisher extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
 			if(count(explode(',', $column)) == 1)

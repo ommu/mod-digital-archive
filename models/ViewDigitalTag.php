@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 3 November 2016, 16:06 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -130,13 +130,13 @@ class ViewDigitalTag extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.tag_id',strtolower($this->tag_id),true);
-		$criteria->compare('t.digitals',strtolower($this->digitals),true);
-		$criteria->compare('t.digital_all',strtolower($this->digital_all),true);
+		$criteria->compare('t.tag_id', strtolower($this->tag_id), true);
+		$criteria->compare('t.digitals', strtolower($this->digitals), true);
+		$criteria->compare('t.digital_all', strtolower($this->digital_all), true);
 		
 		$criteria->compare('tag.body',Utility::getUrlTitle(strtolower(trim($this->tag_search))), true);
 
-		if(!isset($_GET['ViewDigitalTag_sort']))
+		if(!Yii::app()->getRequest()->getParam('ViewDigitalTag_sort'))
 			$criteria->order = 't.tag_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -188,12 +188,12 @@ class ViewDigitalTag extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'digitals',
-				'value' => 'CHtml::link($data->digitals, Yii::app()->controller->createUrl("o/tags/manage",array(\'tag\'=>$data->tag_id,\'publish\'=>1)))',
+				'value' => 'CHtml::link($data->digitals, Yii::app()->controller->createUrl("o/tags/manage", array(\'tag\'=>$data->tag_id,\'publish\'=>1)))',
 				'type' => 'raw',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'digital_all',
-				'value' => 'CHtml::link($data->digital_all, Yii::app()->controller->createUrl("o/tags/manage",array(\'tag\'=>$data->tag_id)))',
+				'value' => 'CHtml::link($data->digital_all, Yii::app()->controller->createUrl("o/tags/manage", array(\'tag\'=>$data->tag_id)))',
 				'type' => 'raw',
 			);
 		}
@@ -206,7 +206,7 @@ class ViewDigitalTag extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
 			if(count(explode(',', $column)) == 1)

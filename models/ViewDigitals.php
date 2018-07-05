@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 28 October 2016, 19:45 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -152,30 +152,30 @@ class ViewDigitals extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.digital_id',strtolower($this->digital_id),true);
-		$criteria->compare('t.md5path',strtolower($this->md5path),true);
-		$criteria->compare('t.uniquepath',strtolower($this->uniquepath),true);
-		$criteria->compare('t.cover_id',strtolower($this->cover_id),true);
-		$criteria->compare('t.md5coverpath',strtolower($this->md5coverpath),true);
-		$criteria->compare('t.cover_filename',strtolower($this->cover_filename),true);
-		$criteria->compare('t.cover_caption',strtolower($this->cover_caption),true);
-		$criteria->compare('t.covers',strtolower($this->covers),true);
-		$criteria->compare('t.cover_all',strtolower($this->cover_all),true);
-		$criteria->compare('t.files',strtolower($this->files),true);
-		$criteria->compare('t.file_all',strtolower($this->file_all),true);
-		$criteria->compare('t.authors',strtolower($this->authors),true);
-		$criteria->compare('t.subjects',strtolower($this->subjects),true);
-		$criteria->compare('t.tags',strtolower($this->tags),true);
-		$criteria->compare('t.likes',strtolower($this->likes),true);
-		$criteria->compare('t.like_all',strtolower($this->like_all),true);
-		$criteria->compare('t.views',strtolower($this->views),true);
-		$criteria->compare('t.view_all',strtolower($this->view_all),true);
-		$criteria->compare('t.choices',strtolower($this->choices),true);
-		$criteria->compare('t.downloads',strtolower($this->downloads),true);
-		$criteria->compare('t.download_backend',strtolower($this->download_backend),true);
-		$criteria->compare('t.download_all',strtolower($this->download_all),true);
+		$criteria->compare('t.digital_id', strtolower($this->digital_id), true);
+		$criteria->compare('t.md5path', strtolower($this->md5path), true);
+		$criteria->compare('t.uniquepath', strtolower($this->uniquepath), true);
+		$criteria->compare('t.cover_id', strtolower($this->cover_id), true);
+		$criteria->compare('t.md5coverpath', strtolower($this->md5coverpath), true);
+		$criteria->compare('t.cover_filename', strtolower($this->cover_filename), true);
+		$criteria->compare('t.cover_caption', strtolower($this->cover_caption), true);
+		$criteria->compare('t.covers', strtolower($this->covers), true);
+		$criteria->compare('t.cover_all', strtolower($this->cover_all), true);
+		$criteria->compare('t.files', strtolower($this->files), true);
+		$criteria->compare('t.file_all', strtolower($this->file_all), true);
+		$criteria->compare('t.authors', strtolower($this->authors), true);
+		$criteria->compare('t.subjects', strtolower($this->subjects), true);
+		$criteria->compare('t.tags', strtolower($this->tags), true);
+		$criteria->compare('t.likes', strtolower($this->likes), true);
+		$criteria->compare('t.like_all', strtolower($this->like_all), true);
+		$criteria->compare('t.views', strtolower($this->views), true);
+		$criteria->compare('t.view_all', strtolower($this->view_all), true);
+		$criteria->compare('t.choices', strtolower($this->choices), true);
+		$criteria->compare('t.downloads', strtolower($this->downloads), true);
+		$criteria->compare('t.download_backend', strtolower($this->download_backend), true);
+		$criteria->compare('t.download_all', strtolower($this->download_all), true);
 
-		if(!isset($_GET['ViewDigitals_sort']))
+		if(!Yii::app()->getRequest()->getParam('ViewDigitals_sort'))
 			$criteria->order = 't.digital_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -272,7 +272,7 @@ class ViewDigitals extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
 			if(count(explode(',', $column)) == 1)

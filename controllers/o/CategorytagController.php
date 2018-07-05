@@ -17,7 +17,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 22 December 2016, 16:08 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -124,7 +124,7 @@ class CategorytagController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Digital Category Tags Manage');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('/o/category_tag/admin_manage',array(
+		$this->render('/o/category_tag/admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -147,10 +147,10 @@ class CategorytagController extends Controller
 			$model->tag_input = $_POST['tag'];
 
 			if($model->save()) {
-				if(isset($_GET['type']) && $_GET['type'] == 'digital')
-					$url = Yii::app()->controller->createUrl('delete',array('id'=>$model->id,'type'=>'digital'));
+				if(Yii::app()->getRequest()->getParam('type') == 'digital')
+					$url = Yii::app()->controller->createUrl('delete', array('id'=>$model->id,'type'=>'digital'));
 				else 
-					$url = Yii::app()->controller->createUrl('delete',array('id'=>$model->id));
+					$url = Yii::app()->controller->createUrl('delete', array('id'=>$model->id));
 				echo CJSON::encode(array(
 					'data' => '<div>'.$model->tag->body.'<a href="'.$url.'" title="'.Yii::t('phrase', 'Delete').'">'.Yii::t('phrase', 'Delete').'</a></div>',
 				));

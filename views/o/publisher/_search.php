@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 20 October 2016, 10:13 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -21,7 +21,7 @@
 	<ul>
 		<li>
 			<?php echo $model->getAttributeLabel('publisher_id'); ?><br/>
-			<?php echo $form->textField($model,'publisher_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'publisher_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
@@ -31,17 +31,17 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('publisher_name'); ?><br/>
-			<?php echo $form->textArea($model,'publisher_name',array('rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->textArea($model,'publisher_name', array('rows'=>6, 'cols'=>50)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('publisher_location'); ?><br/>
-			<?php echo $form->textArea($model,'publisher_location',array('rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->textArea($model,'publisher_location', array('rows'=>6, 'cols'=>50)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('publisher_address'); ?><br/>
-			<?php echo $form->textArea($model,'publisher_address',array('rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->textArea($model,'publisher_address', array('rows'=>6, 'cols'=>50)); ?>
 		</li>
 
 		<li>
@@ -51,7 +51,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('creation_id'); ?><br/>
-			<?php echo $form->textField($model,'creation_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'creation_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
@@ -61,7 +61,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('modified_id'); ?><br/>
-			<?php echo $form->textField($model,'modified_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'modified_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li class="submit">

@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 7 February 2017, 02:54 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -119,13 +119,13 @@ class ViewDigitalLikes extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.like_id',strtolower($this->like_id),true);
-		$criteria->compare('t.digital_id',strtolower($this->digital_id),true);
-		$criteria->compare('t.likes',strtolower($this->likes),true);
-		$criteria->compare('t.unlikes',strtolower($this->unlikes),true);
-		$criteria->compare('t.like_all',strtolower($this->like_all),true);
+		$criteria->compare('t.like_id', strtolower($this->like_id), true);
+		$criteria->compare('t.digital_id', strtolower($this->digital_id), true);
+		$criteria->compare('t.likes', strtolower($this->likes), true);
+		$criteria->compare('t.unlikes', strtolower($this->unlikes), true);
+		$criteria->compare('t.like_all', strtolower($this->like_all), true);
 
-		if(!isset($_GET['ViewDigitalLikes_sort']))
+		if(!Yii::app()->getRequest()->getParam('ViewDigitalLikes_sort'))
 			$criteria->order = 't.like_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -188,7 +188,7 @@ class ViewDigitalLikes extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
 			if(count(explode(',', $column)) == 1)

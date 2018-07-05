@@ -6,7 +6,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 20 October 2016, 10:12 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -37,7 +37,7 @@
 			),
 			array(
 				'name'=>'digitals',
-				'value'=>$model->authors != null ? CHtml::link($model->view->digitals, Yii::app()->controller->createUrl('o/authors/manage',array('author'=>$model->author_id))) : '-',
+				'value'=>$model->authors != null ? CHtml::link($model->view->digitals, Yii::app()->controller->createUrl('o/authors/manage', array('author'=>$model->author_id))) : '-',
 				'type'=>'raw',
 			),
 			array(

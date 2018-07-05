@@ -16,7 +16,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 22 December 2016, 10:35 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -109,7 +109,7 @@ class ChoiceController extends Controller
 	 */
 	public function actionManage() 
 	{
-		$id = $_GET['digital'];
+		$id = Yii::app()->getRequest()->getParam('digital');
 		$digital_title = '';
 		if(isset($id) && $id != '') {
 			$digital = Digitals::model()->findByPk($id);
@@ -136,7 +136,7 @@ class ChoiceController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Digital Choices Manage').$digital_title;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));

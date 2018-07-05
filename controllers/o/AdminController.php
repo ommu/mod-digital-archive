@@ -27,7 +27,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 20 October 2016, 10:14 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -118,13 +118,13 @@ class AdminController extends Controller
 	public function actionSuggest($limit=10) 
 	{
 		if(Yii::app()->request->isAjaxRequest) {
-			if(isset($_GET['term'])) {
+			if(Yii::app()->getRequest()->getParam('term')) {
 				$criteria = new CDbCriteria;
 				$criteria->condition = 'digital_title LIKE :digital_title';
 				$criteria->select = "digital_id, digital_title";
 				$criteria->limit = $limit;
 				$criteria->order = "digital_id ASC";
-				$criteria->params = array(':digital_title' => '%' . strtolower($_GET['term']) . '%');
+				$criteria->params = array(':digital_title' => '%' . strtolower(Yii::app()->getRequest()->getParam('term')) . '%');
 				$model = Digitals::model()->findAll($criteria);
 
 				if($model) {
@@ -163,7 +163,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Digitals Manage');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -175,7 +175,7 @@ class AdminController extends Controller
 	 */
 	public function actionAdd() 
 	{
-		$setting = DigitalSetting::model()->findByPk(1,array(
+		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'digital_global_file_type, cover_limit, cover_file_type, digital_file_type, form_standard, form_custom_field, headline, content_verified',
 		));
 		$cover_file_type = unserialize($setting->cover_file_type);
@@ -253,7 +253,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Create Digitals');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_add',array(
+		$this->render('admin_add', array(
 			'model'=>$model,
 			'publisher'=>$publisher,
 			'setting'=>$setting,
@@ -270,7 +270,7 @@ class AdminController extends Controller
 	 */
 	public function actionEdit($id) 
 	{
-		$setting = DigitalSetting::model()->findByPk(1,array(
+		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'cover_limit, cover_file_type, form_standard, form_custom_field, headline, content_verified',
 		));
 		$cover_file_type = unserialize($setting->cover_file_type);
@@ -346,7 +346,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Update Digitals');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_edit',array(
+		$this->render('admin_edit', array(
 			'model'=>$model,
 			'publisher'=>$publisher,
 			'setting'=>$setting,
@@ -366,7 +366,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'View Digitals');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_view',array(
+		$this->render('admin_view', array(
 			'model'=>$model,
 		));
 	}
@@ -377,7 +377,7 @@ class AdminController extends Controller
 	 */
 	public function actionUpload($id) 
 	{		
-		$setting = DigitalSetting::model()->findByPk(1,array(
+		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'digital_global_file_type, digital_file_type, form_standard, form_custom_field',
 		));
 		$digital_file_type = unserialize($setting->digital_file_type);
@@ -416,7 +416,7 @@ class AdminController extends Controller
 			$this->pageTitle = Yii::t('phrase', 'Create Digital Categories');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
-			$this->render('admin_upload',array(
+			$this->render('admin_upload', array(
 				'model'=>$model,
 				'digital_file_type'=>$digital_file_type,
 			));
@@ -434,7 +434,7 @@ class AdminController extends Controller
 	public function actionRunAction() {
 		$id       = $_POST['trash_id'];
 		$criteria = null;
-		$actions  = $_GET['action'];
+		$actions  = Yii::app()->getRequest()->getParam('action');
 
 		if(count($id) > 0) {
 			$criteria = new CDbCriteria;
@@ -458,7 +458,7 @@ class AdminController extends Controller
 		}
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax'])) {
+		if(!Yii::app()->getRequest()->getParam('ajax')) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('manage'));
 		}
 	}
@@ -534,7 +534,7 @@ class AdminController extends Controller
 		$this->pageTitle = $title;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_publish',array(
+		$this->render('admin_publish', array(
 			'title'=>$title,
 			'model'=>$model,
 		));
@@ -637,7 +637,7 @@ class AdminController extends Controller
 			$this->pageTitle = $title;
 			$this->pageDescription = '';
 			$this->pageMeta = '';
-			$this->render('admin_choice',array(
+			$this->render('admin_choice', array(
 				'title'=>$title,
 				'model'=>$model,
 			));
@@ -653,7 +653,7 @@ class AdminController extends Controller
 	public function actionGetcover($id) 
 	{
 		$model=$this->loadModel($id);
-		$setting = DigitalSetting::model()->findByPk(1,array(
+		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'cover_limit',
 		));		
 		$covers = $model->covers;
@@ -678,7 +678,7 @@ class AdminController extends Controller
 	 */
 	public function actionInsertcover($id) 
 	{
-		$setting = DigitalSetting::model()->findByPk(1,array(
+		$setting = DigitalSetting::model()->findByPk(1, array(
 			'select' => 'cover_limit, cover_file_type, digital_path',
 		));
 		$cover_file_type = unserialize($setting->cover_file_type);

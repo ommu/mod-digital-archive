@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 20 October 2016, 10:14 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -21,7 +21,7 @@
 	<ul>
 		<li>
 			<?php echo $model->getAttributeLabel('digital_id'); ?><br/>
-			<?php echo $form->textField($model,'digital_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'digital_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
@@ -36,7 +36,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('publisher_id'); ?><br/>
-			<?php echo $form->textField($model,'publisher_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'publisher_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
@@ -51,42 +51,42 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('digital_code'); ?><br/>
-			<?php echo $form->textField($model,'digital_code',array('size'=>16,'maxlength'=>16)); ?>
+			<?php echo $form->textField($model,'digital_code', array('size'=>16,'maxlength'=>16)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('digital_title'); ?><br/>
-			<?php echo $form->textArea($model,'digital_title',array('rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->textArea($model,'digital_title', array('rows'=>6, 'cols'=>50)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('digital_intro'); ?><br/>
-			<?php echo $form->textArea($model,'digital_intro',array('rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->textArea($model,'digital_intro', array('rows'=>6, 'cols'=>50)); ?>
 		</li>
 		
 		<li>
 			<?php echo $model->getAttributeLabel('publish_year'); ?><br/>
-			<?php echo $form->textField($model,'publish_year',array('size'=>4,'maxlength'=>4)); ?>
+			<?php echo $form->textField($model,'publish_year', array('size'=>4,'maxlength'=>4)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('publish_location'); ?><br/>
-			<?php echo $form->textArea($model,'publish_location',array('rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->textArea($model,'publish_location', array('rows'=>6, 'cols'=>50)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('isbn'); ?><br/>
-			<?php echo $form->textField($model,'isbn',array('size'=>32,'maxlength'=>32)); ?>
+			<?php echo $form->textField($model,'isbn', array('size'=>32,'maxlength'=>32)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('pages'); ?><br/>
-			<?php echo $form->textField($model,'pages',array('size'=>5,'maxlength'=>5)); ?>
+			<?php echo $form->textField($model,'pages', array('size'=>5,'maxlength'=>5)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('series'); ?><br/>
-			<?php echo $form->textArea($model,'series',array('rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->textArea($model,'series', array('rows'=>6, 'cols'=>50)); ?>
 		</li>
 
 		<li>
@@ -96,7 +96,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('creation_id'); ?><br/>
-			<?php echo $form->textField($model,'creation_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'creation_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
@@ -106,7 +106,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('modified_id'); ?><br/>
-			<?php echo $form->textField($model,'modified_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'modified_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li class="submit">

@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 22 December 2016, 16:08 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -31,7 +31,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('tag_id'); ?><br/>
-			<?php echo $form->textField($model,'tag_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'tag_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>

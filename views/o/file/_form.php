@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 7 November 2016, 09:56 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -70,7 +70,7 @@
 				if(!$model->isNewRecord && $model->old_digital_filename_input != '') {
 					echo $form->hiddenField($model,'old_digital_filename_input');
 					//$file = Yii::app()->request->baseUrl.'/public/digital/'.$model->digital->view->uniquepath.'/'.$model->old_digital_filename_input;
-					$file = Yii::app()->controller->createUrl('media/file',array('id'=>$model->file_id,'abc'=>$model->md5filepath));?>
+					$file = Yii::app()->controller->createUrl('media/file', array('id'=>$model->file_id,'abc'=>$model->md5filepath));?>
 					<div class="mb-10"><a href="<?php echo $file;?>"><?php echo $model->old_digital_filename_input;?></a></div>
 				<?php }
 				echo $form->fileField($model,'digital_filename', array('class'=>'form-control')); ?>
@@ -92,7 +92,7 @@
 	</fieldset>
 </div>
 <div class="dialog-submit">
-	<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') ,array('onclick' => 'setEnableSave()')); ?>
+	<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') , array('onclick' => 'setEnableSave()')); ?>
 	<?php echo CHtml::button(Yii::t('phrase', 'Cancel'), array('id'=>'closed')); ?>
 </div>
 <?php $this->endWidget(); ?>

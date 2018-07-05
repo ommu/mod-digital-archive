@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 7 November 2016, 06:21 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -149,39 +149,39 @@ class DigitalLikes extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.like_id',$this->like_id);
-		if(isset($_GET['type']) && $_GET['type'] == 'publish')
-			$criteria->compare('t.publish',1);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
-			$criteria->compare('t.publish',0);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
-			$criteria->compare('t.publish',2);
+		$criteria->compare('t.like_id', $this->like_id);
+		if(Yii::app()->getRequest()->getParam('type') == 'publish')
+			$criteria->compare('t.publish', 1);
+		elseif(Yii::app()->getRequest()->getParam('type') == 'unpublish')
+			$criteria->compare('t.publish', 0);
+		elseif(Yii::app()->getRequest()->getParam('type') == 'trash')
+			$criteria->compare('t.publish', 2);
 		else {
-			$criteria->addInCondition('t.publish',array(0,1));
-			$criteria->compare('t.publish',$this->publish);
+			$criteria->addInCondition('t.publish', array(0,1));
+			$criteria->compare('t.publish', $this->publish);
 		}
-		if(isset($_GET['digital']))
-			$criteria->compare('t.digital_id',$_GET['digital']);
+		if(Yii::app()->getRequest()->getParam('digital'))
+			$criteria->compare('t.digital_id', Yii::app()->getRequest()->getParam('digital'));
 		else
-			$criteria->compare('t.digital_id',$this->digital_id);
-		if(isset($_GET['user']))
-			$criteria->compare('t.user_id',$_GET['user']);
+			$criteria->compare('t.digital_id', $this->digital_id);
+		if(Yii::app()->getRequest()->getParam('user'))
+			$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user'));
 		else
-			$criteria->compare('t.user_id',$this->user_id);
-		if($this->likes_date != null && !in_array($this->likes_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.likes_date)',date('Y-m-d', strtotime($this->likes_date)));
-		$criteria->compare('t.likes_ip',strtolower($this->likes_ip),true);
-		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
+			$criteria->compare('t.user_id', $this->user_id);
+		if($this->likes_date != null && !in_array($this->likes_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.likes_date)', date('Y-m-d', strtotime($this->likes_date)));
+		$criteria->compare('t.likes_ip', strtolower($this->likes_ip), true);
+		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.updated_date)', date('Y-m-d', strtotime($this->updated_date)));
 
-		$criteria->compare('view.likes',strtolower($this->like_search), true);
-		$criteria->compare('view.unlikes',strtolower($this->unlike_search), true);
-		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
-		if(isset($_GET['digital']) && isset($_GET['publish']))
-			$criteria->compare('digital.publish',$_GET['publish']);
-		$criteria->compare('user.displayname',strtolower($this->user_search), true);
+		$criteria->compare('view.likes', strtolower($this->like_search), true);
+		$criteria->compare('view.unlikes', strtolower($this->unlike_search), true);
+		$criteria->compare('digital.digital_title', strtolower($this->digital_search), true);
+		if(Yii::app()->getRequest()->getParam('digital') && Yii::app()->getRequest()->getParam('publish'))
+			$criteria->compare('digital.publish', Yii::app()->getRequest()->getParam('publish'));
+		$criteria->compare('user.displayname', strtolower($this->user_search), true);
 
-		if(!isset($_GET['DigitalLikes_sort']))
+		if(!Yii::app()->getRequest()->getParam('DigitalLikes_sort'))
 			$criteria->order = 't.like_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -239,13 +239,13 @@ class DigitalLikes extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['digital'])) {
+			if(!Yii::app()->getRequest()->getParam('digital')) {
 				$this->defaultColumns[] = array(
 					'name' => 'digital_search',
 					'value' => '$data->digital->digital_title',
 				);
 			}
-			if(!isset($_GET['user'])) {
+			if(!Yii::app()->getRequest()->getParam('user')) {
 				$this->defaultColumns[] = array(
 					'name' => 'user_search',
 					'value' => '$data->user_id != 0 ? $data->user->displayname : "-"',
@@ -253,7 +253,7 @@ class DigitalLikes extends CActiveRecord
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'like_search',
-				'value' => 'CHtml::link($data->view->likes != 0 ? $data->view->likes : \'0\', Yii::app()->controller->createUrl("o/likedetail/manage",array(\'like\'=>$data->like_id,\'type\'=>\'publish\')))',
+				'value' => 'CHtml::link($data->view->likes != 0 ? $data->view->likes : \'0\', Yii::app()->controller->createUrl("o/likedetail/manage", array(\'like\'=>$data->like_id,\'type\'=>\'publish\')))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -261,7 +261,7 @@ class DigitalLikes extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'unlike_search',
-				'value' => 'CHtml::link($data->view->unlikes != 0 ? $data->view->unlikes : \'0\', Yii::app()->controller->createUrl("o/likedetail/manage",array(\'like\'=>$data->like_id,\'type\'=>\'unpublish\')))',
+				'value' => 'CHtml::link($data->view->unlikes != 0 ? $data->view->unlikes : \'0\', Yii::app()->controller->createUrl("o/likedetail/manage", array(\'like\'=>$data->like_id,\'type\'=>\'unpublish\')))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -284,7 +284,7 @@ class DigitalLikes extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,
@@ -317,7 +317,7 @@ class DigitalLikes extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,
@@ -326,10 +326,10 @@ class DigitalLikes extends CActiveRecord
 					),
 				), true),
 			);
-			if(!isset($_GET['type'])) {
+			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->like_id)), $data->publish, 1)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish", array("id"=>$data->like_id)), $data->publish, 1)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -350,7 +350,7 @@ class DigitalLikes extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

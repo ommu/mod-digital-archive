@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 8 January 2017, 23:04 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -130,18 +130,18 @@ class DigitalViewDetail extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.id',strtolower($this->id),true);
-		if(isset($_GET['view']))
-			$criteria->compare('t.view_id',$_GET['view']);
+		$criteria->compare('t.id', strtolower($this->id), true);
+		if(Yii::app()->getRequest()->getParam('view'))
+			$criteria->compare('t.view_id', Yii::app()->getRequest()->getParam('view'));
 		else
-			$criteria->compare('t.view_id',$this->view_id);
-		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.view_date)',date('Y-m-d', strtotime($this->view_date)));
-		$criteria->compare('t.view_ip',strtolower($this->view_ip),true);
+			$criteria->compare('t.view_id', $this->view_id);
+		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.view_date)', date('Y-m-d', strtotime($this->view_date)));
+		$criteria->compare('t.view_ip', strtolower($this->view_ip), true);
 
-		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
+		$criteria->compare('digital.digital_title', strtolower($this->digital_search), true);
 
-		if(!isset($_GET['DigitalViewDetail_sort']))
+		if(!Yii::app()->getRequest()->getParam('DigitalViewDetail_sort'))
 			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -196,7 +196,7 @@ class DigitalViewDetail extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['view'])) {
+			if(!Yii::app()->getRequest()->getParam('view')) {
 				$this->defaultColumns[] = array(
 					'name' => 'digital_search',
 					'value' => '$data->view->digital->digital_title',
@@ -219,7 +219,7 @@ class DigitalViewDetail extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,
@@ -245,7 +245,7 @@ class DigitalViewDetail extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

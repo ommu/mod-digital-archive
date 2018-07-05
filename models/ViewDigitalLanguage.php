@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 3 November 2016, 16:18 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -115,11 +115,11 @@ class ViewDigitalLanguage extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.language_id',$this->language_id);
-		$criteria->compare('t.digitals',strtolower($this->digitals),true);
-		$criteria->compare('t.digital_all',strtolower($this->digital_all),true);
+		$criteria->compare('t.language_id', $this->language_id);
+		$criteria->compare('t.digitals', strtolower($this->digitals), true);
+		$criteria->compare('t.digital_all', strtolower($this->digital_all), true);
 
-		if(!isset($_GET['ViewDigitalLanguage_sort']))
+		if(!Yii::app()->getRequest()->getParam('ViewDigitalLanguage_sort'))
 			$criteria->order = 't.language_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -186,7 +186,7 @@ class ViewDigitalLanguage extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
 			if(count(explode(',', $column)) == 1)

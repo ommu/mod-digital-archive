@@ -6,7 +6,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 20 October 2016, 10:14 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -37,7 +37,7 @@
 		),
 		array(
 			'name'=>'cat_id',
-			'value'=>$model->cat_id != null ? CHtml::link($model->category->cat_title, Yii::app()->controller->createUrl('o/admin/manage',array('category'=>$model->cat_id))) : '-',
+			'value'=>$model->cat_id != null ? CHtml::link($model->category->cat_title, Yii::app()->controller->createUrl('o/admin/manage', array('category'=>$model->cat_id))) : '-',
 			'type'=>'raw',
 		),
 		array(
@@ -113,17 +113,17 @@
 		),
 		array(
 			'name'=>'choices',
-			'value'=>$model->choices != null ? CHtml::link($model->view->choices, Yii::app()->controller->createUrl('o/choice/manage',array('digital'=>$model->digital_id))) : '-',
+			'value'=>$model->choices != null ? CHtml::link($model->view->choices, Yii::app()->controller->createUrl('o/choice/manage', array('digital'=>$model->digital_id))) : '-',
 			'type'=>'raw',
 		),
 		array(
 			'name'=>'views',
-			'value'=>$model->views != null ? CHtml::link($model->view->views, Yii::app()->controller->createUrl('o/views/manage',array('digital'=>$model->digital_id))) : '-',
+			'value'=>$model->views != null ? CHtml::link($model->view->views, Yii::app()->controller->createUrl('o/views/manage', array('digital'=>$model->digital_id))) : '-',
 			'type'=>'raw',
 		),
 		array(
 			'name'=>'likes',
-			'value'=>$model->likes != null ? CHtml::link($model->view->likes, Yii::app()->controller->createUrl('o/likes/manage',array('digital'=>$model->digital_id))) : '-',
+			'value'=>$model->likes != null ? CHtml::link($model->view->likes, Yii::app()->controller->createUrl('o/likes/manage', array('digital'=>$model->digital_id))) : '-',
 			'type'=>'raw',
 		),
 		array(

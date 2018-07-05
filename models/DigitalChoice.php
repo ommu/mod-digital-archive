@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 22 December 2016, 10:28 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -136,25 +136,25 @@ class DigitalChoice extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.choice_id',strtolower($this->choice_id),true);
-		if(isset($_GET['digital']))
-			$criteria->compare('t.digital_id',$_GET['digital']);
+		$criteria->compare('t.choice_id', strtolower($this->choice_id), true);
+		if(Yii::app()->getRequest()->getParam('digital'))
+			$criteria->compare('t.digital_id', Yii::app()->getRequest()->getParam('digital'));
 		else
-			$criteria->compare('t.digital_id',$this->digital_id);
-		if(isset($_GET['user']))
-			$criteria->compare('t.user_id',$_GET['user']);
+			$criteria->compare('t.digital_id', $this->digital_id);
+		if(Yii::app()->getRequest()->getParam('user'))
+			$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user'));
 		else
-			$criteria->compare('t.user_id',$this->user_id);
-		if($this->choice_date != null && !in_array($this->choice_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.choice_date)',date('Y-m-d', strtotime($this->choice_date)));
-		$criteria->compare('t.choice_ip',strtolower($this->choice_ip),true);
+			$criteria->compare('t.user_id', $this->user_id);
+		if($this->choice_date != null && !in_array($this->choice_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.choice_date)', date('Y-m-d', strtotime($this->choice_date)));
+		$criteria->compare('t.choice_ip', strtolower($this->choice_ip), true);
 		
-		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
-		if(isset($_GET['digital']) && isset($_GET['publish']))
-			$criteria->compare('digital.publish',$_GET['publish']);
-		$criteria->compare('user.displayname',strtolower($this->user_search), true);
+		$criteria->compare('digital.digital_title', strtolower($this->digital_search), true);
+		if(Yii::app()->getRequest()->getParam('digital') && Yii::app()->getRequest()->getParam('publish'))
+			$criteria->compare('digital.publish', Yii::app()->getRequest()->getParam('publish'));
+		$criteria->compare('user.displayname', strtolower($this->user_search), true);
 
-		if(!isset($_GET['DigitalChoice_sort']))
+		if(!Yii::app()->getRequest()->getParam('DigitalChoice_sort'))
 			$criteria->order = 't.choice_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -202,13 +202,13 @@ class DigitalChoice extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['digital'])) {
+			if(!Yii::app()->getRequest()->getParam('digital')) {
 				$this->defaultColumns[] = array(
 					'name' => 'digital_search',
 					'value' => '$data->digital->digital_title',
 				);
 			}
-			if(!isset($_GET['user'])) {
+			if(!Yii::app()->getRequest()->getParam('user')) {
 				$this->defaultColumns[] = array(
 					'name' => 'user_search',
 					'value' => '$data->user->displayname',
@@ -231,7 +231,7 @@ class DigitalChoice extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,
@@ -257,7 +257,7 @@ class DigitalChoice extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

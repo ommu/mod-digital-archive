@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 January 2017, 20:54 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -21,7 +21,7 @@
 	<ul>
 		<li>
 			<?php echo $model->getAttributeLabel('download_id'); ?><br/>
-			<?php echo $form->textField($model,'download_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'download_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
@@ -31,12 +31,12 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('file_id'); ?><br/>
-			<?php echo $form->textField($model,'file_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'file_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('user_id'); ?><br/>
-			<?php echo $form->textField($model,'user_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'user_id', array('size'=>11,'maxlength'=>11)); ?>
 		</li>
 
 		<li>
@@ -51,7 +51,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('download_ip'); ?><br/>
-			<?php echo $form->textField($model,'download_ip',array('size'=>20,'maxlength'=>20)); ?>
+			<?php echo $form->textField($model,'download_ip', array('size'=>20,'maxlength'=>20)); ?>
 		</li>
 
 		<li class="submit">

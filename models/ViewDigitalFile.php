@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 2 February 2017, 12:05 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -118,13 +118,13 @@ class ViewDigitalFile extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.file_id',strtolower($this->file_id),true);
-		$criteria->compare('t.digital_id',strtolower($this->digital_id),true);
-		$criteria->compare('t.downloads',strtolower($this->downloads),true);
-		$criteria->compare('t.download_backend',strtolower($this->download_backend),true);
-		$criteria->compare('t.download_all',strtolower($this->download_all),true);
+		$criteria->compare('t.file_id', strtolower($this->file_id), true);
+		$criteria->compare('t.digital_id', strtolower($this->digital_id), true);
+		$criteria->compare('t.downloads', strtolower($this->downloads), true);
+		$criteria->compare('t.download_backend', strtolower($this->download_backend), true);
+		$criteria->compare('t.download_all', strtolower($this->download_all), true);
 
-		if(!isset($_GET['ViewDigitalFile_sort']))
+		if(!Yii::app()->getRequest()->getParam('ViewDigitalFile_sort'))
 			$criteria->order = 't.file_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -183,7 +183,7 @@ class ViewDigitalFile extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
 			if(count(explode(',', $column)) == 1)

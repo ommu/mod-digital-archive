@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 20 October 2016, 10:14 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -38,7 +38,7 @@
 				<div class="form-group row">
 					<?php echo $form->labelEx($model,'digital_title', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 					<div class="col-lg-8 col-md-9 col-sm-12">
-						<?php echo $form->textField($model,'digital_title',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
+						<?php echo $form->textField($model,'digital_title', array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 						<?php echo $form->error($model,'digital_title'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
@@ -74,7 +74,7 @@
 					<?php echo $form->labelEx($publisher,'publisher_name', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 					<div class="col-lg-8 col-md-9 col-sm-12">
 						<?php
-						//echo $form->textField($publisher,'publisher_name',array('maxlength'=>64,'class'=>'form-control'));
+						//echo $form->textField($publisher,'publisher_name', array('maxlength'=>64,'class'=>'form-control'));
 						$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 							'model' => $publisher,
 							'attribute' => 'publisher_name',
@@ -106,7 +106,7 @@
 					<div class="col-lg-8 col-md-9 col-sm-12">
 						<?php 
 						$model->publish_year = !in_array($model->publish_year, array('0000','1970')) ? $model->publish_year : '';
-						echo $form->textField($model,'publish_year',array('maxlength'=>4, 'class'=>'form-control')); ?>
+						echo $form->textField($model,'publish_year', array('maxlength'=>4, 'class'=>'form-control')); ?>
 						<?php echo $form->error($model,'publish_year'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
@@ -117,7 +117,7 @@
 				<div class="form-group row">
 					<?php echo $form->labelEx($model,'publish_location', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 					<div class="col-lg-8 col-md-9 col-sm-12">
-						<?php echo $form->textField($model,'publish_location',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
+						<?php echo $form->textField($model,'publish_location', array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 						<?php echo $form->error($model,'publish_location'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
@@ -128,7 +128,7 @@
 				<div class="form-group row">
 					<?php echo $form->labelEx($model,'isbn', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 					<div class="col-lg-8 col-md-9 col-sm-12">
-						<?php echo $form->textField($model,'isbn',array('maxlength'=>32, 'class'=>'form-control')); ?>
+						<?php echo $form->textField($model,'isbn', array('maxlength'=>32, 'class'=>'form-control')); ?>
 						<?php echo $form->error($model,'isbn'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
@@ -139,7 +139,7 @@
 				<div class="form-group row">
 					<?php echo $form->labelEx($model,'pages', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 					<div class="col-lg-8 col-md-9 col-sm-12">
-						<?php echo $form->textField($model,'pages',array('maxlength'=>5, 'class'=>'form-control')); ?>
+						<?php echo $form->textField($model,'pages', array('maxlength'=>5, 'class'=>'form-control')); ?>
 						<?php echo $form->error($model,'pages'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
@@ -150,7 +150,7 @@
 				<div class="form-group row">
 					<?php echo $form->labelEx($model,'series', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 					<div class="col-lg-8 col-md-9 col-sm-12">
-						<?php echo $form->textField($model,'series',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
+						<?php echo $form->textField($model,'series', array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 						<?php echo $form->error($model,'series'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
@@ -163,10 +163,10 @@
 					<div class="col-lg-8 col-md-9 col-sm-12">
 						<?php 
 						if($model->isNewRecord) {
-							echo $form->textArea($model,'author_input',array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
+							echo $form->textArea($model,'author_input', array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
 							
 						} else {
-							//echo $form->textField($model,'author_input',array('maxlength'=>32,'class'=>'form-control'));
+							//echo $form->textField($model,'author_input', array('maxlength'=>32,'class'=>'form-control'));
 							$url = Yii::app()->controller->createUrl('o/authors/add', array('type'=>'digital'));
 							$digital = $model->digital_id;
 							$authorId = 'Digitals_author_input';
@@ -204,7 +204,7 @@
 								$authors = $model->authors;
 								if(!empty($authors)) {
 									foreach($authors as $key => $val) {?>
-									<div><?php echo $val->author->author_name;?><a href="<?php echo Yii::app()->controller->createUrl('o/authors/delete',array('id'=>$val->id,'type'=>'digital'));?>" title="<?php echo Yii::t('phrase', 'Delete');?>"><?php echo Yii::t('phrase', 'Delete');?></a></div>
+									<div><?php echo $val->author->author_name;?><a href="<?php echo Yii::app()->controller->createUrl('o/authors/delete', array('id'=>$val->id,'type'=>'digital'));?>" title="<?php echo Yii::t('phrase', 'Delete');?>"><?php echo Yii::t('phrase', 'Delete');?></a></div>
 								<?php }
 								}
 							}?>
@@ -220,10 +220,10 @@
 					<div class="col-lg-8 col-md-9 col-sm-12">
 						<?php 
 						if($model->isNewRecord) {
-							echo $form->textArea($model,'subject_input',array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
+							echo $form->textArea($model,'subject_input', array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
 							
 						} else {
-							//echo $form->textField($model,'subject_input',array('maxlength'=>32,'class'=>'form-control'));
+							//echo $form->textField($model,'subject_input', array('maxlength'=>32,'class'=>'form-control'));
 							$url = Yii::app()->controller->createUrl('o/subjects/add', array('type'=>'digital'));
 							$digital = $model->digital_id;
 							$subjectId = 'Digitals_subject_input';
@@ -261,7 +261,7 @@
 								$subjects = $model->subjects;
 								if(!empty($subjects)) {
 									foreach($subjects as $key => $val) {?>
-									<div><?php echo $val->tag->body;?><a href="<?php echo Yii::app()->controller->createUrl('o/subjects/delete',array('id'=>$val->id,'type'=>'digital'));?>" title="<?php echo Yii::t('phrase', 'Delete');?>"><?php echo Yii::t('phrase', 'Delete');?></a></div>
+									<div><?php echo $val->tag->body;?><a href="<?php echo Yii::app()->controller->createUrl('o/subjects/delete', array('id'=>$val->id,'type'=>'digital'));?>" title="<?php echo Yii::t('phrase', 'Delete');?>"><?php echo Yii::t('phrase', 'Delete');?></a></div>
 								<?php }
 								}
 							}?>
@@ -277,10 +277,10 @@
 					<div class="col-lg-8 col-md-9 col-sm-12">
 						<?php 
 						if($model->isNewRecord) {
-							echo $form->textArea($model,'tag_input',array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
+							echo $form->textArea($model,'tag_input', array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
 							
 						} else {
-							//echo $form->textField($model,'tag_input',array('maxlength'=>32,'class'=>'form-control'));
+							//echo $form->textField($model,'tag_input', array('maxlength'=>32,'class'=>'form-control'));
 							$url = Yii::app()->controller->createUrl('o/tags/add', array('type'=>'digital'));
 							$digital = $model->digital_id;
 							$tagId = 'Digitals_tag_input';
@@ -318,7 +318,7 @@
 								$tags = $model->tags;
 								if(!empty($tags)) {
 									foreach($tags as $key => $val) {?>
-									<div><?php echo $val->tag->body;?><a href="<?php echo Yii::app()->controller->createUrl('o/tags/delete',array('id'=>$val->id,'type'=>'digital'));?>" title="<?php echo Yii::t('phrase', 'Delete');?>"><?php echo Yii::t('phrase', 'Delete');?></a></div>
+									<div><?php echo $val->tag->body;?><a href="<?php echo Yii::app()->controller->createUrl('o/tags/delete', array('id'=>$val->id,'type'=>'digital'));?>" title="<?php echo Yii::t('phrase', 'Delete');?>"><?php echo Yii::t('phrase', 'Delete');?></a></div>
 								<?php }
 								}
 							}?>
@@ -355,7 +355,7 @@
 				<div class="form-group row">
 					<?php echo $form->labelEx($model,'digital_code', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
 					<div class="col-lg-12 col-md-9 col-sm-12">
-						<?php echo $form->textField($model,'digital_code',array('maxlength'=>16, 'class'=>'form-control')); ?>
+						<?php echo $form->textField($model,'digital_code', array('maxlength'=>16, 'class'=>'form-control')); ?>
 						<?php echo $form->error($model,'digital_code'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
@@ -398,7 +398,7 @@
 				<div class="form-group row">
 					<?php echo $form->labelEx($model,'opac_id', array('class'=>'col-form-label col-lg-12 col-md-3 col-sm-12')); ?>
 					<div class="col-lg-12 col-md-9 col-sm-12">
-						<?php echo $form->textField($model,'opac_id',array('class'=>'form-control')); ?>
+						<?php echo $form->textField($model,'opac_id', array('class'=>'form-control')); ?>
 						<?php echo $form->error($model,'opac_id'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
 					</div>
@@ -447,7 +447,7 @@
 			<?php echo $form->labelEx($model,'digital_intro', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
-				//echo $form->textArea($model,'digital_intro',array('rows'=>6, 'cols'=>50));
+				//echo $form->textArea($model,'digital_intro', array('rows'=>6, 'cols'=>50));
 				$this->widget('yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(
 					'model'=>$model,
 					'attribute'=>digital_intro,

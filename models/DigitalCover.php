@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 24 October 2016, 06:49 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -159,44 +159,44 @@ class DigitalCover extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.cover_id',strtolower($this->cover_id),true);
-		if(isset($_GET['type']) && $_GET['type'] == 'publish')
-			$criteria->compare('t.publish',1);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
-			$criteria->compare('t.publish',0);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
-			$criteria->compare('t.publish',2);
+		$criteria->compare('t.cover_id', strtolower($this->cover_id), true);
+		if(Yii::app()->getRequest()->getParam('type') == 'publish')
+			$criteria->compare('t.publish', 1);
+		elseif(Yii::app()->getRequest()->getParam('type') == 'unpublish')
+			$criteria->compare('t.publish', 0);
+		elseif(Yii::app()->getRequest()->getParam('type') == 'trash')
+			$criteria->compare('t.publish', 2);
 		else {
-			$criteria->addInCondition('t.publish',array(0,1));
-			$criteria->compare('t.publish',$this->publish);
+			$criteria->addInCondition('t.publish', array(0,1));
+			$criteria->compare('t.publish', $this->publish);
 		}
-		$criteria->compare('t.status',$this->status);
-		if(isset($_GET['digital']))
-			$criteria->compare('t.digital_id',$_GET['digital']);
+		$criteria->compare('t.status', $this->status);
+		if(Yii::app()->getRequest()->getParam('digital'))
+			$criteria->compare('t.digital_id', Yii::app()->getRequest()->getParam('digital'));
 		else
-			$criteria->compare('t.digital_id',$this->digital_id);
-		$criteria->compare('t.cover_filename',strtolower($this->cover_filename),true);
-		$criteria->compare('t.cover_caption',strtolower($this->cover_caption),true);
-		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
-		if(isset($_GET['creation']))
-			$criteria->compare('t.creation_id',$_GET['creation']);
+			$criteria->compare('t.digital_id', $this->digital_id);
+		$criteria->compare('t.cover_filename', strtolower($this->cover_filename), true);
+		$criteria->compare('t.cover_caption', strtolower($this->cover_caption), true);
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.creation_date)', date('Y-m-d', strtotime($this->creation_date)));
+		if(Yii::app()->getRequest()->getParam('creation'))
+			$criteria->compare('t.creation_id', Yii::app()->getRequest()->getParam('creation'));
 		else
-			$criteria->compare('t.creation_id',$this->creation_id);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
-		if(isset($_GET['modified']))
-			$criteria->compare('t.modified_id',$_GET['modified']);
+			$criteria->compare('t.creation_id', $this->creation_id);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
+		if(Yii::app()->getRequest()->getParam('modified'))
+			$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified'));
 		else
-			$criteria->compare('t.modified_id',$this->modified_id);
+			$criteria->compare('t.modified_id', $this->modified_id);
 		
-		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
-		if(isset($_GET['digital']) && isset($_GET['publish']))
-			$criteria->compare('digital.publish',$_GET['publish']);
-		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
-		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
+		$criteria->compare('digital.digital_title', strtolower($this->digital_search), true);
+		if(Yii::app()->getRequest()->getParam('digital') && Yii::app()->getRequest()->getParam('publish'))
+			$criteria->compare('digital.publish', Yii::app()->getRequest()->getParam('publish'));
+		$criteria->compare('creation.displayname', strtolower($this->creation_search), true);
+		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
 
-		if(!isset($_GET['DigitalCover_sort']))
+		if(!Yii::app()->getRequest()->getParam('DigitalCover_sort'))
 			$criteria->order = 't.cover_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -257,7 +257,7 @@ class DigitalCover extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['digital'])) {
+			if(!Yii::app()->getRequest()->getParam('digital')) {
 				$this->defaultColumns[] = array(
 					'name' => 'digital_search',
 					'value' => '$data->digital->digital_title',
@@ -285,7 +285,7 @@ class DigitalCover extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,
@@ -308,7 +308,7 @@ class DigitalCover extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'status',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("status",array("id"=>$data->cover_id)), $data->status, 1)',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("status", array("id"=>$data->cover_id)), $data->status, 1)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -318,10 +318,10 @@ class DigitalCover extends CActiveRecord
 				),
 				'type' => 'raw',
 			);
-			if(!isset($_GET['type'])) {
+			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->cover_id)), $data->publish, 1)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish", array("id"=>$data->cover_id)), $data->publish, 1)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -342,7 +342,7 @@ class DigitalCover extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

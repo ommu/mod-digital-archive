@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 20 October 2016, 10:11 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -144,29 +144,29 @@ class DigitalTags extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.id',strtolower($this->id),true);
-		if(isset($_GET['digital']))
-			$criteria->compare('t.digital_id',$_GET['digital']);
+		$criteria->compare('t.id', strtolower($this->id), true);
+		if(Yii::app()->getRequest()->getParam('digital'))
+			$criteria->compare('t.digital_id', Yii::app()->getRequest()->getParam('digital'));
 		else
-			$criteria->compare('t.digital_id',$this->digital_id);
-		if(isset($_GET['tag']))
-			$criteria->compare('t.tag_id',$_GET['tag']);
+			$criteria->compare('t.digital_id', $this->digital_id);
+		if(Yii::app()->getRequest()->getParam('tag'))
+			$criteria->compare('t.tag_id', Yii::app()->getRequest()->getParam('tag'));
 		else
-			$criteria->compare('t.tag_id',$this->tag_id);
-		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
-		if(isset($_GET['creation']))
-			$criteria->compare('t.creation_id',$_GET['creation']);
+			$criteria->compare('t.tag_id', $this->tag_id);
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.creation_date)', date('Y-m-d', strtotime($this->creation_date)));
+		if(Yii::app()->getRequest()->getParam('creation'))
+			$criteria->compare('t.creation_id', Yii::app()->getRequest()->getParam('creation'));
 		else
-			$criteria->compare('t.creation_id',$this->creation_id);
+			$criteria->compare('t.creation_id', $this->creation_id);
 		
-		$criteria->compare('digital.digital_title',strtolower($this->digital_search), true);
-		if(isset($_GET['tag']) && isset($_GET['publish']))
-			$criteria->compare('digital.publish',$_GET['publish']);
+		$criteria->compare('digital.digital_title', strtolower($this->digital_search), true);
+		if(Yii::app()->getRequest()->getParam('tag') && Yii::app()->getRequest()->getParam('publish'))
+			$criteria->compare('digital.publish', Yii::app()->getRequest()->getParam('publish'));
 		$criteria->compare('tag.body',Utility::getUrlTitle(strtolower(trim($this->tag_search))), true);
-		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
+		$criteria->compare('creation.displayname', strtolower($this->creation_search), true);
 
-		if(!isset($_GET['DigitalTags_sort']))
+		if(!Yii::app()->getRequest()->getParam('DigitalTags_sort'))
 			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -222,13 +222,13 @@ class DigitalTags extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['digital'])) {
+			if(!Yii::app()->getRequest()->getParam('digital')) {
 				$this->defaultColumns[] = array(
 					'name' => 'digital_search',
 					'value' => '$data->digital->digital_title',
 				);
 			}
-			if(!isset($_GET['tag'])) {
+			if(!Yii::app()->getRequest()->getParam('tag')) {
 				$this->defaultColumns[] = array(
 					'name' => 'tag_search',
 					'value' => 'str_replace(\'-\', \' \', $data->tag->body)',
@@ -255,7 +255,7 @@ class DigitalTags extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,
@@ -274,7 +274,7 @@ class DigitalTags extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

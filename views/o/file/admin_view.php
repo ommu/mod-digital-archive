@@ -6,7 +6,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 7 November 2016, 09:56 WIB
  * @link https://github.com/ommu/mod-digital-archive
  *
@@ -38,12 +38,12 @@
 			array(
 				'name'=>'digital_filename',
 				//'value'=>$model->digital_filename != '' ? CHtml::link($model->digital_filename, Yii::app()->request->baseUrl.'/public/digital/'.$model->digital->view->uniquepath.'/'.$model->digital_filename) : '-',
-				'value'=>$model->digital_filename != '' ? CHtml::link($model->digital_filename, Yii::app()->controller->createUrl('media/file',array('id'=>$model->file_id,'abc'=>$model->md5filepath))) : '-',
+				'value'=>$model->digital_filename != '' ? CHtml::link($model->digital_filename, Yii::app()->controller->createUrl('media/file', array('id'=>$model->file_id,'abc'=>$model->md5filepath))) : '-',
 				'type'=>'raw',
 			),
 			array(
 				'name'=>'downloads',
-				'value'=>$model->view->downloads != null ? CHtml::link($model->view->downloads, Yii::app()->controller->createUrl('o/download/manage',array('file'=>$model->file_id))) : '-',
+				'value'=>$model->view->downloads != null ? CHtml::link($model->view->downloads, Yii::app()->controller->createUrl('o/download/manage', array('file'=>$model->file_id))) : '-',
 				'type'=>'raw',
 			),
 			array(
