@@ -28,6 +28,8 @@
  */
 class ViewDigitalTag extends CActiveRecord
 {
+	use UtilityTrait;
+
 	public $defaultColumns = array();
 	
 	// Variable Search
@@ -134,7 +136,7 @@ class ViewDigitalTag extends CActiveRecord
 		$criteria->compare('t.digitals', strtolower($this->digitals), true);
 		$criteria->compare('t.digital_all', strtolower($this->digital_all), true);
 		
-		$criteria->compare('tag.body',Utility::getUrlTitle(strtolower(trim($this->tag_search))), true);
+		$criteria->compare('tag.body',$this->urlTitle($this->tag_search), true);
 
 		if(!Yii::app()->getRequest()->getParam('ViewDigitalTag_sort'))
 			$criteria->order = 't.tag_id DESC';

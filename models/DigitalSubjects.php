@@ -34,6 +34,8 @@
  */
 class DigitalSubjects extends CActiveRecord
 {
+	use UtilityTrait;
+
 	public $defaultColumns = array();
 	public $tag_input;
 	
@@ -164,7 +166,7 @@ class DigitalSubjects extends CActiveRecord
 		$criteria->compare('digital.digital_title', strtolower($this->digital_search), true);
 		if(Yii::app()->getRequest()->getParam('tag') && Yii::app()->getRequest()->getParam('publish'))
 			$criteria->compare('digital.publish', Yii::app()->getRequest()->getParam('publish'));
-		$criteria->compare('tag.body',Utility::getUrlTitle(strtolower(trim($this->tag_search))), true);
+		$criteria->compare('tag.body',$this->urlTitle($this->tag_search), true);
 		$criteria->compare('creation.displayname', strtolower($this->creation_search), true);
 
 		if(!Yii::app()->getRequest()->getParam('DigitalSubjects_sort'))
@@ -306,7 +308,7 @@ class DigitalSubjects extends CActiveRecord
 	protected function beforeSave() {
 		if(parent::beforeSave()) {
 			if($this->isNewRecord) {
-				$tag_input = Utility::getUrlTitle(strtolower(trim($this->tag_input)));
+				$tag_input = $this->urlTitle($this->tag_input);
 				if($this->tag_id == 0) {
 					$subject = OmmuTags::model()->find(array(
 						'select' => 'tag_id, body',

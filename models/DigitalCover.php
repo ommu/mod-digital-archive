@@ -35,6 +35,8 @@
  */
 class DigitalCover extends CActiveRecord
 {
+	use UtilityTrait;
+
 	public $defaultColumns = array();
 	public $digital_title_input;
 	public $old_cover_filename_input;
@@ -449,7 +451,7 @@ class DigitalCover extends CActiveRecord
 				$this->cover_filename = CUploadedFile::getInstance($this, 'cover_filename');
 				if($this->cover_filename != null) {
 					if($this->cover_filename instanceOf CUploadedFile) {
-						$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital->digital_title).'.'.strtolower($this->cover_filename->extensionName);
+						$fileName = time().'_'.$this->digital_id.'_'.$this->urlTitle($this->digital->digital_title).'.'.strtolower($this->cover_filename->extensionName);
 						if($this->cover_filename->saveAs($digital_path.'/'.$fileName)) {						
 							if(!$this->isNewRecord) {
 								if($this->old_cover_filename_input != '' && file_exists($digital_path.'/'.$this->old_cover_filename_input)) {

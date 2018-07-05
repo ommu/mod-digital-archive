@@ -33,6 +33,8 @@
  */
 class DigitalFile extends CActiveRecord
 {
+	use UtilityTrait;
+
 	public $defaultColumns = array();
 	public $digital_title_input;
 	public $old_digital_filename_input;
@@ -407,7 +409,7 @@ class DigitalFile extends CActiveRecord
 				$this->digital_filename = CUploadedFile::getInstance($this, 'digital_filename');
 				if($this->digital_filename != null) {
 					if($this->digital_filename instanceOf CUploadedFile) {
-						$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital->digital_title).'.'.strtolower($this->digital_filename->extensionName);
+						$fileName = time().'_'.$this->digital_id.'_'.$this->urlTitle($this->digital->digital_title).'.'.strtolower($this->digital_filename->extensionName);
 						if($this->digital_filename->saveAs($digital_path.'/'.$fileName)) {
 							if(!$this->isNewRecord) {
 								if($this->old_digital_filename_input != '' && file_exists($digital_path.'/'.$this->old_digital_filename_input)) {

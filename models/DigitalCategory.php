@@ -41,6 +41,8 @@
  */
 class DigitalCategory extends CActiveRecord
 {
+	use UtilityTrait;
+
 	public $defaultColumns = array();
 	public $tag_input;
 	public $old_cat_icon_image_input;
@@ -499,7 +501,7 @@ class DigitalCategory extends CActiveRecord
 				$this->cat_icon_image = CUploadedFile::getInstance($this, 'cat_icon_image');
 				if($this->cat_icon_image != null) {
 					if($this->cat_icon_image instanceOf CUploadedFile) {
-						$fileName = time().'_'.$this->cat_id.'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_icon_image->extensionName);
+						$fileName = time().'_'.$this->cat_id.'_'.$this->urlTitle($this->cat_title).'.'.strtolower($this->cat_icon_image->extensionName);
 						if($this->cat_icon_image->saveAs($digital_path.'/'.$fileName)) {
 							self::resizeCategoryCover($digital_path.'/'.$fileName, '300,300');
 							if($this->old_cat_icon_image_input != '' && file_exists($digital_path.'/'.$this->old_cat_icon_image_input))
@@ -515,7 +517,7 @@ class DigitalCategory extends CActiveRecord
 				$this->cat_cover = CUploadedFile::getInstance($this, 'cat_cover');
 				if($this->cat_cover != null) {
 					if($this->cat_cover instanceOf CUploadedFile) {
-						$fileName = $this->cat_id.'_'.time().'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_cover->extensionName);
+						$fileName = $this->cat_id.'_'.time().'_'.$this->urlTitle($this->cat_title).'.'.strtolower($this->cat_cover->extensionName);
 						if($this->cat_cover->saveAs($digital_path.'/'.$fileName)) {
 							self::resizeCategoryCover($digital_path.'/'.$fileName, '360,380');
 							if($this->old_cat_cover_input != '' && file_exists($digital_path.'/'.$this->old_cat_cover_input))
@@ -557,7 +559,7 @@ class DigitalCategory extends CActiveRecord
 			$this->cat_icon_image = CUploadedFile::getInstance($this, 'cat_icon_image');
 			if($this->cat_icon_image != null) {
 				if($this->cat_icon_image instanceOf CUploadedFile) {
-					$fileName = time().'_'.$this->cat_id.'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_icon_image->extensionName);
+					$fileName = time().'_'.$this->cat_id.'_'.$this->urlTitle($this->cat_title).'.'.strtolower($this->cat_icon_image->extensionName);
 					if($this->cat_icon_image->saveAs($digital_path.'/'.$fileName)) {
 						self::resizeCategoryCover($digital_path.'/'.$fileName, '300,300');
 						self::model()->updateByPk($this->cat_id, array('cat_icon_image'=>$fileName));
@@ -568,7 +570,7 @@ class DigitalCategory extends CActiveRecord
 			$this->cat_cover = CUploadedFile::getInstance($this, 'cat_cover');
 			if($this->cat_cover != null) {
 				if($this->cat_cover instanceOf CUploadedFile) {
-					$fileName = time().'_'.$this->cat_id.'_'.Utility::getUrlTitle($this->cat_title).'.'.strtolower($this->cat_cover->extensionName);
+					$fileName = time().'_'.$this->cat_id.'_'.$this->urlTitle($this->cat_title).'.'.strtolower($this->cat_cover->extensionName);
 					if($this->cat_cover->saveAs($digital_path.'/'.$fileName)) {
 						self::resizeCategoryCover($digital_path.'/'.$fileName, '360,380');
 						self::model()->updateByPk($this->cat_id, array('cat_cover'=>$fileName));

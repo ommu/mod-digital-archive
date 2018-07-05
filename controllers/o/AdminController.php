@@ -692,7 +692,7 @@ class AdminController extends Controller
 				$digital_path = YiiBase::getPathOfAlias('webroot.public.digital').'/'.$pathUnique;
 			
 			$uploadCover = CUploadedFile::getInstanceByName('namaFile');
-			$fileName = time().'_'.$model->digital_id.'_'.Utility::getUrlTitle($model->digital_title).'.'.strtolower($uploadCover->extensionName);
+			$fileName = time().'_'.$model->digital_id.'_'.$this->urlTitle($model->digital_title).'.'.strtolower($uploadCover->extensionName);
 			if($uploadCover->saveAs($digital_path.'/'.$fileName)) {
 				$cover = new DigitalCover;
 				$photo->cover = $model->covers == null ? '1' : '0';

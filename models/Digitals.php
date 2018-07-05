@@ -56,6 +56,8 @@
  */
 class Digitals extends CActiveRecord
 {
+	use UtilityTrait;
+
 	public $defaultColumns = array();
 	public $cover_input;
 	public $cover_old_input;
@@ -812,7 +814,7 @@ class Digitals extends CActiveRecord
 		$this->cover_input = CUploadedFile::getInstance($this, 'cover_input');
 		if($this->cover_input != null && ($this->isNewRecord || (!$this->isNewRecord && $setting->cover_limit == 1))) {
 			if($this->cover_input instanceOf CUploadedFile) {
-				$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital_title).'.'.strtolower($this->cover_input->extensionName);
+				$fileName = time().'_'.$this->digital_id.'_'.$this->urlTitle($this->digital_title).'.'.strtolower($this->cover_input->extensionName);
 				if($this->cover_input->saveAs($digital_path.'/'.$fileName)) {
 					if($this->isNewRecord || (!$this->isNewRecord && $this->covers == null)) {
 						$cover = new DigitalCover;
@@ -836,7 +838,7 @@ class Digitals extends CActiveRecord
 		$this->digital_file_input = CUploadedFile::getInstance($this, 'digital_file_input');
 		if($this->digital_file_input != null && ($this->isNewRecord || (!$this->isNewRecord && $action == 'upload'))) {
 			if($this->digital_file_input instanceOf CUploadedFile) {
-				$fileName = time().'_'.$this->digital_id.'_'.Utility::getUrlTitle($this->digital_title).'.'.strtolower($this->digital_file_input->extensionName);
+				$fileName = time().'_'.$this->digital_id.'_'.$this->urlTitle($this->digital_title).'.'.strtolower($this->digital_file_input->extensionName);
 				if($this->digital_file_input->saveAs($digital_path.'/'.$fileName)) {
 					if($this->multiple_file_input == 0) {
 						$file = new DigitalFile;
@@ -855,7 +857,7 @@ class Digitals extends CActiveRecord
 								$extension = pathinfo($filename, PATHINFO_EXTENSION);
 								if(in_array(strtolower($extension), $digital_file_type)) {
 									if(copy('zip://'.$digital_path.'/'.$fileName.'#'.$filename, $digital_path.'/'.$fileinfo['basename'])) {
-										$fileNameOnZip = time().'_'.$this->digital_id.'_'.$i.'_'.Utility::getUrlTitle($this->digital_title).'.'.strtolower($fileinfo['extension']);
+										$fileNameOnZip = time().'_'.$this->digital_id.'_'.$i.'_'.$this->urlTitle($this->digital_title).'.'.strtolower($fileinfo['extension']);
 										rename($digital_path.'/'.$fileinfo['basename'], $digital_path.'/'.$fileNameOnZip);
 										
 										$file = new DigitalFile;
