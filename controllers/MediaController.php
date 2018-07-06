@@ -35,10 +35,10 @@ class MediaController extends Controller
 	{
 		$permission = DigitalSetting::getInfo('permission');
 		if($permission == 1 || ($permission == 0 && !Yii::app()->user->isGuest)) {
-			$arrThemes = Utility::getCurrentTemplate('public');
+			$arrThemes = $this->currentTemplate('public');
 			Yii::app()->theme = $arrThemes['folder'];
 			$this->layout = $arrThemes['layout'];
-			Utility::applyViewPath(__dir__);
+			$this->applyViewPath(__dir__);
 		} else
 			$this->redirect(Yii::app()->createUrl('site/login'));
 	}
