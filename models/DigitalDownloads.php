@@ -36,6 +36,8 @@
  */
 class DigitalDownloads extends CActiveRecord
 {
+	use GridViewTrait;
+
 	public $defaultColumns = array();
 	
 	// Variable Search
@@ -236,25 +238,7 @@ class DigitalDownloads extends CActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'download_date',
-					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
-					//'mode'=>'datetime',
-					'htmlOptions' => array(
-						'id' => 'download_date_filter',
-					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'yy-mm-dd',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
+				'filter' => $this->filterDatepicker($this, 'download_date'),
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'download_ip',
