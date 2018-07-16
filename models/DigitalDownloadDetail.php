@@ -209,7 +209,7 @@ class DigitalDownloadDetail extends CActiveRecord
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'download_date',
-				'value' => 'Utility::dateFormat($data->download_date)',
+				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->download_date, \'medium\', false)',
 				'htmlOptions' => array(
 					//'class' => 'center',
 				),

@@ -218,7 +218,7 @@ class DigitalChoice extends CActiveRecord
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'choice_date',
-				'value' => 'Utility::dateFormat($data->choice_date)',
+				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->choice_date, \'medium\', false)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
