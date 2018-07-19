@@ -104,7 +104,7 @@ class ViewdetailController extends Controller
 	public function actionManage() 
 	{
 		$model=new DigitalViewDetail('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['DigitalViewDetail'])) {
 			$model->attributes=$_GET['DigitalViewDetail'];
 		}

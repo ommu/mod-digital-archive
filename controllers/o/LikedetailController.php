@@ -104,7 +104,7 @@ class LikedetailController extends Controller
 	public function actionManage() 
 	{
 		$model=new DigitalLikeDetail('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['DigitalLikeDetail'])) {
 			$model->attributes=$_GET['DigitalLikeDetail'];
 		}

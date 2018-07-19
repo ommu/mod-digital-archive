@@ -114,7 +114,7 @@ class SubjectsController extends Controller
 		}
 		
 		$model=new DigitalSubjects('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['DigitalSubjects'])) {
 			$model->attributes=$_GET['DigitalSubjects'];
 		}

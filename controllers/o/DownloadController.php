@@ -106,7 +106,7 @@ class DownloadController extends Controller
 	public function actionManage() 
 	{
 		$model=new DigitalDownloads('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['DigitalDownloads'])) {
 			$model->attributes=$_GET['DigitalDownloads'];
 		}

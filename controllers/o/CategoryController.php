@@ -110,7 +110,7 @@ class CategoryController extends Controller
 	public function actionManage() 
 	{
 		$model=new DigitalCategory('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['DigitalCategory'])) {
 			$model->attributes=$_GET['DigitalCategory'];
 		}

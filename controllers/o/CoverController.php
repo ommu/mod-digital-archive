@@ -119,7 +119,7 @@ class CoverController extends Controller
 		}
 		
 		$model=new DigitalCover('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['DigitalCover'])) {
 			$model->attributes=$_GET['DigitalCover'];
 		}

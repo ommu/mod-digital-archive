@@ -168,7 +168,7 @@ class HistoryprintController extends Controller
 	public function actionManage() 
 	{
 		$model=new DigitalHistoryPrint('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['DigitalHistoryPrint'])) {
 			$model->attributes=$_GET['DigitalHistoryPrint'];
 		}

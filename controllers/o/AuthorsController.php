@@ -114,7 +114,7 @@ class AuthorsController extends Controller
 		}
 		
 		$model=new DigitalAuthors('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['DigitalAuthors'])) {
 			$model->attributes=$_GET['DigitalAuthors'];
 		}

@@ -104,7 +104,7 @@ class TagController extends Controller
 	public function actionManage() 
 	{
 		$model=new ViewDigitalTag('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['ViewDigitalTag'])) {
 			$model->attributes=$_GET['ViewDigitalTag'];
 		}

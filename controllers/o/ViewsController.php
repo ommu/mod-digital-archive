@@ -115,7 +115,7 @@ class ViewsController extends Controller
 		}
 		
 		$model=new DigitalViews('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['DigitalViews'])) {
 			$model->attributes=$_GET['DigitalViews'];
 		}

@@ -118,7 +118,7 @@ class ChoiceController extends Controller
 		}
 		
 		$model=new DigitalChoice('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['DigitalChoice'])) {
 			$model->attributes=$_GET['DigitalChoice'];
 		}

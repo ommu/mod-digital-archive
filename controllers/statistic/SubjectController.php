@@ -104,7 +104,7 @@ class SubjectController extends Controller
 	public function actionManage() 
 	{
 		$model=new ViewDigitalSubject('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['ViewDigitalSubject'])) {
 			$model->attributes=$_GET['ViewDigitalSubject'];
 		}

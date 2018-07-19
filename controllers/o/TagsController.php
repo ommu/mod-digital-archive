@@ -114,7 +114,7 @@ class TagsController extends Controller
 		}
 		
 		$model=new DigitalTags('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['DigitalTags'])) {
 			$model->attributes=$_GET['DigitalTags'];
 		}

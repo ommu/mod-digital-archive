@@ -109,7 +109,7 @@ class LanguageController extends Controller
 	public function actionManage() 
 	{
 		$model=new DigitalLanguage('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['DigitalLanguage'])) {
 			$model->attributes=$_GET['DigitalLanguage'];
 		}
