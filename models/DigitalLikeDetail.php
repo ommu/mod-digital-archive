@@ -127,11 +127,11 @@ class DigitalLikeDetail extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'like' => array(
-				'alias'=>'like',
+				'alias' => 'like',
 			),
 			'like.digital' => array(
-				'alias'=>'digital',
-				'select'=>'digital_title'
+				'alias' => 'digital',
+				'select' => 'digital_title'
 			),
 		);
 

@@ -124,11 +124,11 @@ class DigitalViewDetail extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'view' => array(
-				'alias'=>'view',
+				'alias' => 'view',
 			),
 			'view.digital' => array(
-				'alias'=>'digital',
-				'select'=>'digital_title'
+				'alias' => 'digital',
+				'select' => 'digital_title'
 			),
 		);
 

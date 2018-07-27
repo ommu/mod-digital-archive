@@ -135,12 +135,12 @@ class DigitalDownloads extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'file' => array(
-				'alias'=>'file',
-				'select'=>'digital_filename',
+				'alias' => 'file',
+				'select' => 'digital_filename',
 			),
 			'user' => array(
-				'alias'=>'user',
-				'select'=>'displayname',
+				'alias' => 'user',
+				'select' => 'displayname',
 			),
 		);
 
@@ -253,7 +253,7 @@ class DigitalDownloads extends CActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter'=>array(
+				'filter' =>array(
 					1=>Yii::t('phrase', 'Front-end'),
 					0=>Yii::t('phrase', 'Back-end'),
 				),

@@ -126,15 +126,15 @@ class DigitalDownloadDetail extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'download' => array(
-				'alias'=>'download',
+				'alias' => 'download',
 			),
 			'download.file' => array(
-				'alias'=>'file',
-				'select'=>'digital_id, digital_filename'
+				'alias' => 'file',
+				'select' => 'digital_id, digital_filename'
 			),
 			'download.file.digital' => array(
-				'alias'=>'digital',
-				'select'=>'digital_title'
+				'alias' => 'digital',
+				'select' => 'digital_title'
 			),
 		);
 

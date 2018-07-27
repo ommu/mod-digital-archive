@@ -132,16 +132,16 @@ class DigitalCategoryTag extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'category' => array(
-				'alias'=>'category',
-				'select'=>'cat_title',
+				'alias' => 'category',
+				'select' => 'cat_title',
 			),
 			'tag' => array(
-				'alias'=>'tag',
-				'select'=>'body',
+				'alias' => 'tag',
+				'select' => 'body',
 			),
 			'creation' => array(
-				'alias'=>'creation',
-				'select'=>'displayname',
+				'alias' => 'creation',
+				'select' => 'displayname',
 			),
 		);
 

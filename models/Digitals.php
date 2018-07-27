@@ -235,20 +235,20 @@ class Digitals extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'publisher' => array(
-				'alias'=>'publisher',
-				'select'=>'publisher_name',
+				'alias' => 'publisher',
+				'select' => 'publisher_name',
 			),
 			'view' => array(
-				'alias'=>'view',
-				'select'=>'covers, files, likes, views, choices',
+				'alias' => 'view',
+				'select' => 'covers, files, likes, views, choices',
 			),
 			'creation' => array(
-				'alias'=>'creation',
-				'select'=>'displayname',
+				'alias' => 'creation',
+				'select' => 'displayname',
 			),
 			'modified' => array(
-				'alias'=>'modified',
-				'select'=>'displayname',
+				'alias' => 'modified',
+				'select' => 'displayname',
 			),
 		);
 

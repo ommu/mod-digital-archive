@@ -139,15 +139,15 @@ class DigitalLikes extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'view' => array(
-				'alias'=>'view',
+				'alias' => 'view',
 			),
 			'digital' => array(
-				'alias'=>'digital',
-				'select'=>'publish, digital_title',
+				'alias' => 'digital',
+				'select' => 'publish, digital_title',
 			),
 			'user' => array(
-				'alias'=>'user',
-				'select'=>'displayname',
+				'alias' => 'user',
+				'select' => 'displayname',
 			),
 		);
 

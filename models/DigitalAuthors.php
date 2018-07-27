@@ -134,16 +134,16 @@ class DigitalAuthors extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'digital' => array(
-				'alias'=>'digital',
-				'select'=>'publish, digital_title',
+				'alias' => 'digital',
+				'select' => 'publish, digital_title',
 			),
 			'author' => array(
-				'alias'=>'author',
-				'select'=>'author_name',
+				'alias' => 'author',
+				'select' => 'author_name',
 			),
 			'creation' => array(
-				'alias'=>'creation',
-				'select'=>'displayname',
+				'alias' => 'creation',
+				'select' => 'displayname',
 			),
 		);
 

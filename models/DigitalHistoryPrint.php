@@ -141,16 +141,16 @@ class DigitalHistoryPrint extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'digital' => array(
-				'alias'=>'digital',
-				'select'=>'digital_title',
+				'alias' => 'digital',
+				'select' => 'digital_title',
 			),
 			'creation' => array(
-				'alias'=>'creation',
-				'select'=>'displayname',
+				'alias' => 'creation',
+				'select' => 'displayname',
 			),
 			'modified' => array(
-				'alias'=>'modified',
-				'select'=>'displayname',
+				'alias' => 'modified',
+				'select' => 'displayname',
 			),
 		);
 

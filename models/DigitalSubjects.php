@@ -135,16 +135,16 @@ class DigitalSubjects extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'digital' => array(
-				'alias'=>'digital',
-				'select'=>'publish, digital_title',
+				'alias' => 'digital',
+				'select' => 'publish, digital_title',
 			),
 			'tag' => array(
-				'alias'=>'tag',
-				'select'=>'body',
+				'alias' => 'tag',
+				'select' => 'body',
 			),
 			'creation' => array(
-				'alias'=>'creation',
-				'select'=>'displayname',
+				'alias' => 'creation',
+				'select' => 'displayname',
 			),
 		);
 

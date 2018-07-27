@@ -127,8 +127,8 @@ class ViewDigitalSubject extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'tag' => array(
-				'alias'=>'tag',
-				'select'=>'body',
+				'alias' => 'tag',
+				'select' => 'body',
 			),
 		);
 
