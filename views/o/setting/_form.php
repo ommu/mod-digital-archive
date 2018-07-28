@@ -42,11 +42,11 @@ EOP;
 	<fieldset>
 
 		<div class="form-group row">
-			<label class="col-form-label col-lg-4 col-md-3 col-sm-12">
+			<label class="col-form-label col-lg-3 col-md-3 col-sm-12">
 				<?php echo $model->getAttributeLabel('license');?> <span class="required">*</span><br/>
 				<span><?php echo Yii::t('phrase', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.');?></span>
 			</label>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 
 				if($model->isNewRecord || (!$model->isNewRecord && $model->license == '')) {
 					$model->license = $this->licenseCode();
@@ -59,8 +59,8 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'permission', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'permission', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<span class="small-px"><?php echo Yii::t('phrase', 'Select whether or not you want to let the public (visitors that are not logged-in) to view the following sections of your social network. In some cases (such as Profiles, Blogs, and Albums), if you have given them the option, your users will be able to make their pages private even though you have made them publically viewable here. For more permissions settings, please visit the General Settings page.');?></span>
 				<?php echo $form->radioButtonList($model, 'permission', array(
 					1 => Yii::t('phrase', 'Yes, the public can view articles unless they are made private.'),
@@ -71,24 +71,24 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'meta_description', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'meta_description', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textArea($model,'meta_description', array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'meta_description'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'meta_keyword', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'meta_keyword', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textArea($model,'meta_keyword', array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'meta_keyword'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cover_unlimit_input', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'cover_unlimit_input', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->getErrors())
 					$model->cover_unlimit_input = $model->cover_limit == 0 ? 1 : 0;
@@ -98,16 +98,16 @@ EOP;
 		</div>
 
 		<div id="cover-limit" class="form-group row <?php echo $model->cover_limit == 0 ? 'hide' : '';?>">
-			<?php echo $form->labelEx($model,'cover_limit', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'cover_limit', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textField($model,'cover_limit', array('maxlength'=>2, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cover_limit'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo Yii::t('phrase', 'Cover Setting');?> <span class="required">*</span></label>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo Yii::t('phrase', 'Cover Setting');?> <span class="required">*</span></label>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<p><?php echo $model->getAttributeLabel('cover_resize');?></p>
 				<?php echo $form->radioButtonList($model, 'cover_resize', array(
 					0 => Yii::t('phrase', 'No, not resize cover after upload.'),
@@ -144,8 +144,8 @@ EOP;
 
 		<?php if(!$model->isNewRecord && $model->digital_admin == 1) {?>
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'form_standard', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'form_standard', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->radioButtonList($model, 'form_standard', array(
 					1 => Yii::t('phrase', 'Standard'),
 					0 => Yii::t('phrase', 'Custom'),
@@ -155,8 +155,8 @@ EOP;
 		</div>
 
 		<div class="form-group row <?php echo $model->form_standard == 1 ? 'hide' : '';?>" id="custom_field">
-			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('form_custom_field');?></label>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('form_custom_field');?></label>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 				
 				$customField = array(
 					'cat_id' => $digital->getAttributeLabel('cat_id'),
@@ -182,8 +182,8 @@ EOP;
 		</div>
 		
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'headline', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'headline', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->dropDownLIst($model,'headline', array(
 					'1' => Yii::t('phrase', 'Enable'),
 					'0' => Yii::t('phrase', 'Disable'),
@@ -194,16 +194,16 @@ EOP;
 		
 		<div id="headline" class="<?php echo $model->headline == 0 ? 'hide' : '';?>">
 			<div class="form-group row">
-				<?php echo $form->labelEx($model,'headline_limit', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-				<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->labelEx($model,'headline_limit', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+				<div class="col-lg-6 col-md-9 col-sm-12">
 					<?php echo $form->textField($model,'headline_limit', array('maxlength'=>3, 'class'=>'form-control')); ?>
 					<?php echo $form->error($model,'headline_limit'); ?>
 				</div>
 			</div>
 
 			<div class="form-group row">
-				<?php echo $form->labelEx($model,'headline_category', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-				<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->labelEx($model,'headline_category', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+				<div class="col-lg-6 col-md-9 col-sm-12">
 					<?php 
 					$category = DigitalCategory::getCategory(1);
 					if(!$model->getErrors())
@@ -215,8 +215,8 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'editor_choice_status', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'editor_choice_status', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->radioButtonList($model, 'editor_choice_status', array(
 					1 => Yii::t('phrase', 'Enable'),
 					0 => Yii::t('phrase', 'Disable'),
@@ -227,16 +227,16 @@ EOP;
 
 		<div <?php echo $model->editor_choice_status == 0 ? 'class="hide"' : '';?> id="editor_choice">
 			<div class="form-group row">
-				<?php echo $form->labelEx($model,'editor_choice_limit', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-				<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->labelEx($model,'editor_choice_limit', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+				<div class="col-lg-6 col-md-9 col-sm-12">
 					<?php echo $form->textField($model,'editor_choice_limit', array('maxlength'=>2, 'class'=>'form-control')); ?>
 					<?php echo $form->error($model,'editor_choice_limit'); ?>
 				</div>
 			</div>
 			
 			<div class="form-group row">
-				<?php echo $form->labelEx($model,'editor_choice_userlevel', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-				<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->labelEx($model,'editor_choice_userlevel', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+				<div class="col-lg-6 col-md-9 col-sm-12">
 					<?php 
 					if(!$model->getErrors())
 						$model->editor_choice_userlevel = unserialize($model->editor_choice_userlevel);
@@ -247,8 +247,8 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'content_verified', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'content_verified', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->radioButtonList($model, 'content_verified', array(
 					1 => Yii::t('phrase', 'Enable'),
 					0 => Yii::t('phrase', 'Disable'),
@@ -259,8 +259,8 @@ EOP;
 		<?php }?>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cover_file_type', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'cover_file_type', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->getErrors()) {
 					$cover_file_type = unserialize($model->cover_file_type);
@@ -277,8 +277,8 @@ EOP;
 		$form_custom_field = $model->form_custom_field;
 		if($model->digital_global_file_type == 1 || ($model->digital_global_file_type == 0 && ($model->form_standard == 1 || ($model->form_standard == 0 && !in_array('cat_id', $form_custom_field))))) {?>
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'digital_file_type', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'digital_file_type', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php
 				if(!$model->getErrors()) {
 					$digital_file_type = unserialize($model->digital_file_type);
@@ -293,8 +293,8 @@ EOP;
 		<?php }?>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'digital_path', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'digital_path', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 
 				if($model->isNewRecord || (!$model->isNewRecord && $model->digital_path == ''))
 					$model->digital_path = YiiBase::getPathOfAlias('webroot.public.digital');
@@ -305,8 +305,8 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'digital_sync_path', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'digital_sync_path', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 
 				if($model->isNewRecord || (!$model->isNewRecord && $model->digital_sync_path == ''))
 					$model->digital_sync_path = YiiBase::getPathOfAlias('webroot.public.digital.__');
@@ -317,8 +317,8 @@ EOP;
 		</div>
 
 		<div class="form-group row submit">
-			<label class="col-form-label col-lg-4 col-md-3 col-sm-12">&nbsp;</label>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<label class="col-form-label col-lg-3 col-md-3 col-sm-12">&nbsp;</label>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save'), array('onclick' => 'setEnableSave()')); ?>
 			</div>
 		</div>

@@ -36,8 +36,8 @@
 		<div class="row">
 			<div class="col-lg-8 col-md-12">
 				<div class="form-group row">
-					<?php echo $form->labelEx($model,'digital_title', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-					<div class="col-lg-8 col-md-9 col-sm-12">
+					<?php echo $form->labelEx($model,'digital_title', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+					<div class="col-lg-6 col-md-9 col-sm-12">
 						<?php echo $form->textField($model,'digital_title', array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 						<?php echo $form->error($model,'digital_title'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
@@ -46,8 +46,8 @@
 
 				<?php if($model->isNewRecord || (!$model->isNewRecord && $setting->cover_limit == 1)) {?>
 				<div id="media" class="form-group row filter">
-					<?php echo $form->labelEx($model,'cover_input', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-					<div class="col-lg-8 col-md-9 col-sm-12">
+					<?php echo $form->labelEx($model,'cover_input', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+					<div class="col-lg-6 col-md-9 col-sm-12">
 						<?php if(!$model->isNewRecord) {
 							$covers = $model->covers;
 							if($covers != null) {
@@ -71,8 +71,8 @@
 
 				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publisher_id', $form_custom_field))) {?>
 				<div class="form-group row">
-					<?php echo $form->labelEx($publisher,'publisher_name', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-					<div class="col-lg-8 col-md-9 col-sm-12">
+					<?php echo $form->labelEx($publisher,'publisher_name', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+					<div class="col-lg-6 col-md-9 col-sm-12">
 						<?php
 						//echo $form->textField($publisher,'publisher_name', array('maxlength'=>64,'class'=>'form-control'));
 						$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
@@ -102,8 +102,8 @@
 
 				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publish_year', $form_custom_field))) {?>
 				<div class="form-group row">
-					<?php echo $form->labelEx($model,'publish_year', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-					<div class="col-lg-8 col-md-9 col-sm-12">
+					<?php echo $form->labelEx($model,'publish_year', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+					<div class="col-lg-6 col-md-9 col-sm-12">
 						<?php 
 						$model->publish_year = !in_array($model->publish_year, array('0000','1970')) ? $model->publish_year : '';
 						echo $form->textField($model,'publish_year', array('maxlength'=>4, 'class'=>'form-control')); ?>
@@ -115,8 +115,8 @@
 
 				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publish_location', $form_custom_field))) {?>
 				<div class="form-group row">
-					<?php echo $form->labelEx($model,'publish_location', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-					<div class="col-lg-8 col-md-9 col-sm-12">
+					<?php echo $form->labelEx($model,'publish_location', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+					<div class="col-lg-6 col-md-9 col-sm-12">
 						<?php echo $form->textField($model,'publish_location', array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 						<?php echo $form->error($model,'publish_location'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
@@ -126,8 +126,8 @@
 
 				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('isbn', $form_custom_field))) {?>
 				<div class="form-group row">
-					<?php echo $form->labelEx($model,'isbn', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-					<div class="col-lg-8 col-md-9 col-sm-12">
+					<?php echo $form->labelEx($model,'isbn', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+					<div class="col-lg-6 col-md-9 col-sm-12">
 						<?php echo $form->textField($model,'isbn', array('maxlength'=>32, 'class'=>'form-control')); ?>
 						<?php echo $form->error($model,'isbn'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
@@ -137,8 +137,8 @@
 
 				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('pages', $form_custom_field))) {?>
 				<div class="form-group row">
-					<?php echo $form->labelEx($model,'pages', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-					<div class="col-lg-8 col-md-9 col-sm-12">
+					<?php echo $form->labelEx($model,'pages', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+					<div class="col-lg-6 col-md-9 col-sm-12">
 						<?php echo $form->textField($model,'pages', array('maxlength'=>5, 'class'=>'form-control')); ?>
 						<?php echo $form->error($model,'pages'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
@@ -148,8 +148,8 @@
 
 				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('series', $form_custom_field))) {?>
 				<div class="form-group row">
-					<?php echo $form->labelEx($model,'series', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-					<div class="col-lg-8 col-md-9 col-sm-12">
+					<?php echo $form->labelEx($model,'series', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+					<div class="col-lg-6 col-md-9 col-sm-12">
 						<?php echo $form->textField($model,'series', array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 						<?php echo $form->error($model,'series'); ?>
 						<?php /*<div class="small-px silent"></div>*/?>
@@ -159,8 +159,8 @@
 				
 				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('author_input', $form_custom_field))) {?>
 				<div class="form-group row">
-					<?php echo $form->labelEx($model,'author_input', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-					<div class="col-lg-8 col-md-9 col-sm-12">
+					<?php echo $form->labelEx($model,'author_input', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+					<div class="col-lg-6 col-md-9 col-sm-12">
 						<?php 
 						if($model->isNewRecord) {
 							echo $form->textArea($model,'author_input', array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
@@ -216,8 +216,8 @@
 				
 				<?php if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('subject_input', $form_custom_field))) {?>
 				<div class="form-group row">
-					<?php echo $form->labelEx($model,'subject_input', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-					<div class="col-lg-8 col-md-9 col-sm-12">
+					<?php echo $form->labelEx($model,'subject_input', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+					<div class="col-lg-6 col-md-9 col-sm-12">
 						<?php 
 						if($model->isNewRecord) {
 							echo $form->textArea($model,'subject_input', array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
@@ -273,8 +273,8 @@
 				
 				<?php if($setting->form_standard == 0 && in_array('tag_input', $form_custom_field)) {?>
 				<div class="form-group row">
-					<?php echo $form->labelEx($model,'tag_input', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-					<div class="col-lg-8 col-md-9 col-sm-12">
+					<?php echo $form->labelEx($model,'tag_input', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+					<div class="col-lg-6 col-md-9 col-sm-12">
 						<?php 
 						if($model->isNewRecord) {
 							echo $form->textArea($model,'tag_input', array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
@@ -444,8 +444,8 @@
 		
 	<fieldset>
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'digital_intro', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'digital_intro', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 
 				//echo $form->textArea($model,'digital_intro', array('rows'=>6, 'cols'=>50));
 				$this->widget('yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(
@@ -476,8 +476,8 @@
 		</div>
 
 		<div class="form-group row submit">
-			<label class="col-form-label col-lg-4 col-md-3 col-sm-12">&nbsp;</label>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<label class="col-form-label col-lg-3 col-md-3 col-sm-12">&nbsp;</label>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save'), array('onclick' => 'setEnableSave()')); ?>
 			</div>
 		</div>

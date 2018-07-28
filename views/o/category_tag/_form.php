@@ -29,8 +29,8 @@
 <fieldset>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model,'cat_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model,'cat_id', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php echo $form->textField($model,'cat_id', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model,'cat_id'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
@@ -38,8 +38,8 @@
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model,'tag_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model,'tag_id', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php echo $form->textField($model,'tag_id', array('maxlength'=>11, 'class'=>'form-control')); ?>
 			<?php echo $form->error($model,'tag_id'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
@@ -47,8 +47,8 @@
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model,'creation_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model,'creation_date', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php echo $form->textField($model,'creation_date', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model,'creation_date'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
@@ -56,8 +56,8 @@
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model,'creation_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model,'creation_id', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php echo $form->textField($model,'creation_id', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model,'creation_id'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
@@ -65,8 +65,8 @@
 	</div>
 
 	<div class="form-group row submit">
-		<label class="col-form-label col-lg-4 col-md-3 col-sm-12">&nbsp;</label>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<label class="col-form-label col-lg-3 col-md-3 col-sm-12">&nbsp;</label>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save'), array('onclick' => 'setEnableSave()')); ?>
 		</div>
 	</div>

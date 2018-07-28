@@ -33,8 +33,8 @@
 		
 		<?php if($model->isNewRecord && $digital == null) {?>
 			<div class="form-group row">
-				<?php echo $form->labelEx($model,'digital_title_input', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-				<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->labelEx($model,'digital_title_input', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+				<div class="col-lg-6 col-md-9 col-sm-12">
 					<?php 
 					//echo $form->textField($model,'digital_title_input', array('class'=>'form-control'));
 					$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
@@ -62,8 +62,8 @@
 		<?php }?>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'digital_filename', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'digital_filename', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->getErrors())
 					$model->old_digital_filename_input = $model->digital_filename;
@@ -80,8 +80,8 @@
 		</div>
 
 		<div class="form-group row publish">
-			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->checkBox($model,'publish', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model,'publish'); ?>
 				<?php echo $form->error($model,'publish'); ?>

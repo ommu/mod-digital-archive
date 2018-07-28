@@ -35,8 +35,8 @@
 		*/?>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cat_title', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'cat_title', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textField($model,'cat_title', array('maxlength'=>32, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_title'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
@@ -44,8 +44,8 @@
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cat_desc', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'cat_desc', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textArea($model,'cat_desc', array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_desc'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
@@ -53,8 +53,8 @@
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cat_code', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'cat_code', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textField($model,'cat_code', array('maxlength'=>6, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_code'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
@@ -62,8 +62,8 @@
 		</div>
 		
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'tag_input', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'tag_input', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 
 				if($model->isNewRecord) {
 					echo $form->textArea($model,'tag_input', array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
@@ -117,8 +117,8 @@
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cat_icon', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'cat_icon', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textField($model,'cat_icon', array('maxlength'=>32, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_icon'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
@@ -126,8 +126,8 @@
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cat_file_type', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'cat_file_type', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php				
 				if(!$model->getErrors()) {
 					$cat_file_type = unserialize($model->cat_file_type);
@@ -141,8 +141,8 @@
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cat_icon_image', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'cat_icon_image', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->isNewRecord) {
 					if(!$model->getErrors())
@@ -160,8 +160,8 @@
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cat_cover', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'cat_cover', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->isNewRecord) {
 					if(!$model->getErrors())
@@ -179,8 +179,8 @@
 		</div>
 
 		<div class="form-group row publish">
-			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->checkBox($model,'publish', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model,'publish'); ?>
 				<?php echo $form->error($model,'publish'); ?>
