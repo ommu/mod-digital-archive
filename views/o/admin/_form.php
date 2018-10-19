@@ -64,7 +64,7 @@
 						}?>
 						<?php echo $form->fileField($model,'cover_input', array('class'=>'form-control')); ?>
 						<?php echo $form->error($model,'cover_input'); ?>
-						<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($cover_file_type, false);?></span>
+						<div class="small-px">extensions are allowed: <?php echo Utility::formatFileType($cover_file_type, false);?></div>
 					</div>
 				</div>
 				<?php }?>
@@ -74,7 +74,7 @@
 					<?php echo $form->labelEx($publisher,'publisher_name', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
 					<div class="col-lg-6 col-md-9 col-sm-12">
 						<?php
-						//echo $form->textField($publisher,'publisher_name', array('maxlength'=>64,'class'=>'form-control'));
+						//echo $form->textField($publisher,'publisher_name', array('maxlength'=>64, 'class'=>'form-control'));
 						$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 							'model' => $publisher,
 							'attribute' => 'publisher_name',
@@ -166,7 +166,7 @@
 							echo $form->textArea($model,'author_input', array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
 							
 						} else {
-							//echo $form->textField($model,'author_input', array('maxlength'=>32,'class'=>'form-control'));
+							//echo $form->textField($model,'author_input', array('maxlength'=>32, 'class'=>'form-control'));
 							$url = Yii::app()->controller->createUrl('o/authors/add', array('type'=>'digital'));
 							$digital = $model->digital_id;
 							$authorId = 'Digitals_author_input';
@@ -209,7 +209,7 @@
 								}
 							}?>
 						</div>
-						<?php if($model->isNewRecord) {?><span class="small-px">tambahkan tanda pagar (#) jika ingin menambahkan aothor lebih dari satu</span><?php }?>
+						<?php if($model->isNewRecord) {?><div class="small-px">tambahkan tanda pagar (#) jika ingin menambahkan aothor lebih dari satu</div><?php }?>
 					</div>
 				</div>
 				<?php }?>
@@ -223,7 +223,7 @@
 							echo $form->textArea($model,'subject_input', array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
 							
 						} else {
-							//echo $form->textField($model,'subject_input', array('maxlength'=>32,'class'=>'form-control'));
+							//echo $form->textField($model,'subject_input', array('maxlength'=>32, 'class'=>'form-control'));
 							$url = Yii::app()->controller->createUrl('o/subjects/add', array('type'=>'digital'));
 							$digital = $model->digital_id;
 							$subjectId = 'Digitals_subject_input';
@@ -266,7 +266,7 @@
 								}
 							}?>
 						</div>
-						<?php if($model->isNewRecord) {?><span class="small-px">tambahkan tanda koma (,) jika ingin menambahkan subject lebih dari satu</span><?php }?>
+						<?php if($model->isNewRecord) {?><div class="small-px">tambahkan tanda koma (,) jika ingin menambahkan subject lebih dari satu</div><?php }?>
 					</div>
 				</div>
 				<?php }?>
@@ -280,7 +280,7 @@
 							echo $form->textArea($model,'tag_input', array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
 							
 						} else {
-							//echo $form->textField($model,'tag_input', array('maxlength'=>32,'class'=>'form-control'));
+							//echo $form->textField($model,'tag_input', array('maxlength'=>32, 'class'=>'form-control'));
 							$url = Yii::app()->controller->createUrl('o/tags/add', array('type'=>'digital'));
 							$digital = $model->digital_id;
 							$tagId = 'Digitals_tag_input';
@@ -323,7 +323,7 @@
 								}
 							}?>
 						</div>
-						<?php if($model->isNewRecord) {?><span class="small-px">tambahkan tanda koma (,) jika ingin menambahkan tag lebih dari satu</span><?php }?>
+						<?php if($model->isNewRecord) {?><div class="small-px">tambahkan tanda koma (,) jika ingin menambahkan tag lebih dari satu</div><?php }?>
 					</div>
 				</div>
 				<?php }?>
@@ -336,7 +336,7 @@
 					<div class="col-lg-12 col-md-9 col-sm-12">
 						<?php echo $form->fileField($model,'digital_file_input', array('class'=>'form-control')); ?>
 						<?php echo $form->error($model,'digital_file_input'); ?>
-						<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($digital_file_type, false);?></span>
+						<div class="small-px">extensions are allowed: <?php echo Utility::formatFileType($digital_file_type, false);?></div>
 					</div>
 				</div>
 
@@ -446,14 +446,10 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'digital_intro', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-6 col-md-9 col-sm-12">
-				<?php 
-				//echo $form->textArea($model,'digital_intro', array('rows'=>6, 'cols'=>50));
-				$this->widget('yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(
+				<?php $this->widget('yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(
 					'model'=>$model,
 					'attribute'=>digital_intro,
-					// Redactor options
 					'options'=>array(
-						//'lang'=>'fi',
 						'buttons'=>array(
 							'html', 'formatting', '|', 
 							'bold', 'italic', 'deleted', '|',

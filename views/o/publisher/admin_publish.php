@@ -15,14 +15,13 @@
 
 	$this->breadcrumbs=array(
 		'Digital Publishers'=>array('manage'),
-		'Publish',
+		Yii::t('phrase', 'Publish'),
 	);
 ?>
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'digital-publisher-form',
 	'enableAjaxValidation'=>true,
-	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
 
 	<div class="dialog-content">

@@ -14,7 +14,7 @@
 
 	$this->breadcrumbs=array(
 		'Digital View Details'=>array('manage'),
-		'Manage',
+		Yii::t('phrase', 'Manage'),
 	);
 	$this->menu=array(
 		array(

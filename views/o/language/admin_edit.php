@@ -16,7 +16,7 @@
 	$this->breadcrumbs=array(
 		'Digital Languages'=>array('manage'),
 		$model->language_id=>array('view','id'=>$model->language_id),
-		'Update',
+		Yii::t('phrase', 'Update'),
 	);
 ?>
 

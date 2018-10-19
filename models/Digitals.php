@@ -159,7 +159,7 @@ class Digitals extends CActiveRecord
 			'cover_all' => array(self::HAS_MANY, 'DigitalCover', 'digital_id'),
 			'files' => array(self::HAS_MANY, 'DigitalFile', 'digital_id', 'on'=>'files.publish=1'),
 			'history_prints' => array(self::HAS_MANY, 'DigitalHistoryPrint', 'digital_id'),
-			'likes' => array(self::HAS_MANY, 'DigitalLikes', 'digital_id'),	
+			'likes' => array(self::HAS_MANY, 'DigitalLikes', 'digital_id'),
 			'subjects' => array(self::HAS_MANY, 'DigitalSubjects', 'digital_id'),
 			'tags' => array(self::HAS_MANY, 'DigitalTags', 'digital_id'),
 			'views' => array(self::HAS_MANY, 'DigitalViews', 'digital_id'),
@@ -523,7 +523,7 @@ class Digitals extends CActiveRecord
 			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish", array("id"=>$data->digital_id)), $data->publish, 1)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->digital_id)), $data->publish, 1)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),

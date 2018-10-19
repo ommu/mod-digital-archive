@@ -14,7 +14,7 @@
 
 	$this->breadcrumbs=array(
 		'Digital Category Tags'=>array('manage'),
-		'Manage',
+		Yii::t('phrase', 'Manage'),
 	);
 	$this->menu=array(
 		array(

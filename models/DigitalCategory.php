@@ -300,7 +300,7 @@ class DigitalCategory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'header' => Yii::t('phrase', 'Digitals'),
-				'value' => 'CHtml::link($data->view->digitals, Yii::app()->controller->createUrl("o/admin/manage", array(\'category\'=>$data->cat_id, \'type\'=>\'publish\')))',
+				'value' => 'CHtml::link($data->view->digitals, Yii::app()->controller->createUrl(\'o/admin/manage\', array(\'category\'=>$data->cat_id, \'type\'=>\'publish\')))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -347,7 +347,7 @@ class DigitalCategory extends CActiveRecord
 			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish", array("id"=>$data->cat_id)), $data->publish, 1)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->cat_id)), $data->publish, 1)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),

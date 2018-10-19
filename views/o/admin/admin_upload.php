@@ -16,7 +16,7 @@
 	$this->breadcrumbs=array(
 		'Digital Categories'=>array('manage'),
 		$model->cat_id=>array('view','id'=>$model->cat_id),
-		'Update',
+		Yii::t('phrase', 'Update'),
 	);
 ?>
 
@@ -43,7 +43,7 @@
 			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->fileField($model,'digital_file_input', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'digital_file_input'); ?>
-				<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($digital_file_type, false);?></span>
+				<div class="small-px">extensions are allowed: <?php echo Utility::formatFileType($digital_file_type, false);?></div>
 			</div>
 		</div>
 

@@ -15,7 +15,7 @@
 
 	$this->breadcrumbs=array(
 		'Digital Languages'=>array('manage'),
-		'Create',
+		Yii::t('phrase', 'Create'),
 	);
 ?>
 

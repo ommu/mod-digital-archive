@@ -15,7 +15,7 @@
 
 	$this->breadcrumbs=array(
 		'Digital Publishers'=>array('manage'),
-		'Create',
+		Yii::t('phrase', 'Create'),
 	);
 ?>
 

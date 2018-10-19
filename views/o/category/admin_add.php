@@ -15,7 +15,7 @@
 
 	$this->breadcrumbs=array(
 		'Digital Categories'=>array('manage'),
-		'Create',
+		Yii::t('phrase', 'Create'),
 	);
 ?>
 

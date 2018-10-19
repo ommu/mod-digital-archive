@@ -69,7 +69,7 @@
 					echo $form->textArea($model,'tag_input', array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
 					
 				} else {
-					//echo $form->textField($model,'tag_input', array('maxlength'=>32,'class'=>'form-control'));
+					//echo $form->textField($model,'tag_input', array('maxlength'=>32, 'class'=>'form-control'));
 					$url = Yii::app()->controller->createUrl('o/categorytag/add', array('type'=>'digital'));
 					$category = $model->cat_id;
 					$tagId = 'DigitalCategory_tag_input';
@@ -112,7 +112,7 @@
 						}
 					}?>
 				</div>
-				<?php if($model->isNewRecord) {?><span class="small-px">tambahkan tanda koma (,) jika ingin menambahkan tag lebih dari satu</span><?php }?>
+				<?php if($model->isNewRecord) {?><div class="small-px">tambahkan tanda koma (,) jika ingin menambahkan tag lebih dari satu</div><?php }?>
 			</div>
 		</div>
 
@@ -136,7 +136,7 @@
 				}
 				echo $form->textField($model,'cat_file_type', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cat_file_type'); ?>
-				<span class="small-px">pisahkan type file dengan koma (,). example: "mp3, mp4, pdf, doc, docx"</span>
+				<div class="small-px">pisahkan type file dengan koma (,). example: "mp3, mp4, pdf, doc, docx"</div>
 			</div>
 		</div>
 

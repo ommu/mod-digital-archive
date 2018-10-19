@@ -16,7 +16,7 @@
 	$this->breadcrumbs=array(
 		'Digital Categories'=>array('manage'),
 		$model->cat_id=>array('view','id'=>$model->cat_id),
-		'Update',
+		Yii::t('phrase', 'Update'),
 	);
 ?>
 

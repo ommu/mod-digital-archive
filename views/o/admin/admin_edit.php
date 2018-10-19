@@ -16,7 +16,7 @@
 	$this->breadcrumbs=array(
 		'Digitals'=>array('manage'),
 		$model->digital_id=>array('view','id'=>$model->digital_id),
-		'Update',
+		Yii::t('phrase', 'Update'),
 	);
 	$covers = $model->covers;
 ?>

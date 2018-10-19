@@ -248,7 +248,7 @@ class DigitalLanguage extends CActiveRecord
 			$this->defaultColumns[] = 'language_desc';
 			$this->defaultColumns[] = array(
 				'header' => Yii::t('phrase', 'Digitals'),
-				'value' => 'CHtml::link($data->view->digitals, Yii::app()->controller->createUrl("o/admin/manage", array(\'language\'=>$data->language_id, \'type\'=>\'publish\')))',
+				'value' => 'CHtml::link($data->view->digitals, Yii::app()->controller->createUrl(\'o/admin/manage\', array(\'language\'=>$data->language_id, \'type\'=>\'publish\')))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -271,7 +271,7 @@ class DigitalLanguage extends CActiveRecord
 			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish", array("id"=>$data->language_id)), $data->publish, 1)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->language_id)), $data->publish, 1)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),

@@ -290,7 +290,7 @@ class DigitalCover extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'status',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("status", array("id"=>$data->cover_id)), $data->status, 1)',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'status\', array(\'id\'=>$data->cover_id)), $data->status, 1)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -300,7 +300,7 @@ class DigitalCover extends CActiveRecord
 			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish", array("id"=>$data->cover_id)), $data->publish, 1)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->cover_id)), $data->publish, 1)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),

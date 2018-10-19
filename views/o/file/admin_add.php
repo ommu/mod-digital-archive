@@ -15,7 +15,7 @@
 
 	$this->breadcrumbs=array(
 		'Digital Files'=>array('manage'),
-		'Create',
+		Yii::t('phrase', 'Create'),
 	);
 ?>
 

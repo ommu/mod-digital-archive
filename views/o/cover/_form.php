@@ -75,7 +75,7 @@
 				<?php }
 				echo $form->fileField($model,'cover_filename', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'cover_filename'); ?>
-				<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($cover_file_type, false);?></span>
+				<div class="small-px">extensions are allowed: <?php echo Utility::formatFileType($cover_file_type, false);?></div>
 			</div>
 		</div>
 
