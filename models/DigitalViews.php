@@ -244,7 +244,7 @@ class DigitalViews extends CActiveRecord
 			if(!Yii::app()->getRequest()->getParam('user')) {
 				$this->defaultColumns[] = array(
 					'name' => 'user_search',
-					'value' => '$data->user_id != 0 ? $data->user->displayname : "-"',
+					'value' => '$data->user_id != 0 ? $data->user->displayname : \'-\'',
 				);
 			}
 			$this->defaultColumns[] = array(

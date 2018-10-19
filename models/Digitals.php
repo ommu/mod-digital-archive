@@ -426,7 +426,7 @@ class Digitals extends CActiveRecord
 			if($setting->form_standard == 1 || ($setting->form_standard == 0 && in_array('publish_year', $form_custom_field))) {
 				$this->defaultColumns[] = array(
 					'name' => 'publish_year',
-					'value' => '!in_array($data->publish_year, array(\'0000\', \'1970\')) ? $data->publish_year : "-"',
+					'value' => '!in_array($data->publish_year, array(\'0000\', \'1970\')) ? $data->publish_year : \'-\'',
 				);
 			}
 			if($setting->form_standard == 0) {
@@ -502,7 +502,7 @@ class Digitals extends CActiveRecord
 				$this->defaultColumns[] = array(
 					'header' => Yii::t('phrase', 'Choice'),
 					//'name' => 'editor_choice_input',
-					'value' => '$data->editor_choice_input != 2 ? Utility::getPublish(Yii::app()->controller->createUrl("choice", array("id"=>$data->digital_id)), $data->editor_choice_input, Yii::t(\'phrase\', \'Choice\').\',\'.Yii::t(\'phrase\', \'Unchoice\')) : "-"',
+					'value' => '$data->editor_choice_input != 2 ? Utility::getPublish(Yii::app()->controller->createUrl("choice", array("id"=>$data->digital_id)), $data->editor_choice_input, Yii::t(\'phrase\', \'Choice\').\',\'.Yii::t(\'phrase\', \'Unchoice\')) : \'-\'',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
