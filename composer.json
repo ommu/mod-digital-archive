@@ -3,11 +3,11 @@
 	"description": "Digital Archive Module from Ommu Platform",
 	"keywords": [
 		"module",
-		"digital archive",
+		"digital-archive",
 		"digital",
 		"archive",
 		"ommu",
-		"ommu-platform"
+		"yii"
 	],
 	"homepage": "https://github.com/ommu/mod-digital-archive",
 	"type": "ommu-module",
@@ -24,8 +24,8 @@
 	"authors": [
 		{
 			"name": "Putra Sudaryanto",
-			"email": "putra@ommu.co",
-			"homepage": "https://ommu.co",
+			"email": "putra@ommu.id",
+			"homepage": "https://ommu.id",
 			"role": "Creator"
 		}
 	],
